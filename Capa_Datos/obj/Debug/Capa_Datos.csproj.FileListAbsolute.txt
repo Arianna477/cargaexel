@@ -1,0 +1,7 @@
+C:\Users\Aricita\source\CargaMasivaExcel\Monolito4bm\Capa_Datos\bin\Debug\Capa_Datos.dll.config
+C:\Users\Aricita\source\CargaMasivaExcel\Monolito4bm\Capa_Datos\bin\Debug\Capa_Datos.dll
+C:\Users\Aricita\source\CargaMasivaExcel\Monolito4bm\Capa_Datos\bin\Debug\Capa_Datos.pdb
+C:\Users\Aricita\source\CargaMasivaExcel\Monolito4bm\Capa_Datos\obj\Debug\Capa_Datos.csproj.AssemblyReference.cache
+C:\Users\Aricita\source\CargaMasivaExcel\Monolito4bm\Capa_Datos\obj\Debug\Capa_Datos.csproj.CoreCompileInputs.cache
+C:\Users\Aricita\source\CargaMasivaExcel\Monolito4bm\Capa_Datos\obj\Debug\Capa_Datos.dll
+C:\Users\Aricita\source\CargaMasivaExcel\Monolito4bm\Capa_Datos\obj\Debug\Capa_Datos.pdb
