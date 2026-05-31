@@ -14,19 +14,19 @@ namespace Monolito4bm
     {
         // ── Controles declarados manualmente (evita errores de designer) ──
         protected global::System.Web.UI.WebControls.HiddenField hfProId;
-        protected global::System.Web.UI.WebControls.Literal     litNombreProducto;
+        protected global::System.Web.UI.WebControls.Literal litNombreProducto;
         protected global::System.Web.UI.WebControls.DropDownList ddlProducto;
-        protected global::System.Web.UI.WebControls.Literal     litMensaje;
-        protected global::System.Web.UI.WebControls.Literal     litAviso;
-        protected global::System.Web.UI.WebControls.Literal     litTotalFotos;
-        protected global::System.Web.UI.WebControls.Literal     litSinFotos;
-        protected global::System.Web.UI.WebControls.FileUpload  fuFotos;
-        protected global::System.Web.UI.WebControls.Button      btnSubir;
-        protected global::System.Web.UI.WebControls.Button      btnCancelar;
-        protected global::System.Web.UI.WebControls.Repeater    rptFotos;
-        protected global::System.Web.UI.WebControls.Repeater    rptFotosPreview;
-        protected global::System.Web.UI.WebControls.Button      btnPrevisualizar;
-        protected global::System.Web.UI.WebControls.Literal     lblFotosPreviewInfo;
+        protected global::System.Web.UI.WebControls.Literal litMensaje;
+        protected global::System.Web.UI.WebControls.Literal litAviso;
+        protected global::System.Web.UI.WebControls.Literal litTotalFotos;
+        protected global::System.Web.UI.WebControls.Literal litSinFotos;
+        protected global::System.Web.UI.WebControls.FileUpload fuFotos;
+        protected global::System.Web.UI.WebControls.Button btnSubir;
+        protected global::System.Web.UI.WebControls.Button btnCancelar;
+        protected global::System.Web.UI.WebControls.Repeater rptFotos;
+        protected global::System.Web.UI.WebControls.Repeater rptFotosPreview;
+        protected global::System.Web.UI.WebControls.Button btnPrevisualizar;
+        protected global::System.Web.UI.WebControls.Literal lblFotosPreviewInfo;
 
         [Serializable]
         private sealed class FotoTemporal
@@ -59,6 +59,11 @@ namespace Monolito4bm
         // ── Page Load ─────────────────────────────────────────────
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (fuFotos != null)
+            {
+                fuFotos.Attributes["multiple"] = "multiple";
+            }
+
             int proId = 0;
             if (!int.TryParse(Request.QueryString["id"], out proId) || proId == 0)
             {
@@ -182,7 +187,7 @@ namespace Monolito4bm
                 }
 
                 var fotosActuales = FotosTemporales;
-                
+
                 int totalEnCola = fotosActuales.Count;
                 if (totalEnCola >= disponibles)
                 {

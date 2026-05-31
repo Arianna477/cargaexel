@@ -20,6 +20,8 @@ namespace Capa_Negocios
         public int Cantidad { get; set; }
         public decimal Precio { get; set; }
         public int? ProveedorId { get; set; }
+        /// <summary>Nombre del proveedor tal como viene en el Excel. Se resuelve a ProveedorId en la capa de negocios.</summary>
+        public string ProveedorNombre { get; set; }
         public string FotoRuta { get; set; }
         public char EstadoProducto { get; set; }
     }
@@ -56,6 +58,7 @@ namespace Capa_Negocios
         private static readonly string[] HeadersCantidad = { "cantidad", "stock", "existencia", "procantidad" };
         private static readonly string[] HeadersPrecio = { "precio", "proprecio", "valor", "costo" };
         private static readonly string[] HeadersProveedorId = { "provid", "proveedorid", "idproveedor" };
+        private static readonly string[] HeadersProveedorNombre = { "nombreproveedor", "proveedor", "provnombre", "nombreprov", "proveedornombre" };
         private static readonly string[] HeadersFotoRuta = { "fotoruta", "rutafoto", "foto_ruta", "ruta", "path", "archivo", "ubicacion" };
         private static readonly string[] HeadersEstado = { "estado", "proestado", "estadoproducto" };
 
@@ -151,7 +154,7 @@ namespace Capa_Negocios
                     }
 
                     sheetData.RemoveNodes();
-                    sheetData.Add(CrearFilaWorksheet(ns, 1, new[] { "pro_id", "nombre", "cantidad", "precio", "prov_id", "foto_ruta", "estado" }));
+                    sheetData.Add(CrearFilaWorksheet(ns, 1, new[] { "nombre", "cantidad", "precio", "nombre_proveedor", "estado" }));
 
                     sheetEntry.Delete();
                     var nuevaEntry = zip.CreateEntry(sheetPath, CompressionLevel.Optimal);
@@ -184,6 +187,7 @@ namespace Capa_Negocios
             int indexCantidad = BuscarIndiceHeader(headers, HeadersCantidad);
             int indexPrecio = BuscarIndiceHeader(headers, HeadersPrecio);
             int indexProveedorId = BuscarIndiceHeader(headers, HeadersProveedorId);
+            int indexProveedorNombre = BuscarIndiceHeader(headers, HeadersProveedorNombre);
             int indexFotoRuta = BuscarIndiceHeader(headers, HeadersFotoRuta);
             int indexEstado = BuscarIndiceHeader(headers, HeadersEstado);
 
@@ -201,6 +205,7 @@ namespace Capa_Negocios
                 string cantidadTexto = ObtenerValor(fila, indexCantidad).Trim();
                 string precioTexto = ObtenerValor(fila, indexPrecio).Trim();
                 string proveedorTexto = ObtenerValor(fila, indexProveedorId).Trim();
+                string proveedorNombreTexto = ObtenerValor(fila, indexProveedorNombre).Trim();
                 string fotoRuta = ObtenerValor(fila, indexFotoRuta).Trim();
                 string estadoTexto = ObtenerValor(fila, indexEstado).Trim();
 
@@ -209,6 +214,7 @@ namespace Capa_Negocios
                     string.IsNullOrWhiteSpace(cantidadTexto) &&
                     string.IsNullOrWhiteSpace(precioTexto) &&
                     string.IsNullOrWhiteSpace(proveedorTexto) &&
+                    string.IsNullOrWhiteSpace(proveedorNombreTexto) &&
                     string.IsNullOrWhiteSpace(fotoRuta) &&
                     string.IsNullOrWhiteSpace(estadoTexto))
                 {
@@ -218,7 +224,7 @@ namespace Capa_Negocios
                 try
                 {
                     int? productoId = ParsearEnteroOpcional(idTexto, $"El ID de producto '{idTexto}' no es un número entero positivo válido.");
-                    
+
                     int cantidad = ParsearEntero(cantidadTexto, 0, $"La cantidad '{cantidadTexto}' no es un número entero válido.");
                     if (cantidad < 0)
                     {
@@ -231,7 +237,19 @@ namespace Capa_Negocios
                         throw new Exception("El precio no puede ser un número negativo.");
                     }
 
-                    int? proveedorId = ParsearEnteroOpcional(proveedorTexto, $"El ID de proveedor '{proveedorTexto}' no es un número entero positivo válido.");
+                    // Prioridad: columna nombre_proveedor (por nombre) > columna prov_id (por ID numérico)
+                    int? proveedorId = null;
+                    string proveedorNombre = null;
+                    if (!string.IsNullOrWhiteSpace(proveedorNombreTexto))
+                    {
+                        // Guardamos el nombre para resolverlo en la capa de negocios
+                        proveedorNombre = proveedorNombreTexto;
+                    }
+                    else if (!string.IsNullOrWhiteSpace(proveedorTexto))
+                    {
+                        proveedorId = ParsearEnteroOpcional(proveedorTexto, $"El ID de proveedor '{proveedorTexto}' no es un número entero positivo válido.");
+                    }
+
                     char estado = ParsearEstado(estadoTexto);
 
                     resultado.Add(new ProductoCargaFila
@@ -242,6 +260,7 @@ namespace Capa_Negocios
                         Cantidad = cantidad,
                         Precio = precio,
                         ProveedorId = proveedorId,
+                        ProveedorNombre = proveedorNombre,
                         FotoRuta = NormalizarRutaOpcional(fotoRuta),
                         EstadoProducto = estado
                     });

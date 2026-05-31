@@ -110,7 +110,7 @@ namespace Monolito4bm
             decimal? pMin = string.IsNullOrEmpty(txtPrecioMin.Text) ? (decimal?)null : decimal.Parse(txtPrecioMin.Text);
             decimal? pMax = string.IsNullOrEmpty(txtPrecioMax.Text) ? (decimal?)null : decimal.Parse(txtPrecioMax.Text);
             int? sMin = string.IsNullOrEmpty(txtStockMin.Text) ? (int?)null : int.Parse(txtStockMin.Text);
-            int? sMax = string.IsNullOrEmpty(txtStockMax.Text) ? (int?)null : int.Parse(txtStockMax.Text); 
+            int? sMax = string.IsNullOrEmpty(txtStockMax.Text) ? (int?)null : int.Parse(txtStockMax.Text);
 
             var lista = CN_tbl_producto.BuscarPaginado(
                 pagina, POR_PAGINA, out total, nombre, provId, estado, pMin, pMax, sMin, sMax, OrdenIdAscendente);
@@ -188,7 +188,7 @@ namespace Monolito4bm
                         txtCantidad.Text = prod.pro_cantidad.ToString();
                         txtPrecio.Text = prod.pro_precio.HasValue
                                               ? prod.pro_precio.Value.ToString("0.00") : "0.00";
-                        
+
                         if (prod.prov_id.HasValue)
                         {
                             var item = ddlProveedor.Items.FindByValue(prod.prov_id.Value.ToString());
@@ -365,7 +365,7 @@ namespace Monolito4bm
                 }
                 if (resultado.ProductosSinProveedor > 0)
                 {
-                    mensaje += $" Reasignados a Sin proveedor por prov_id inexistente: {resultado.ProductosSinProveedor}.";
+                    mensaje += $" Reasignados a Sin proveedor (nombre de proveedor no encontrado): {resultado.ProductosSinProveedor}.";
                 }
                 if (tipo == TipoInsercionProveedor.ReemplazarTodo)
                 {
@@ -551,7 +551,9 @@ namespace Monolito4bm
                 f.NombreProducto,
                 f.Cantidad,
                 Precio = f.Precio.ToString("0.00"),
-                ProveedorIdTexto = f.ProveedorId.HasValue ? f.ProveedorId.Value.ToString() : "Sin proveedor",
+                ProveedorIdTexto = !string.IsNullOrWhiteSpace(f.ProveedorNombre)
+                    ? f.ProveedorNombre
+                    : (f.ProveedorId.HasValue ? f.ProveedorId.Value.ToString() : "Sin proveedor"),
                 FotoRuta = string.IsNullOrWhiteSpace(f.FotoRuta) ? "(sin foto)" : f.FotoRuta,
                 EstadoTexto = f.EstadoProducto == 'I' ? "Inactivo" : "Activo"
             }).ToList();

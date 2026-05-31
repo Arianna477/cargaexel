@@ -294,6 +294,13 @@ namespace Capa_Negocios
             var nombres = new HashSet<string>();
             var ids = new HashSet<int>();
 
+            // Precargamos el diccionario de proveedores activos para resolver por nombre
+            var proveedoresPorNombre = dc.tbl_proveedor
+                .Where(p => p.prov_estado == 'A')
+                .ToList()
+                .GroupBy(p => (p.prov_nombre ?? string.Empty).Trim().ToUpperInvariant())
+                .ToDictionary(g => g.Key, g => g.First().prov_id);
+
             foreach (var f in filas ?? Enumerable.Empty<ProductoCargaFila>())
             {
                 string nombreOriginal = f.NombreProducto ?? string.Empty;
@@ -322,6 +329,15 @@ namespace Capa_Negocios
                     continue;
                 }
 
+                // Resolver proveedor por nombre si se proporcionó
+                int? proveedorId = f.ProveedorId;
+                if (!string.IsNullOrWhiteSpace(f.ProveedorNombre))
+                {
+                    string clave = f.ProveedorNombre.Trim().ToUpperInvariant();
+                    int idEncontrado;
+                    proveedorId = proveedoresPorNombre.TryGetValue(clave, out idEncontrado) ? idEncontrado : (int?)null;
+                }
+
                 normalizadas.Add(new ProductoCargaFilaNormalizada
                 {
                     NumeroFilaArchivo = f.NumeroFilaArchivo,
@@ -330,7 +346,7 @@ namespace Capa_Negocios
                     NombreNormalizado = nombreNormalizado,
                     Cantidad = f.Cantidad,
                     Precio = f.Precio,
-                    ProveedorId = f.ProveedorId,
+                    ProveedorId = proveedorId,
                     FotoRuta = NormalizarRutaFotoCarga(f.FotoRuta),
                     EstadoProducto = f.EstadoProducto == 'I' ? 'I' : 'A'
                 });

@@ -16,7 +16,7 @@ namespace Capa_Negocios
     {
         public int NumeroFilaArchivo { get; set; }
         public int? FotoId { get; set; }
-        public int ProductoId { get; set; }
+        public string ProductoIdentificador { get; set; }
         public string RutaFoto { get; set; }
         public byte[] FotoBit { get; set; }
         public char EstadoFoto { get; set; }
@@ -37,12 +37,14 @@ namespace Capa_Negocios
     {
         public string NombreArchivo { get; set; }
         public string RutaRelativa { get; set; }
+        public int ProductoId { get; set; }
     }
 
     internal sealed class FotoCargaFilaNormalizada
     {
         public int NumeroFilaArchivo { get; set; }
         public int? FotoId { get; set; }
+        public string ProductoIdentificador { get; set; }
         public int ProductoId { get; set; }
         public string RutaFoto { get; set; }
         public byte[] FotoBit { get; set; }
@@ -52,7 +54,7 @@ namespace Capa_Negocios
     internal static class FotoCargaMasivaParser
     {
         private static readonly string[] HeadersFotoId = { "id", "fotoid", "idfoto", "codigo", "codigofoto" };
-        private static readonly string[] HeadersProductoId = { "proid", "productoid", "idproducto", "productoid", "idpro", "pro_id" };
+        private static readonly string[] HeadersProductoId = { "proid", "productoid", "idproducto", "idpro", "pro_id", "producto", "nombreproducto", "productonombre" };
         private static readonly string[] HeadersRuta = { "fotoruta", "ruta", "path", "rutafoto", "archivo", "ubicacion", "foto_ruta" };
         private static readonly string[] HeadersBit = { "fotobit", "foto_bit", "bit", "base64", "imagenbase64", "bytesbase64" };
         private static readonly string[] HeadersEstado = { "estado", "fotoestado", "estadofoto" };
@@ -151,16 +153,19 @@ namespace Capa_Negocios
 
                     sheetData.RemoveNodes();
 
-                    string[] headers = { "foto_id", "pro_id", "foto_ruta", "foto_bit", "estado" };
+                    string[] headers = { "foto_id", "producto", "foto_ruta", "foto_bit", "estado" };
                     sheetData.Add(CrearFilaWorksheet(ns, 1, headers));
 
                     int fila = 2;
                     foreach (var item in datos)
                     {
+                        int targetProId = item.ProductoId > 0 ? item.ProductoId : productoId;
+                        string productoNombre = ObtenerNombreProductoPorId(targetProId);
+
                         sheetData.Add(CrearFilaWorksheet(ns, fila++, new[]
                         {
                             string.Empty,
-                            productoId > 0 ? productoId.ToString() : string.Empty,
+                            productoNombre,
                             item.RutaRelativa ?? string.Empty,
                             string.Empty,
                             "A"
@@ -229,7 +234,7 @@ namespace Capa_Negocios
 
             if (indexProductoId < 0 || (indexRuta < 0 && indexBit < 0))
             {
-                throw new Exception("El archivo debe contener pro_id y al menos una columna foto_ruta o foto_bit.");
+                throw new Exception("El archivo debe contener el ID o nombre del producto y al menos una columna foto_ruta o foto_bit.");
             }
 
             var resultado = new List<FotoCargaFila>();
@@ -254,7 +259,12 @@ namespace Capa_Negocios
                 try
                 {
                     int? fotoId = ParsearEnteroOpcional(fotoIdTexto, $"El ID de foto '{fotoIdTexto}' no es un numero entero positivo valido.");
-                    int productoId = ParsearEnteroRequerido(productoIdTexto, $"El ID de producto '{productoIdTexto}' no es un numero entero positivo valido.");
+                    
+                    if (string.IsNullOrWhiteSpace(productoIdTexto))
+                    {
+                        throw new Exception("El identificador del producto (ID o nombre) no puede estar vacio.");
+                    }
+
                     byte[] fotoBit = ParsearFotoBitOpcional(fotoBitTexto);
                     string rutaNormalizada = NormalizarRuta(ruta);
 
@@ -267,7 +277,7 @@ namespace Capa_Negocios
                     {
                         NumeroFilaArchivo = i + 1,
                         FotoId = fotoId,
-                        ProductoId = productoId,
+                        ProductoIdentificador = productoIdTexto,
                         RutaFoto = rutaNormalizada,
                         FotoBit = fotoBit,
                         EstadoFoto = ParsearEstado(estadoTexto)
@@ -607,6 +617,23 @@ namespace Capa_Negocios
             }
 
             return Math.Max(0, indice - 1);
+        }
+
+        private static string ObtenerNombreProductoPorId(int proId)
+        {
+            if (proId <= 0) return string.Empty;
+            try
+            {
+                using (var db = new Capa_Datos.MonolitoDataContext())
+                {
+                    var prod = db.tbl_producto.FirstOrDefault(p => p.pro_id == proId);
+                    return prod != null ? prod.pro_nombre : string.Empty;
+                }
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
     }
 }

@@ -223,7 +223,7 @@
 .prov-grid tbody tr:hover { background:var(--row-hover); }
 .prov-grid tbody td { padding:11px 15px; vertical-align:middle; }
 .carousel-cell {
-  position:relative; width:110px; height:80px;
+  position:relative; width:155px; height:110px;
   border-radius:10px; overflow:hidden;
   background:rgba(219,39,119,0.08);
 }
@@ -232,19 +232,19 @@
 .carousel-cell img { width:100%; height:100%; object-fit:cover; border-radius:10px; }
 .carousel-cell .prev, .carousel-cell .next {
   position:absolute; top:50%; transform:translateY(-50%);
-  background:rgba(0,0,0,0.45); color:#fff; border:none; cursor:pointer;
-  border-radius:50%; width:22px; height:22px; font-size:.6rem;
+  background:rgba(219,39,119,0.85); color:#fff; border:none; cursor:pointer;
+  border-radius:50%; width:30px; height:30px; font-size:.9rem;
   display:flex; align-items:center; justify-content:center;
-  transition:background .2s; z-index:2;
+  transition:all .2s; z-index:2;
 }
-.carousel-cell .prev { left:3px; }
-.carousel-cell .next { right:3px; }
-.carousel-cell .prev:hover, .carousel-cell .next:hover { background:rgba(0,0,0,0.75); }
-.carousel-cell .dots { position:absolute; bottom:4px; left:50%; transform:translateX(-50%); display:flex; gap:4px; }
-.carousel-cell .dot { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.5); cursor:pointer; transition:background .2s; }
-.carousel-cell .dot.on { background:#fff; }
+.carousel-cell .prev { left:4px; }
+.carousel-cell .next { right:4px; }
+.carousel-cell .prev:hover, .carousel-cell .next:hover { background:rgba(244,63,94,0.95); transform:translateY(-50%) scale(1.15); }
+.carousel-cell .dots { position:absolute; bottom:6px; left:50%; transform:translateX(-50%); display:flex; gap:5px; }
+.carousel-cell .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.6); cursor:pointer; transition:background .2s; }
+.carousel-cell .dot.on { background:#f43f5e; box-shadow:0 0 5px rgba(244,63,94,0.9); }
 .no-foto, .provider-slide-inline-empty {
-  width:110px; height:80px; border-radius:10px;
+  width:155px; height:110px; border-radius:10px;
   display:flex; align-items:center; justify-content:center;
   background:rgba(219,39,119,0.07); color:rgba(219,39,119,0.35); font-size:1.8rem;
 }
@@ -456,7 +456,7 @@
                 <HeaderTemplate><i class="fa-solid fa-address-card"></i> NOMBRE</HeaderTemplate>
                 <ItemTemplate><%# Eval("prov_nombre") %></ItemTemplate>
               </asp:TemplateField>
-              <asp:TemplateField ItemStyle-Width="140px">
+              <asp:TemplateField ItemStyle-Width="165px">
                 <HeaderTemplate><i class="fa-solid fa-box-open"></i> PRODUCTOS</HeaderTemplate>
                 <ItemTemplate>
                   <%# GenerarCarruselProveedor(Eval("prov_id")) %>
@@ -672,11 +672,11 @@
     var p = document.getElementById('filtrosPanel');
     var a = document.getElementById('arrowFilt');
     var hf = document.getElementById('<%= hfFiltrosAbiertos.ClientID %>');
-    p.classList.toggle('closed');
-    var closed = p.classList.contains('closed');
-    a.innerHTML = closed ? '<i class="fa-solid fa-chevron-down"></i>' : '<i class="fa-solid fa-chevron-up"></i>';
-    hf.value = closed ? '0' : '1';
-  }
+          p.classList.toggle('closed');
+          var closed = p.classList.contains('closed');
+          a.innerHTML = closed ? '<i class="fa-solid fa-chevron-down"></i>' : '<i class="fa-solid fa-chevron-up"></i>';
+          hf.value = closed ? '0' : '1';
+      }
   </script>
 
 </asp:Content>

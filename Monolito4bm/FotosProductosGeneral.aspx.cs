@@ -33,16 +33,32 @@ namespace Monolito4bm
         protected global::System.Web.UI.WebControls.Button btnPrevisualizarCarga;
         protected global::System.Web.UI.WebControls.LinkButton btnLimpiarFiltros;
         protected global::System.Web.UI.WebControls.Repeater rptFotos;
-        protected global::System.Web.UI.WebControls.Repeater rptFotosPreview;
         protected global::System.Web.UI.WebControls.Repeater rptRutasPreparadas;
         protected global::System.Web.UI.WebControls.GridView gvPreviewCarga;
         protected global::System.Web.UI.WebControls.PlaceHolder phPreviewVacia;
-        protected global::System.Web.UI.WebControls.Literal lblFotosPreviewInfo;
         protected global::System.Web.UI.WebControls.Literal litArchivoCarga;
         protected global::System.Web.UI.WebControls.Literal litResumenCarga;
         protected global::System.Web.UI.WebControls.Literal litRutasPreparadasInfo;
         protected global::System.Web.UI.WebControls.HiddenField hfFiltrosAbiertos;
         protected global::System.Web.UI.WebControls.HiddenField hfAccionRutasFaltantes;
+        protected global::System.Web.UI.WebControls.HiddenField hfProductosJson;
+        protected global::System.Web.UI.WebControls.HiddenField hfAccumulatedRoutes;
+        protected global::System.Web.UI.WebControls.Button btnGenerarExcelTodo;
+        protected global::System.Web.UI.UpdatePanel upCargaMasiva;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPaginacion;
+        protected global::System.Web.UI.WebControls.LinkButton btnPaginaPrev;
+        protected global::System.Web.UI.WebControls.LinkButton btnPaginaNext;
+        protected global::System.Web.UI.WebControls.Label lblPaginaActual;
+        protected global::System.Web.UI.WebControls.Label lblTotalPaginas;
+
+        private const int TamanioPagina = 5;
+
+        private int PaginaActual
+        {
+            get { return ViewState["PaginaActual"] as int? ?? 0; }
+            set { ViewState["PaginaActual"] = value; }
+        }
+
 
         private const string CarpetaVirtual = "~/Uploads/Productos/";
         private const int MaxFilasPreview = 20;
@@ -83,7 +99,7 @@ namespace Monolito4bm
             set { Session[SessionRutasPreparadasKey] = value; }
         }
 
-        private byte[] ExcelRutasPreparadas
+        protected byte[] ExcelRutasPreparadas
         {
             get { return Session[SessionExcelRutasKey] as byte[]; }
             set { Session[SessionExcelRutasKey] = value; }
@@ -97,10 +113,7 @@ namespace Monolito4bm
             {
                 CargarProductosDropdowns();
                 CargarFotos();
-                LimpiarFotosTemporales();
-                LimpiarPreviewCarga();
                 LimpiarRutasPreparadas();
-                BindFotosPreview();
             }
         }
 
@@ -109,6 +122,7 @@ namespace Monolito4bm
             if (fuFotos != null)
             {
                 fuFotos.Attributes["accept"] = ".jpg,.jpeg,.png,image/jpeg,image/png";
+                fuFotos.Attributes["multiple"] = "multiple";
             }
 
             if (fuCargaMasiva != null)
@@ -126,6 +140,7 @@ namespace Monolito4bm
                     .OrderBy(p => p.pro_nombre)
                     .ToList();
 
+                // DDLs de filtros y compatibilidad
                 ddlFiltroProducto.DataSource = productos;
                 ddlFiltroProducto.DataTextField = "pro_nombre";
                 ddlFiltroProducto.DataValueField = "pro_id";
@@ -137,6 +152,24 @@ namespace Monolito4bm
                 ddlProductoCarga.DataValueField = "pro_id";
                 ddlProductoCarga.DataBind();
                 ddlProductoCarga.Items.Insert(0, new ListItem("-- Seleccione un producto --", ""));
+
+                // JSON de productos para el JS del cliente
+                // Formato: [{"id": 1, "nombre": "Producto A"}, ...]
+                var sb = new System.Text.StringBuilder("[");
+                bool first = true;
+                foreach (var p in productos)
+                {
+                    if (!first) sb.Append(',');
+                    first = false;
+                    sb.Append("{\"id\":");
+                    sb.Append(p.pro_id);
+                    sb.Append(",\"nombre\":\"");
+                    sb.Append(HttpUtility.JavaScriptStringEncode(p.pro_nombre));
+                    sb.Append("\"}");
+                }
+                sb.Append("]");
+                if (hfProductosJson != null)
+                    hfProductosJson.Value = sb.ToString();
             }
             catch (Exception ex)
             {
@@ -200,11 +233,40 @@ namespace Monolito4bm
                         })
                         .ToList();
 
-                    litTotalFotos.Text = listado.Count + " foto(s) encontrada(s)";
+                    int totalRegistros = listado.Count;
+                    int totalPaginas = (int)Math.Ceiling((double)totalRegistros / TamanioPagina);
 
-                    if (listado.Any())
+                    if (PaginaActual < 0) PaginaActual = 0;
+                    if (totalPaginas > 0 && PaginaActual >= totalPaginas) PaginaActual = totalPaginas - 1;
+
+                    var paginado = listado
+                        .Skip(PaginaActual * TamanioPagina)
+                        .Take(TamanioPagina)
+                        .ToList();
+
+                    litTotalFotos.Text = totalRegistros + " foto(s) encontrada(s)";
+
+                    if (lblPaginaActual != null) lblPaginaActual.Text = (PaginaActual + 1).ToString();
+                    if (lblTotalPaginas != null) lblTotalPaginas.Text = Math.Max(1, totalPaginas).ToString();
+
+                    if (btnPaginaPrev != null)
                     {
-                        rptFotos.DataSource = listado;
+                        btnPaginaPrev.Enabled = PaginaActual > 0;
+                        btnPaginaPrev.CssClass = PaginaActual > 0 ? "btn btn-secondary btn-sm" : "btn btn-secondary btn-sm disabled";
+                    }
+                    if (btnPaginaNext != null)
+                    {
+                        btnPaginaNext.Enabled = PaginaActual < totalPaginas - 1;
+                        btnPaginaNext.CssClass = PaginaActual < totalPaginas - 1 ? "btn btn-secondary btn-sm" : "btn btn-secondary btn-sm disabled";
+                    }
+                    if (divPaginacion != null)
+                    {
+                        divPaginacion.Style["display"] = totalRegistros > TamanioPagina ? "flex" : "none";
+                    }
+
+                    if (paginado.Any())
+                    {
+                        rptFotos.DataSource = paginado;
                         rptFotos.DataBind();
                         litSinFotos.Text = string.Empty;
                     }
@@ -227,18 +289,8 @@ namespace Monolito4bm
 
         private void BindFotosPreview()
         {
-            var fotos = FotosTemporales;
-            rptFotosPreview.DataSource = fotos;
-            rptFotosPreview.DataBind();
-
-            if (fotos.Count > 0)
-            {
-                lblFotosPreviewInfo.Text = "Fotos listas para preparar: " + fotos.Count + ". Siguiente paso: guardar en servidor y generar el Excel de rutas.";
-            }
-            else
-            {
-                lblFotosPreviewInfo.Text = "No hay fotos en la previsualizacion temporal.";
-            }
+            // El carrusel ahora es manejado 100% por el cliente (JS).
+            // Este método se mantiene para compatibilidad pero no hace nada.
         }
 
         private void BindRutasPreparadas()
@@ -254,86 +306,79 @@ namespace Monolito4bm
 
         protected void btnPrevisualizar_Click(object sender, EventArgs e)
         {
+            // Compatibilidad con flujo original (botón oculto).
+        }
+
+        // ── Handlers del nuevo sistema multi-slot (via ASHX + fetch) ──
+
+        /// <summary>
+        /// Genera el Excel de rutas a partir del JSON acumulado por el cliente (JS).
+        /// El JS lo llama automáticamente después de que todos los slots se guardaron via fetch a GuardarFotosSlots.ashx.
+        /// </summary>
+        protected void btnGenerarExcelTodo_Click(object sender, EventArgs e)
+        {
             try
             {
-                if (string.IsNullOrEmpty(ddlProductoCarga.SelectedValue))
+                string json = (hfAccumulatedRoutes != null ? hfAccumulatedRoutes.Value : string.Empty).Trim();
+                if (string.IsNullOrEmpty(json) || json == "[]")
                 {
-                    throw new Exception("Selecciona un producto antes de previsualizar.");
+                    // Sin rutas acumuladas: no generar Excel (puede pasar si el JS no lo llenó aun)
+                    return;
                 }
 
-                if (!fuFotos.HasFiles)
-                {
-                    throw new Exception("Selecciona al menos una imagen JPG o PNG para preparar la carga.");
-                }
+                var rutas = ParseRoutesJson(json);
+                if (!rutas.Any()) return;
 
-                var fotosActuales = FotosTemporales;
-                var nuevasFotos = new List<FotoTemporal>();
+                var rutasActuales = RutasPreparadas;
+                rutasActuales.AddRange(rutas);
+                RutasPreparadas = rutasActuales;
 
-                foreach (HttpPostedFile file in fuFotos.PostedFiles)
-                {
-                    if (file == null || file.ContentLength <= 0)
-                    {
-                        continue;
-                    }
+                string plantillaPath = Server.MapPath("~/Plantillas/Fotos.xlsx");
+                if (!File.Exists(plantillaPath))
+                    throw new Exception("La plantilla 'Fotos.xlsx' no existe en el servidor.");
 
-                    if (file.ContentLength > 2 * 1024 * 1024)
-                    {
-                        throw new Exception("El archivo '" + file.FileName + "' supera el limite de 2 MB.");
-                    }
+                byte[] plantilla = File.ReadAllBytes(plantillaPath);
+                ExcelRutasPreparadas = CN_tbl_pro_fotos.GenerarExcelRutasDesdePlantilla(plantilla, RutasPreparadas);
 
-                    string ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-                    string contentType = (file.ContentType ?? string.Empty).ToLowerInvariant();
-                    if ((ext != ".jpg" && ext != ".jpeg" && ext != ".png") ||
-                        (contentType != "image/jpeg" && contentType != "image/png"))
-                    {
-                        throw new Exception("El archivo '" + file.FileName + "' no es una imagen JPG o PNG valida.");
-                    }
+                BindRutasPreparadas();
+                MostrarMensaje(rutas.Count() + " foto(s) guardadas en servidor. Descarga el Excel con las rutas.", true);
 
-                    using (var reader = new BinaryReader(file.InputStream))
-                    {
-                        nuevasFotos.Add(new FotoTemporal
-                        {
-                            Id = Guid.NewGuid().ToString("N"),
-                            NombreArchivo = Path.GetFileName(file.FileName),
-                            ContentType = file.ContentType,
-                            Contenido = reader.ReadBytes(file.ContentLength)
-                        });
-                    }
-                }
-
-                if (!nuevasFotos.Any())
-                {
-                    throw new Exception("No se encontraron imagenes validas para previsualizar.");
-                }
-
-                fotosActuales.AddRange(nuevasFotos);
-                FotosTemporales = fotosActuales;
-                BindFotosPreview();
-                MostrarMensaje("Previsualizacion lista. Ahora puedes revisar las imagenes y generar el Excel de rutas.", true);
+                // Limpiar el hidden para que no regenere en futuros postbacks
+                if (hfAccumulatedRoutes != null) hfAccumulatedRoutes.Value = string.Empty;
             }
             catch (Exception ex)
             {
-                MostrarMensaje(ex.Message, false);
+                MostrarMensaje("Error al generar el Excel de rutas: " + ex.Message, false);
             }
         }
 
-        protected void rptFotosPreview_ItemCommand(object source, RepeaterCommandEventArgs e)
+        /// <summary>Parsea el JSON de rutas acumuladas del cliente (formato [{nombreArchivo, rutaRelativa}]).</summary>
+        private IEnumerable<FotoRutaPreparada> ParseRoutesJson(string json)
         {
-            if (e.CommandName != "Eliminar")
+            var result = new List<FotoRutaPreparada>();
+            try
             {
-                return;
-            }
+                var arr = Newtonsoft.Json.Linq.JArray.Parse(json);
+                foreach (var item in arr)
+                {
+                    string nombre = item["nombreArchivo"]?.ToString() ?? string.Empty;
+                    string ruta   = item["rutaRelativa"]?.ToString() ?? string.Empty;
+                    int proId     = 0;
+                    int.TryParse(item["proId"]?.ToString(), out proId);
 
-            string id = Convert.ToString(e.CommandArgument);
-            var fotos = FotosTemporales;
-            var foto = fotos.FirstOrDefault(f => f.Id == id);
-            if (foto != null)
-            {
-                fotos.Remove(foto);
-                FotosTemporales = fotos;
+                    if (!string.IsNullOrWhiteSpace(ruta))
+                    {
+                        result.Add(new FotoRutaPreparada
+                        {
+                            NombreArchivo = nombre,
+                            RutaRelativa  = ruta,
+                            ProductoId    = proId
+                        });
+                    }
+                }
             }
-
-            BindFotosPreview();
+            catch { /* JSON malformado */ }
+            return result;
         }
 
         protected void btnPrepararExcelRutas_Click(object sender, EventArgs e)
@@ -344,6 +389,8 @@ namespace Monolito4bm
                 {
                     throw new Exception("Selecciona un producto antes de subir.");
                 }
+
+                int selectedProId = int.Parse(ddlProductoCarga.SelectedValue);
 
                 var fotos = FotosTemporales;
                 if (!fotos.Any())
@@ -373,7 +420,8 @@ namespace Monolito4bm
                     rutas.Add(new FotoRutaPreparada
                     {
                         NombreArchivo = foto.NombreArchivo,
-                        RutaRelativa = "Uploads/Productos/" + archivo
+                        RutaRelativa = "Uploads/Productos/" + archivo,
+                        ProductoId = selectedProId
                     });
                 }
 
@@ -384,7 +432,6 @@ namespace Monolito4bm
                 }
 
                 byte[] plantilla = File.ReadAllBytes(plantillaPath);
-                int selectedProId = int.Parse(ddlProductoCarga.SelectedValue);
                 ExcelRutasPreparadas = CN_tbl_pro_fotos.GenerarExcelRutasDesdePlantilla(plantilla, rutas, selectedProId);
                 RutasPreparadas = rutas;
 
@@ -459,21 +506,17 @@ namespace Monolito4bm
         {
             try
             {
-                if (!fuCargaMasiva.HasFile)
+                byte[] contenido = Session["CargaMasivaFileBytes"] as byte[];
+                string filename = Session["CargaMasivaFileName"] as string;
+
+                if (contenido == null || contenido.Length == 0)
                 {
-                    throw new Exception("Primero debes seleccionar un archivo para la carga masiva.");
+                    throw new Exception("Primero debes seleccionar y subir un archivo para la carga masiva.");
                 }
 
-                ValidarArchivoCarga(fuCargaMasiva.FileName);
+                ValidarArchivoCarga(filename);
 
-                byte[] contenido;
-                using (var memory = new MemoryStream())
-                {
-                    fuCargaMasiva.PostedFile.InputStream.CopyTo(memory);
-                    contenido = memory.ToArray();
-                }
-
-                FilasCargaMasiva = CN_tbl_pro_fotos.LeerArchivoCargaMasiva(contenido, fuCargaMasiva.FileName);
+                FilasCargaMasiva = CN_tbl_pro_fotos.LeerArchivoCargaMasiva(contenido, filename);
                 BindPreviewCarga();
                 MostrarMensaje("Vista previa generada correctamente. Se detectaron " + FilasCargaMasiva.Count + " fila(s).", true);
             }
@@ -526,6 +569,7 @@ namespace Monolito4bm
                 hfAccionRutasFaltantes.Value = string.Empty;
 
                 LimpiarPreviewCarga();
+                PaginaActual = 0;
                 CargarFotos();
 
                 string mensaje = "Carga masiva completada. Filas: " + resultado.FilasProcesadas +
@@ -564,6 +608,7 @@ namespace Monolito4bm
 
         protected void Filtros_Changed(object sender, EventArgs e)
         {
+            PaginaActual = 0;
             CargarFotos();
         }
 
@@ -575,7 +620,20 @@ namespace Monolito4bm
             txtFechaDesde.Text = string.Empty;
             txtFechaHasta.Text = string.Empty;
             hfFiltrosAbiertos.Value = "1";
+            PaginaActual = 0;
 
+            CargarFotos();
+        }
+
+        protected void btnPaginaPrev_Click(object sender, EventArgs e)
+        {
+            PaginaActual--;
+            CargarFotos();
+        }
+
+        protected void btnPaginaNext_Click(object sender, EventArgs e)
+        {
+            PaginaActual++;
             CargarFotos();
         }
 
@@ -627,7 +685,7 @@ namespace Monolito4bm
                 {
                     f.NumeroFilaArchivo,
                     FotoIdTexto = f.FotoId.HasValue ? f.FotoId.Value.ToString() : "(nueva)",
-                    f.ProductoId,
+                    ProductoId = f.ProductoIdentificador,
                     f.RutaFoto,
                     OrigenFoto = (f.FotoBit != null && f.FotoBit.Length > 0) ? "foto_bit" : "foto_ruta",
                     EstadoTexto = f.EstadoFoto == 'I' ? "Inactiva" : "Activa"
@@ -638,7 +696,9 @@ namespace Monolito4bm
             gvPreviewCarga.DataSource = preview;
             gvPreviewCarga.DataBind();
             phPreviewVacia.Visible = !preview.Any();
-            litArchivoCarga.Text = "Archivo listo: " + HttpUtility.HtmlEncode(fuCargaMasiva.FileName);
+            
+            string filename = Session["CargaMasivaFileName"] as string ?? string.Empty;
+            litArchivoCarga.Text = "Archivo listo: " + HttpUtility.HtmlEncode(filename);
             litResumenCarga.Text = filas.Count > MaxFilasPreview
                 ? "Mostrando " + MaxFilasPreview + " de " + filas.Count + " fila(s)."
                 : "Mostrando " + filas.Count + " fila(s).";
@@ -647,6 +707,8 @@ namespace Monolito4bm
         private void LimpiarPreviewCarga()
         {
             FilasCargaMasiva = null;
+            Session["CargaMasivaFileBytes"] = null;
+            Session["CargaMasivaFileName"] = null;
             gvPreviewCarga.Visible = false;
             gvPreviewCarga.DataSource = null;
             gvPreviewCarga.DataBind();

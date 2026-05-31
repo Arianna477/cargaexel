@@ -238,7 +238,8 @@ namespace Capa_Negocios
                 {
                     NumeroFilaArchivo = f.NumeroFilaArchivo,
                     FotoId = f.FotoId,
-                    ProductoId = f.ProductoId,
+                    ProductoIdentificador = f.ProductoIdentificador,
+                    ProductoId = 0,
                     RutaFoto = rutaNormalizada,
                     FotoBit = f.FotoBit,
                     EstadoFoto = f.EstadoFoto == 'I' ? 'I' : 'A'
@@ -255,7 +256,21 @@ namespace Capa_Negocios
 
         private static void EjecutarCargaIncremental(MonolitoDataContext dc, List<FotoCargaFilaNormalizada> filas, ResultadoCargaFotos resultado)
         {
-            var productosValidos = dc.tbl_producto.Select(p => p.pro_id).ToHashSet();
+            var productosDb = dc.tbl_producto.ToList();
+            var productosPorId = productosDb.ToDictionary(p => p.pro_id, p => p.pro_id);
+            var productosPorNombre = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            foreach (var p in productosDb)
+            {
+                if (!string.IsNullOrWhiteSpace(p.pro_nombre))
+                {
+                    string nom = p.pro_nombre.Trim();
+                    if (!productosPorNombre.ContainsKey(nom))
+                    {
+                        productosPorNombre[nom] = p.pro_id;
+                    }
+                }
+            }
+
             int? productoFallbackId = null;
             var existentes = dc.tbl_pro_fotos.ToList();
             var porId = existentes.ToDictionary(f => f.foto_id);
@@ -264,7 +279,7 @@ namespace Capa_Negocios
 
             foreach (var fila in filas)
             {
-                fila.ProductoId = ResolverProductoRelacionado(dc, productosValidos, fila, resultado, ref productoFallbackId);
+                fila.ProductoId = ResolverProductoRelacionado(dc, productosPorId, productosPorNombre, fila, resultado, ref productoFallbackId);
 
                 tbl_pro_fotos existente = null;
                 if (fila.FotoId.HasValue)
@@ -313,11 +328,25 @@ namespace Capa_Negocios
 
         private static void EjecutarReemplazoTotal(MonolitoDataContext dc, List<FotoCargaFilaNormalizada> filas, ResultadoCargaFotos resultado)
         {
-            var productosValidos = dc.tbl_producto.Select(p => p.pro_id).ToHashSet();
+            var productosDb = dc.tbl_producto.ToList();
+            var productosPorId = productosDb.ToDictionary(p => p.pro_id, p => p.pro_id);
+            var productosPorNombre = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            foreach (var p in productosDb)
+            {
+                if (!string.IsNullOrWhiteSpace(p.pro_nombre))
+                {
+                    string nom = p.pro_nombre.Trim();
+                    if (!productosPorNombre.ContainsKey(nom))
+                    {
+                        productosPorNombre[nom] = p.pro_id;
+                    }
+                }
+            }
+
             int? productoFallbackId = null;
             foreach (var fila in filas)
             {
-                fila.ProductoId = ResolverProductoRelacionado(dc, productosValidos, fila, resultado, ref productoFallbackId);
+                fila.ProductoId = ResolverProductoRelacionado(dc, productosPorId, productosPorNombre, fila, resultado, ref productoFallbackId);
             }
 
             var fotos = dc.tbl_pro_fotos.ToList();
@@ -375,22 +404,50 @@ namespace Capa_Negocios
 
         private static int ResolverProductoRelacionado(
             MonolitoDataContext dc,
-            HashSet<int> productosValidos,
+            Dictionary<int, int> productosPorId,
+            Dictionary<string, int> productosPorNombre,
             FotoCargaFilaNormalizada fila,
             ResultadoCargaFotos resultado,
             ref int? productoFallbackId)
         {
-            if (productosValidos.Contains(fila.ProductoId))
+            string identificador = (fila.ProductoIdentificador ?? string.Empty).Trim();
+            if (string.IsNullOrEmpty(identificador))
             {
-                return fila.ProductoId;
+                return ObtenerFallbackId(dc, ref productoFallbackId, resultado);
             }
 
+            int id;
+            if (int.TryParse(identificador, out id))
+            {
+                if (productosPorId.ContainsKey(id))
+                {
+                    return id;
+                }
+            }
+
+            string nombreNormalizado = identificador.ToLowerInvariant();
+            if (productosPorNombre.ContainsKey(nombreNormalizado))
+            {
+                return productosPorNombre[nombreNormalizado];
+            }
+
+            var prodDb = dc.tbl_producto.FirstOrDefault(p => p.pro_nombre != null && p.pro_nombre.ToLower() == nombreNormalizado);
+            if (prodDb != null)
+            {
+                productosPorNombre[nombreNormalizado] = prodDb.pro_id;
+                productosPorId[prodDb.pro_id] = prodDb.pro_id;
+                return prodDb.pro_id;
+            }
+
+            return ObtenerFallbackId(dc, ref productoFallbackId, resultado);
+        }
+
+        private static int ObtenerFallbackId(MonolitoDataContext dc, ref int? productoFallbackId, ResultadoCargaFotos resultado)
+        {
             if (!productoFallbackId.HasValue)
             {
                 productoFallbackId = ObtenerOCrearProductoPredeterminado(dc);
-                productosValidos.Add(productoFallbackId.Value);
             }
-
             resultado.FotosSinProducto++;
             return productoFallbackId.Value;
         }

@@ -10,7 +10,7 @@
       crossorigin="anonymous"/>
 <style>
 :root {
-  --accent:#db2777; --accent2:#9d174d;
+  --accent:#7a4aaa; --accent2:#5a2a8a;
   --danger:#c0392b; --success:#27ae60; --warn:#e67e22;
 }
 
@@ -27,15 +27,42 @@
   display:inline-flex; align-items:center; gap:7px;
   color:var(--accent); font-weight:700; font-size:.88rem;
   text-decoration:none; padding:8px 18px; border-radius:30px;
-  border:1.5px solid rgba(219,39,119,0.3); transition:all .2s;
+  border:1.5px solid rgba(122,74,170,0.3); transition:all .2s;
 }
-.back-link:hover { background:rgba(219,39,119,0.1); transform:translateX(-2px); }
+.back-link:hover { background:rgba(122,74,170,0.1); transform:translateX(-2px); }
+
+/* Dropdown rosa */
+.product-select-dropdown {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid #db2777; /* Rosa */
+  color: #9d174d; /* Rosa oscuro */
+  font-family: inherit;
+  font-size: .92rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 30px;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(219,39,119,0.12);
+  transition: all .2s;
+  max-width: 320px;
+  display: inline-block;
+}
+.product-select-dropdown:hover {
+  background: #fff;
+  border-color: #9d174d;
+  box-shadow: 0 4px 16px rgba(219,39,119,0.2);
+}
+.product-select-dropdown:focus {
+  border-color: #9d174d;
+  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.25);
+}
 
 /* ── Cards ──────────────────────────────────────── */
 .card {
   background:rgba(255,255,255,0.72); backdrop-filter:blur(12px);
-  border:1px solid rgba(244,143,177,0.4); border-radius:18px;
-  padding:22px 26px; box-shadow:0 4px 24px rgba(190,24,93,0.10);
+  border:1px solid rgba(180,150,220,0.4); border-radius:18px;
+  padding:22px 26px; box-shadow:0 4px 24px rgba(120,80,180,0.10);
   margin-bottom:22px;
 }
 .card-title {
@@ -198,10 +225,10 @@
     <div class="page-title">
       <i class="fa-solid fa-camera" style="color:var(--accent)"></i>
       Fotos &mdash;
-      <span style="color:rgba(90,42,138,0.65);font-size:1.05rem;font-weight:500;">
-        <asp:DropDownList ID="ddlProducto" runat="server" CssClass="form-control"
-                          AutoPostBack="true" OnSelectedIndexChanged="ddlProducto_SelectedIndexChanged"
-                          Style="display:inline-block; width:auto; min-width:250px; margin-left:10px;" />
+      <span style="color:rgba(90,42,138,0.65);font-size:1.05rem;font-weight:500;display:inline-flex;align-items:center;">
+        <asp:DropDownList ID="ddlProducto" runat="server" AutoPostBack="true"
+                          OnSelectedIndexChanged="ddlProducto_SelectedIndexChanged"
+                          CssClass="product-select-dropdown" style="margin-left: 10px;" />
       </span>
     </div>
     <a href="Productos.aspx" class="back-link">
@@ -218,17 +245,17 @@
     <div class="card-title">
       <i class="fa-solid fa-upload"></i> Subir fotos
       <span style="font-size:.76rem;color:#aaa;font-weight:400;margin-left:4px;">
-        (max. 4 por producto &mdash; JPG o PNG &mdash; 5&nbsp;MB c/u)
+        (max. 4 por producto &mdash; JPG o PNG &mdash; 2&nbsp;MB c/u)
       </span>
     </div>
 
     <div class="upload-zone" id="uploadZone">
       <div class="uz-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-      <p><strong>Haz clic o arrastra</strong> las imagenes aqui</p>
+      <p><strong>Haz clic o arrastra</strong> las imágenes aquí</p>
       <p style="font-size:.78rem;">JPG, PNG hasta 2&nbsp;MB</p>
       <asp:FileUpload ID="fuFotos" runat="server"
                       AllowMultiple="true"
-                      accept="image/jpeg,image/png"/>
+                      accept="image/jpeg,image/png" />
     </div>
 
     <div class="preview-strip">
@@ -239,8 +266,8 @@
             <div class="preview-meta">
               <strong style="display:block;margin-bottom:6px;"><%# Eval("NombreArchivo") %></strong>
               <asp:LinkButton runat="server" CommandName="Eliminar" CommandArgument='<%# Eval("Id") %>'
-                              CssClass="btn btn-danger btn-sm" OnClientClick="return confirm('Quitar esta foto de la previsualizacion?');">
-                Quitar
+                  CssClass="btn btn-danger btn-sm" OnClientClick="return confirm('¿Quitar esta foto de la previsualización?');">
+                  Quitar
               </asp:LinkButton>
             </div>
           </div>
@@ -248,12 +275,12 @@
       </asp:Repeater>
     </div>
     <div style="font-size:.82rem;color:#6b5b82;margin-top:8px;font-weight:600;">
-      <asp:Literal ID="lblFotosPreviewInfo" runat="server" />
+        <asp:Literal ID="lblFotosPreviewInfo" runat="server" />
     </div>
 
     <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
       <asp:Button ID="btnPrevisualizar" runat="server" CssClass="btn btn-secondary"
-                  Text="Previsualizar fotos" OnClick="btnPrevisualizar_Click" CausesValidation="false" />
+                  Text="Previsualizar fotos" OnClick="btnPrevisualizar_Click" style="display:none;" />
       <asp:Button ID="btnSubir" runat="server" CssClass="btn btn-primary"
                   Text="Subir fotos" OnClick="btnSubir_Click"/>
       <asp:Button ID="btnCancelar" runat="server" CssClass="btn btn-secondary"
@@ -278,12 +305,12 @@
           <table class="fotos-table">
             <thead>
               <tr>
-                <th style="width:76px;"><i class="fa-solid fa-image"></i> FOTO</th>
-                <th><i class="fa-solid fa-box"></i> PRODUCTO</th>
-                <th style="width:80px;"><i class="fa-solid fa-hashtag"></i> ID</th>
-                <th style="width:90px;"><i class="fa-solid fa-toggle-on"></i> ESTADO</th>
-                <th><i class="fa-solid fa-calendar-days"></i> SUBIDA</th>
-                <th style="width:210px;"><i class="fa-solid fa-gears"></i> ACCIONES</th>
+                <th style="width:76px;">FOTO</th>
+                <th>PRODUCTO</th>
+                <th style="width:80px;">ID</th>
+                <th style="width:90px;">ESTADO</th>
+                <th>SUBIDA</th>
+                <th style="width:210px;">ACCIONES</th>
               </tr>
             </thead>
             <tbody>
@@ -366,18 +393,84 @@
   </div>
 
   <script>
-      // Drag & drop sobre la zona
-      var zone = document.getElementById('uploadZone');
-      if (zone) {
-          zone.addEventListener('dragover', function (e) { e.preventDefault(); zone.classList.add('drag-over'); });
-          zone.addEventListener('dragleave', function () { zone.classList.remove('drag-over'); });
-          zone.addEventListener('drop', function (e) {
-              e.preventDefault(); zone.classList.remove('drag-over');
-              var inp = zone.querySelector('input[type=file]');
-              if (inp) {
-                  inp.files = e.dataTransfer.files;
-              }
-          });
-      }
+      document.addEventListener('DOMContentLoaded', function () {
+          var input = document.getElementById('<%= fuFotos.ClientID %>');
+          var ddlProd = document.getElementById('<%= ddlProducto.ClientID %>');
+          var btnPrev = document.getElementById('<%= btnPrevisualizar.ClientID %>');
+          var btnSubir = document.getElementById('<%= btnSubir.ClientID %>');
+
+          if (input) {
+              input.addEventListener('change', function () {
+                  if (!ddlProd || ddlProd.value === '' || ddlProd.value === '0') {
+                      Swal.fire({
+                          title: '¡Atención!',
+                          text: 'Debes seleccionar un producto antes de previsualizar y subir las fotos.',
+                          icon: 'warning',
+                          confirmButtonColor: '#7a4aaa'
+                      });
+                      input.value = '';
+                      return;
+                  }
+
+                  var files = Array.from(input.files);
+                  var maxBytes = 2 * 1024 * 1024; // 2 MB
+                  for (var i = 0; i < files.length; i++) {
+                      var file = files[i];
+                      if (file.size > maxBytes) {
+                          Swal.fire({
+                              title: 'Archivo muy pesado',
+                              text: 'La foto "' + file.name + '" supera los 2 MB permitidos.',
+                              icon: 'warning',
+                              confirmButtonColor: '#7a4aaa'
+                          });
+                          input.value = '';
+                          return;
+                      }
+                      var ext = file.name.split('.').pop().toLowerCase();
+                      if (ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png') {
+                          Swal.fire({
+                              title: 'Formato no válido',
+                              text: 'El archivo "' + file.name + '" no es una imagen JPG o PNG válida.',
+                              icon: 'warning',
+                              confirmButtonColor: '#7a4aaa'
+                          });
+                          input.value = '';
+                          return;
+                      }
+                  }
+
+                  if (files.length > 0 && btnPrev) {
+                      btnPrev.click();
+                  }
+              });
+          }
+
+          if (btnSubir) {
+              btnSubir.addEventListener('click', function (e) {
+                  var cards = document.querySelectorAll('.preview-strip .preview-card');
+                  if (cards.length === 0) {
+                      e.preventDefault();
+                      Swal.fire({
+                          title: '¡Atención!',
+                          text: 'Debes previsualizar las fotos primero antes de subirlas.',
+                          icon: 'warning',
+                          confirmButtonColor: '#7a4aaa'
+                      });
+                  }
+              });
+          }
+
+          // Drag & drop sobre la zona
+          var zone = document.getElementById('uploadZone');
+          if (zone && input) {
+              zone.addEventListener('dragover', function (e) { e.preventDefault(); zone.classList.add('drag-over'); });
+              zone.addEventListener('dragleave', function () { zone.classList.remove('drag-over'); });
+              zone.addEventListener('drop', function (e) {
+                  e.preventDefault(); zone.classList.remove('drag-over');
+                  input.files = e.dataTransfer.files;
+                  input.dispatchEvent(new Event('change'));
+              });
+          }
+      });
   </script>
 </asp:Content>

@@ -149,6 +149,7 @@
     <Content Include="Global.asax" />
     <Content Include="ImagenProductoFallback.ashx" />
     <Content Include="ImagenUsuarioFallback.ashx" />
+    <Content Include="GuardarFotosSlots.ashx" />
     <Content Include="PaginaRol1.aspx" />
     <Content Include="PaginaRol2.aspx" />
     <Content Include="Productos.aspx" />
@@ -282,6 +283,9 @@
     <Compile Include="FotosProductosGeneral.aspx.cs">
       <DependentUpon>FotosProductosGeneral.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GuardarFotosSlots.ashx.cs">
+      <DependentUpon>GuardarFotosSlots.ashx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
