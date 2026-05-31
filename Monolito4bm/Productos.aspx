@@ -206,7 +206,7 @@
 }
 .pager-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
 .pager-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-.pager-btn:disabled { opacity:.4; cursor:default; }
+.pager-btn:disabled, .pager-btn.aspNetDisabled { opacity:.4; cursor:default; pointer-events:none; }
 
 /* ── Modal ──────────────────────────────────────────────────── */
 .modal-overlay {
@@ -681,8 +681,8 @@
     <div class="pager-wrap">
       <span class="pager-info"><asp:Literal ID="litPagerInfo" runat="server"/></span>
       <div class="pager-btns">
-        <asp:Button ID="btnPrev" runat="server" Text="&#8249;" CssClass="pager-btn"
-                    CausesValidation="false" OnClick="btnPrev_Click"/>
+        <asp:LinkButton ID="btnPrev" runat="server" CssClass="pager-btn"
+                    CausesValidation="false" OnClick="btnPrev_Click">&#8249;</asp:LinkButton>
         <asp:Repeater ID="rptPager" runat="server" OnItemCommand="rptPager_ItemCommand">
           <ItemTemplate>
             <asp:LinkButton runat="server" CommandName="Paginar"
@@ -692,8 +692,8 @@
             </asp:LinkButton>
           </ItemTemplate>
         </asp:Repeater>
-        <asp:Button ID="btnNext" runat="server" Text="&#8250;" CssClass="pager-btn"
-                    CausesValidation="false" OnClick="btnNext_Click"/>
+        <asp:LinkButton ID="btnNext" runat="server" CssClass="pager-btn"
+                    CausesValidation="false" OnClick="btnNext_Click">&#8250;</asp:LinkButton>
       </div>
     </div>
 

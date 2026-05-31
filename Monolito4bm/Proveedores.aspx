@@ -258,7 +258,7 @@
 .pager-btns { display:flex; align-items:center; gap:6px; }
 .pager-btn { min-width:34px; height:34px; border-radius:50%; border:1.5px solid rgba(219,39,119,0.22); background:rgba(255,255,255,0.8); color:var(--accent2); font-weight:700; font-size:.84rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; font-family:inherit; text-decoration:none; }
 .pager-btn:hover, .pager-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-.pager-btn:disabled { opacity:.4; cursor:default; }
+.pager-btn:disabled, .pager-btn.aspNetDisabled { opacity:.4; cursor:default; pointer-events:none; }
 
 .modal-overlay { display:none; position:fixed; inset:0; background:rgba(40,20,70,0.52); backdrop-filter:blur(6px); z-index:999; align-items:center; justify-content:center; }
 .modal-overlay.open { display:flex; }
@@ -514,8 +514,8 @@
         <div class="pager-wrap">
           <span class="pager-info"><asp:Literal ID="litPagerInfo" runat="server"/></span>
           <div class="pager-btns">
-            <asp:Button ID="btnPrev" runat="server" Text="&#8249;" CssClass="pager-btn"
-                        CausesValidation="false" OnClick="btnPrev_Click"/>
+            <asp:LinkButton ID="btnPrev" runat="server" CssClass="pager-btn"
+                        CausesValidation="false" OnClick="btnPrev_Click">&#8249;</asp:LinkButton>
             <asp:Repeater ID="rptPager" runat="server" OnItemCommand="rptPager_ItemCommand">
               <ItemTemplate>
                 <asp:LinkButton runat="server" CommandName="Paginar"
@@ -525,8 +525,8 @@
                 </asp:LinkButton>
               </ItemTemplate>
             </asp:Repeater>
-            <asp:Button ID="btnNext" runat="server" Text="&#8250;" CssClass="pager-btn"
-                        CausesValidation="false" OnClick="btnNext_Click"/>
+            <asp:LinkButton ID="btnNext" runat="server" CssClass="pager-btn"
+                        CausesValidation="false" OnClick="btnNext_Click">&#8250;</asp:LinkButton>
           </div>
         </div>
       </div>

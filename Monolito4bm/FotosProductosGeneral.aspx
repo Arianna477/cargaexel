@@ -399,6 +399,11 @@
         <span id="litRutasPreparadasInfoCliente">
             <asp:Literal ID="litRutasPreparadasInfo" runat="server" Text="Aún no hay rutas preparadas en servidor." />
         </span>
+        <ul class="guide-list" style="margin: 12px 0 16px 20px; color: rgba(60,30,90,.78); font-size: .88rem; line-height: 1.45; list-style-type: disc; padding-left: 0;">
+            <li>Si quieres agregar manualmente las fotos descarga <strong>plantilla base</strong>.</li>
+            <li>Si quieres una con las rutas de las fotos ya subidas descarga <strong>plantilla con rutas</strong>, revísala y puedes cambiar manualmente (asegúrate de colocar bien los datos).</li>
+            <li>Dale al scroll para seguir con los pasos.</li>
+        </ul>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
             <button type="button" id="btnDescargarExcelRutasCliente" class="btn btn-success" 
                 style="display:<%= (ExcelRutasPreparadas != null && ExcelRutasPreparadas.Length > 0) ? "inline-flex" : "none" %>;" 
@@ -439,12 +444,18 @@
                 <div class="card-title">
                     <i class="fa-solid fa-file-excel" style="color:var(--success)"></i> Carga masiva por Excel
                 </div>
+                <ol class="guide-list" style="margin: 0 0 18px 20px; color: rgba(60,30,90,.78); font-size: .88rem; line-height: 1.45; list-style-type: decimal; padding-left: 0;">
+                    <li>Selecciona el excel con las rutas (obligatorio)</li>
+                    <li>Previsualiza el excel para asegurarnos que todo está correcto (obligatorio)</li>
+                    <li>Selecciona si quieres carga borrando datos previos o sin borrado</li>
+                    <li>Dale al botón de cargar datos (obligatorio)</li>
+                </ol>
                 <div class="steps-grid">
                     <div>
                         <label class="form-label" for="<%= fuCargaMasiva.ClientID %>">Archivo Excel o CSV</label>
                         <asp:FileUpload ID="fuCargaMasiva" runat="server" CssClass="form-control" />
                         <div style="font-size:.78rem;color:#6b5b82;margin-top:8px;">
-                            Encabezados: <code>foto_id</code>, <code>producto</code>, <code>foto_ruta</code> o <code>foto_bit</code>, <code>estado</code>.
+                            Encabezados: <code>producto</code>, <code>foto_ruta</code>, <code>estado</code>.
                         </div>
                         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
                             <asp:Button ID="btnPrevisualizarCarga" runat="server" CssClass="btn btn-secondary"

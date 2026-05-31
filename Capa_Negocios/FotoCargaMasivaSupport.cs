@@ -153,7 +153,7 @@ namespace Capa_Negocios
 
                     sheetData.RemoveNodes();
 
-                    string[] headers = { "foto_id", "producto", "foto_ruta", "foto_bit", "estado" };
+                    string[] headers = { "producto", "foto_ruta", "estado" };
                     sheetData.Add(CrearFilaWorksheet(ns, 1, headers));
 
                     int fila = 2;
@@ -164,10 +164,8 @@ namespace Capa_Negocios
 
                         sheetData.Add(CrearFilaWorksheet(ns, fila++, new[]
                         {
-                            string.Empty,
                             productoNombre,
                             item.RutaRelativa ?? string.Empty,
-                            string.Empty,
                             "A"
                         }));
                     }

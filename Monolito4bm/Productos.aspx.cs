@@ -39,10 +39,11 @@ namespace Monolito4bm
         protected global::System.Web.UI.WebControls.HiddenField hfTotalPags;
         protected global::System.Web.UI.WebControls.HiddenField hfOrdenId;
         protected global::System.Web.UI.WebControls.GridView gvProductos;
+        protected global::System.Web.UI.UpdatePanel upGridProductos;
         protected global::System.Web.UI.WebControls.Literal litPagerInfo;
-        protected global::System.Web.UI.WebControls.Button btnPrev;
+        protected global::System.Web.UI.WebControls.LinkButton btnPrev;
         protected global::System.Web.UI.WebControls.Repeater rptPager;
-        protected global::System.Web.UI.WebControls.Button btnNext;
+        protected global::System.Web.UI.WebControls.LinkButton btnNext;
         protected global::System.Web.UI.WebControls.Literal litTituloModal;
         protected global::System.Web.UI.WebControls.HiddenField hfProdId;
         protected global::System.Web.UI.WebControls.TextBox txtNombre;
@@ -152,16 +153,22 @@ namespace Monolito4bm
         {
             int p = int.Parse(hfPagina.Value);
             if (p > 1) { hfPagina.Value = (p - 1).ToString(); CargarGrid(); }
+            upGridProductos.Update();
         }
         protected void btnNext_Click(object sender, EventArgs e)
         {
             int p = int.Parse(hfPagina.Value), m = int.Parse(hfTotalPags.Value);
             if (p < m) { hfPagina.Value = (p + 1).ToString(); CargarGrid(); }
+            upGridProductos.Update();
         }
         protected void rptPager_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "Paginar")
-            { hfPagina.Value = e.CommandArgument.ToString(); CargarGrid(); }
+            { 
+                hfPagina.Value = e.CommandArgument.ToString(); 
+                CargarGrid(); 
+                upGridProductos.Update();
+            }
         }
 
         protected void btnNuevo_Click(object sender, EventArgs e)

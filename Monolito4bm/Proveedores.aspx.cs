@@ -40,10 +40,11 @@ namespace Monolito4bm
         protected global::System.Web.UI.WebControls.HiddenField hfPagina;
         protected global::System.Web.UI.WebControls.HiddenField hfTotalPags;
         protected global::System.Web.UI.WebControls.HiddenField hfOrdenId;
+        protected global::System.Web.UI.UpdatePanel upDashboardProveedores;
         protected global::System.Web.UI.WebControls.Literal litPagerInfo;
-        protected global::System.Web.UI.WebControls.Button btnPrev;
+        protected global::System.Web.UI.WebControls.LinkButton btnPrev;
         protected global::System.Web.UI.WebControls.Repeater rptPager;
-        protected global::System.Web.UI.WebControls.Button btnNext;
+        protected global::System.Web.UI.WebControls.LinkButton btnNext;
 
         private const int POR_PAGINA = 5;
         private const int MAX_FILAS_PREVIEW = 20;
@@ -294,6 +295,7 @@ namespace Monolito4bm
             {
                 hfPagina.Value = (pagina - 1).ToString();
                 CargarGrid();
+                upDashboardProveedores.Update();
             }
         }
 
@@ -306,6 +308,7 @@ namespace Monolito4bm
             {
                 hfPagina.Value = (pagina + 1).ToString();
                 CargarGrid();
+                upDashboardProveedores.Update();
             }
         }
 
@@ -315,6 +318,7 @@ namespace Monolito4bm
             {
                 hfPagina.Value = e.CommandArgument.ToString();
                 CargarGrid();
+                upDashboardProveedores.Update();
             }
         }
 
