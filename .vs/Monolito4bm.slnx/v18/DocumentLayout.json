@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{F021288F-83F2-47B0-B0FF-296B878D4D27}|Capa_Negocios\\Capa_Negocios.csproj|c:\\users\\aricita\\source\\monolito4bm\\monolito4bm\\capa_negocios\\cn_estadisticas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F021288F-83F2-47B0-B0FF-296B878D4D27}|Capa_Negocios\\Capa_Negocios.csproj|solutionrelative:capa_negocios\\cn_estadisticas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|c:\\users\\aricita\\source\\monolito4bm\\monolito4bm\\monolito4bm\\fotosproductosgeneral.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\fotosproductosgeneral.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
@@ -18,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,7 +38,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "CN_Estadisticas.cs",
+              "DocumentMoniker": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Capa_Negocios\\CN_Estadisticas.cs",
+              "RelativeDocumentMoniker": "Capa_Negocios\\CN_Estadisticas.cs",
+              "ToolTip": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Capa_Negocios\\CN_Estadisticas.cs",
+              "RelativeToolTip": "Capa_Negocios\\CN_Estadisticas.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-31T20:05:33.57Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "GuardarFotosSlots.ashx.cs",
               "DocumentMoniker": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\GuardarFotosSlots.ashx.cs",
               "RelativeDocumentMoniker": "Monolito4bm\\GuardarFotosSlots.ashx.cs",
@@ -42,11 +59,12 @@
               "RelativeToolTip": "Monolito4bm\\GuardarFotosSlots.ashx.cs",
               "ViewState": "AgIAAFsAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-31T16:16:02.122Z"
+              "WhenOpened": "2026-05-31T16:16:02.122Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "FotosProductosGeneral.aspx",
               "DocumentMoniker": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\FotosProductosGeneral.aspx",
               "RelativeDocumentMoniker": "Monolito4bm\\FotosProductosGeneral.aspx",

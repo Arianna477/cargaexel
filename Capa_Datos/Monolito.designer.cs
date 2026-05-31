@@ -22,7 +22,7 @@ namespace Capa_Datos
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="deberes_4to")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="db_aca09c_deberes4to")]
 	public partial class MonolitoDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -57,7 +57,7 @@ namespace Capa_Datos
     #endregion
 		
 		public MonolitoDataContext() : 
-				base(global::Capa_Datos.Properties.Settings.Default.deberes_4toConnectionString1, mappingSource)
+				base(global::Capa_Datos.Properties.Settings.Default.db_aca09c_deberes4toConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -150,17 +150,17 @@ namespace Capa_Datos
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.sp_ResetearIntentosCaducados")]
-		public int sp_ResetearIntentosCaducados()
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
-			return ((int)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.sp_eliminar_proveedor_permanente")]
 		public int sp_eliminar_proveedor_permanente([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> prov_id)
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), prov_id);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.sp_ResetearIntentosCaducados")]
+		public int sp_ResetearIntentosCaducados()
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
 			return ((int)(result.ReturnValue));
 		}
 	}

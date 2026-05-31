@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="deberes_4to" Class="MonolitoDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=deberes_4to;Integrated Security=True;Encrypt=True;Trust Server Certificate=True" SettingsObjectName="Capa_Datos.Properties.Settings" SettingsPropertyName="deberes_4toConnectionString4" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="db_aca09c_deberes4to" Class="MonolitoDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=sql1003.site4now.net;Initial Catalog=db_aca09c_deberes4to;Persist Security Info=True;User ID=db_aca09c_deberes4to_admin;Encrypt=False;Trust Server Certificate=True" SettingsObjectName="Capa_Datos.Properties.Settings" SettingsPropertyName="db_aca09c_deberes4toConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.tbl_juego_progreso" Member="tbl_juego_progreso">
     <Type Name="tbl_juego_progreso">
       <Column Name="progreso_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -93,11 +93,11 @@
       <Association Name="tbl_usuario_tbl_usuario_fotos" Member="tbl_usuario" ThisKey="usu_id" OtherKey="usu_id" Type="tbl_usuario" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
-  <Function Name="dbo.sp_ResetearIntentosCaducados" Method="sp_ResetearIntentosCaducados">
-    <Return Type="System.Int32" />
-  </Function>
   <Function Name="dbo.sp_eliminar_proveedor_permanente" Method="sp_eliminar_proveedor_permanente">
     <Parameter Name="prov_id" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.sp_ResetearIntentosCaducados" Method="sp_ResetearIntentosCaducados">
     <Return Type="System.Int32" />
   </Function>
 </Database>
