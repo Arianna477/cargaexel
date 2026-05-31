@@ -209,7 +209,7 @@
   background:linear-gradient(180deg, rgba(253,242,248,.9), rgba(255,255,255,.95));
 }
 .upload-drop small { display:block; color:#64748b; margin-top:8px; }
-.preview-shell { border:1px solid rgba(148,163,184,.18); border-radius:14px; overflow:hidden; background:rgba(255,255,255,.92); }
+.preview-shell { max-height:200px; overflow-y:auto; overflow-x:auto; border:1px solid rgba(148,163,184,.18); border-radius:14px; background:rgba(255,255,255,.92); }
 .preview-meta { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:12px 0 0; font-size:.8rem; color:#64748b; }
 .empty-preview {
   padding:28px; text-align:center; color:#94a3b8; border:1px dashed rgba(148,163,184,.25);
@@ -244,10 +244,84 @@
 .carousel-cell .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.6); cursor:pointer; transition:background .2s; }
 .carousel-cell .dot.on { background:#f43f5e; box-shadow:0 0 5px rgba(244,63,94,0.9); }
 .no-foto, .provider-slide-inline-empty {
-  width:155px; height:110px; border-radius:10px;
-  display:flex; align-items:center; justify-content:center;
-  background:rgba(219,39,119,0.07); color:rgba(219,39,119,0.35); font-size:1.8rem;
+  width:155px;
+  height:110px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(219,39,119,0.07);
+  color:rgba(219,39,119,0.35);
+  font-size:1.8rem;
 }
+.provider-slide-inline-empty {
+  width:100px;
+  height:100%;
+  border-radius:6px;
+  font-size:1.5rem;
+}
+
+/* ── Custom File Upload styling ── */
+.custom-file-upload {
+  border: 2px dashed rgba(124, 58, 237, 0.4);
+  background: linear-gradient(135deg, rgba(253, 242, 248, 0.7) 0%, rgba(245, 243, 255, 0.7) 100%);
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  margin-bottom: 8px;
+}
+.custom-file-upload:hover, .custom-file-upload.dragover {
+  border-color: #db2777;
+  background: linear-gradient(135deg, rgba(253, 242, 248, 0.9) 0%, rgba(245, 243, 255, 0.9) 100%);
+  box-shadow: 0 8px 24px rgba(219, 39, 119, 0.12);
+  transform: translateY(-2px);
+}
+.custom-file-upload .upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+.custom-file-upload .upload-icon {
+  font-size: 2rem;
+  background: linear-gradient(135deg, #db2777, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2px;
+}
+.custom-file-upload .upload-text {
+  font-size: 0.88rem;
+  color: #4c0519;
+  font-weight: 700;
+}
+.custom-file-upload .upload-file-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+.custom-file-upload .file-icon {
+  font-size: 2.2rem;
+  color: #27ae60;
+}
+.custom-file-upload .file-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1e293b;
+  word-break: break-all;
+  max-width: 280px;
+}
+
 
 .badge { display:inline-flex; align-items:center; gap:5px; padding:3px 11px; border-radius:20px; font-size:.72rem; font-weight:700; letter-spacing:.3px; }
 .badge-activo { background:rgba(39,174,96,.14); color:#1e8449; }
@@ -289,12 +363,10 @@
     <div class="page-title">
       <i class="fa-solid fa-industry" style="color:var(--accent)"></i> Proveedores
     </div>
-    <button class="btn btn-primary" onclick="abrirModal(); return false;">
+    <asp:LinkButton ID="btnNuevo" runat="server" CssClass="btn btn-primary" OnClick="btnNuevo_Click" CausesValidation="false">
       <i class="fa-solid fa-plus"></i> Nuevo Proveedor
-    </button>
+    </asp:LinkButton>
   </div>
-
-  <asp:Literal ID="litMensaje" runat="server"/>
 
   <div class="card">
     <div class="card-title">
@@ -303,12 +375,21 @@
 
     <div class="massive-layout">
       <div>
-        <div class="upload-drop">
-          <div class="fg" style="min-width:100%">
-            <label>Seleccionar archivo</label>
-            <asp:FileUpload ID="fuCargaMasiva" runat="server" CssClass="form-control" />
-            <small>Formatos permitidos: .csv, .xlsx y .xls. La primera fila debe tener encabezados.</small>
-          </div>
+        <div class="custom-file-upload" id="uploadZoneExcel">
+            <div class="upload-content">
+                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                <span class="upload-text">Arrastra tu archivo aquí o</span>
+                <button type="button" class="btn btn-secondary btn-sm" style="margin-top: 4px; pointer-events: none;">
+                    <i class="fa-solid fa-plus"></i> Seleccionar archivo
+                </button>
+                <small style="color:#7b6a94;font-size:0.75rem;margin-top:4px;">Formatos soportados: .csv, .xlsx y .xls</small>
+            </div>
+            <div class="upload-file-info" style="display:none;">
+                <i class="fa-solid fa-file-excel file-icon"></i>
+                <span class="file-name"></span>
+            </div>
+            <asp:FileUpload ID="fuCargaMasiva" runat="server" Style="display:none;" onchange="handleFileSelect(this);" />
+        </div>
 
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
             <asp:LinkButton ID="btnDescargarFormato" runat="server"
@@ -329,7 +410,6 @@
               <i class="fa-solid fa-broom"></i> Limpiar carga
             </asp:LinkButton>
           </div>
-        </div>
 
         <div class="preview-meta">
           <span><asp:Literal ID="litArchivoCarga" runat="server" Text="Sin archivo cargado." /></span>
@@ -394,45 +474,45 @@
     </div>
   </div>
 
-  <div class="card">
-    <div class="search-bar">
-      <span class="si"><i class="fa-solid fa-magnifying-glass"></i></span>
-      <asp:TextBox ID="txtBuscar" runat="server"
-                   placeholder="Buscar proveedor por nombre..."
-                   AutoPostBack="false" OnTextChanged="Buscar_Changed"/>
-    </div>
-
-    <button class="filtros-toggle" onclick="toggleFiltros(); return false;">
-      <i class="fa-solid fa-sliders"></i> Filtros avanzados
-      <span id="arrowFilt"><i class="fa-solid fa-chevron-down"></i></span>
-    </button>
-
-    <div class="filtros-panel" id="filtrosPanel">
-      <div class="fg">
-        <label><i class="fa-solid fa-toggle-on"></i> Estado</label>
-        <asp:DropDownList ID="ddlFiltroEstado" runat="server" CssClass="form-control"
-                          AutoPostBack="true" OnSelectedIndexChanged="Buscar_Changed">
-          <asp:ListItem Value="" Text="Todos los estados"/>
-          <asp:ListItem Value="A" Text="Solo activos"/>
-          <asp:ListItem Value="I" Text="Solo inactivos"/>
-        </asp:DropDownList>
-      </div>
-      <div style="display:flex;align-items:flex-end;gap:8px;">
-        <asp:LinkButton ID="btnLimpiarFiltros" runat="server"
-                        CssClass="btn btn-secondary btn-sm" CausesValidation="false"
-                        OnClick="btnLimpiarFiltros_Click">
-          <i class="fa-solid fa-eraser"></i> Limpiar
-        </asp:LinkButton>
-      </div>
-    </div>
-  </div>
-
-  <asp:HiddenField ID="hfPagina" runat="server" Value="1"/>
-  <asp:HiddenField ID="hfTotalPags" runat="server" Value="1"/>
-  <asp:HiddenField ID="hfOrdenId" runat="server" Value="DESC"/>
-
   <asp:UpdatePanel ID="upDashboardProveedores" runat="server" UpdateMode="Conditional">
     <ContentTemplate>
+      <asp:HiddenField ID="hfPagina" runat="server" Value="1"/>
+      <asp:HiddenField ID="hfTotalPags" runat="server" Value="1"/>
+      <asp:HiddenField ID="hfOrdenId" runat="server" Value="DESC"/>
+      <asp:Literal ID="litMensaje" runat="server"/>
+
+      <div class="card">
+        <div class="search-bar">
+          <span class="si"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <asp:TextBox ID="txtBuscar" runat="server"
+                       placeholder="Buscar proveedor por nombre..."
+                       AutoPostBack="false" OnTextChanged="Buscar_Changed"/>
+        </div>
+
+        <button class="filtros-toggle" onclick="toggleFiltros(); return false;">
+          <i class="fa-solid fa-sliders"></i> Filtros avanzados
+          <span id="arrowFilt"><i class="fa-solid fa-chevron-down"></i></span>
+        </button>
+
+        <div class="filtros-panel" id="filtrosPanel">
+          <div class="fg">
+            <label><i class="fa-solid fa-toggle-on"></i> Estado</label>
+            <asp:DropDownList ID="ddlFiltroEstado" runat="server" CssClass="form-control"
+                              AutoPostBack="true" OnSelectedIndexChanged="Buscar_Changed">
+              <asp:ListItem Value="" Text="Todos los estados"/>
+              <asp:ListItem Value="A" Text="Solo activos"/>
+              <asp:ListItem Value="I" Text="Solo inactivos"/>
+            </asp:DropDownList>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:8px;">
+            <asp:LinkButton ID="btnLimpiarFiltros" runat="server"
+                            CssClass="btn btn-secondary btn-sm" CausesValidation="false"
+                            OnClick="btnLimpiarFiltros_Click">
+              <i class="fa-solid fa-eraser"></i> Limpiar
+            </asp:LinkButton>
+          </div>
+        </div>
+      </div>
 
 
       <div class="card" id="cardCrudProveedores">
@@ -617,6 +697,58 @@
     });
   }
 
+  function handleFileSelect(input) {
+    var zone = document.getElementById('uploadZoneExcel');
+    if (!zone) return;
+    var content = zone.querySelector('.upload-content');
+    var fileInfo = zone.querySelector('.upload-file-info');
+    var nameSpan = zone.querySelector('.file-name');
+
+    if (input.files && input.files.length > 0) {
+      var fileName = input.files[0].name;
+      nameSpan.textContent = fileName;
+      content.style.display = 'none';
+      fileInfo.style.display = 'flex';
+    } else {
+      content.style.display = 'flex';
+      fileInfo.style.display = 'none';
+      nameSpan.textContent = '';
+    }
+  }
+
+  function initDragAndDrop() {
+    var zone = document.getElementById('uploadZoneExcel');
+    var fileInput = document.getElementById('<%= fuCargaMasiva.ClientID %>');
+    if (!zone || !fileInput) return;
+
+    zone.addEventListener('click', function(e) {
+      if (e.target !== fileInput) {
+        fileInput.click();
+      }
+    });
+
+    zone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      zone.classList.add('dragover');
+    });
+
+    zone.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+    });
+
+    zone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        fileInput.files = e.dataTransfer.files;
+        handleFileSelect(fileInput);
+      }
+    });
+
+    handleFileSelect(fileInput);
+  }
+
   function inicializarCarruselProductoProveedor() {
     document.querySelectorAll('.carousel-cell').forEach(function(c) {
       if (c.dataset.carouselBound === '1') return;
@@ -649,6 +781,8 @@
   function inicializarComponentes() {
     if (document.getElementById('<%= hfModalAbierto.ClientID %>').value === '1') {
       document.getElementById('modalProveedor').classList.add('open');
+    } else {
+      document.getElementById('modalProveedor').classList.remove('open');
     }
 
     if (document.getElementById('<%= hfFiltrosAbiertos.ClientID %>').value === '0') {
@@ -659,13 +793,47 @@
     }
 
     inicializarBusquedaPredictivaProveedor();
+    initDragAndDrop();
     inicializarCarruselProductoProveedor();
   }
 
   window.addEventListener('DOMContentLoaded', inicializarComponentes);
 
   if (typeof Sys !== 'undefined') {
-    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(inicializarComponentes);
+    var prm = Sys.WebForms.PageRequestManager.getInstance();
+    prm.add_endRequest(inicializarComponentes);
+
+    var activeElementId = null;
+    var selectionStart = 0;
+    var selectionEnd = 0;
+
+    prm.add_beginRequest(function (sender, args) {
+      var activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+        activeElementId = activeEl.id;
+        try {
+          selectionStart = activeEl.selectionStart;
+          selectionEnd = activeEl.selectionEnd;
+        } catch (e) {
+          selectionStart = 0;
+          selectionEnd = 0;
+        }
+      } else {
+        activeElementId = null;
+      }
+    });
+
+    prm.add_endRequest(function (sender, args) {
+      if (activeElementId) {
+        var el = document.getElementById(activeElementId);
+        if (el) {
+          el.focus();
+          try {
+            el.setSelectionRange(selectionStart, selectionEnd);
+          } catch (e) {}
+        }
+      }
+    });
   }
 
   function toggleFiltros() {

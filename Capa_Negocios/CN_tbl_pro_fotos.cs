@@ -9,59 +9,67 @@ namespace Capa_Negocios
 {
     public class CN_tbl_pro_fotos
     {
-        private static MonolitoDataContext dc = new MonolitoDataContext();
         private const string NombreProductoPredeterminado = "Sin producto";
 
         public static List<tbl_pro_fotos> ObtenerPorProducto(int proId)
         {
-            var query = dc.tbl_pro_fotos
-                          .Where(f => f.pro_id == proId)
-                          .OrderByDescending(f => f.fecha_subida);
-            return query.ToList();
+            using (var db = new MonolitoDataContext())
+            {
+                var query = db.tbl_pro_fotos
+                              .Where(f => f.pro_id == proId)
+                              .OrderByDescending(f => f.fecha_subida);
+                return query.ToList();
+            }
         }
 
         public static string EliminarFisico(int fotoId)
         {
-            var foto = dc.tbl_pro_fotos.FirstOrDefault(f => f.foto_id == fotoId);
-            if (foto == null) throw new Exception("Foto no encontrada.");
+            using (var db = new MonolitoDataContext())
+            {
+                var foto = db.tbl_pro_fotos.FirstOrDefault(f => f.foto_id == fotoId);
+                if (foto == null) throw new Exception("Foto no encontrada.");
 
-            string ruta = foto.foto_ruta;
-            dc.tbl_pro_fotos.DeleteOnSubmit(foto);
-            dc.SubmitChanges();
-            return ruta;
+                string ruta = foto.foto_ruta;
+                db.tbl_pro_fotos.DeleteOnSubmit(foto);
+                db.SubmitChanges();
+                return ruta;
+            }
         }
 
         public static List<tbl_pro_fotos> ObtenerConProducto(int productoId)
         {
-            var query = dc.tbl_pro_fotos
-                .Where(f => f.pro_id == productoId)
-                .Select(f => new
-                {
-                    f.foto_id,
-                    f.pro_id,
-                    f.foto_bit,
-                    f.foto_ruta,
-                    f.foto_estado,
-                    f.fecha_subida,
-                    pro_nombre = f.tbl_producto.pro_nombre
-                })
-                .OrderByDescending(f => f.fecha_subida);
-
-            var datosCrudos = query.ToList();
-
-            return datosCrudos.Select(x => new tbl_pro_fotos
+            using (var db = new MonolitoDataContext())
             {
-                foto_id = x.foto_id,
-                pro_id = x.pro_id,
-                foto_bit = x.foto_bit,
-                foto_ruta = x.foto_ruta,
-                foto_estado = x.foto_estado,
-                fecha_subida = x.fecha_subida,
-                tbl_producto = new tbl_producto
+                var query = db.tbl_pro_fotos
+                    .Where(f => f.pro_id == productoId)
+                    .Select(f => new
+                    {
+                        f.foto_id,
+                        f.pro_id,
+                        f.foto_bit,
+                        f.foto_ruta,
+                        f.foto_estado,
+                        f.fecha_subida,
+                        pro_nombre = f.tbl_producto.pro_nombre
+                    })
+                    .OrderByDescending(f => f.fecha_subida);
+
+                var datosCrudos = query.ToList();
+
+                return datosCrudos.Select(x => new tbl_pro_fotos
                 {
-                    pro_nombre = x.pro_nombre
-                }
-            }).ToList();
+                    foto_id = x.foto_id,
+                    pro_id = x.pro_id,
+                    foto_bit = x.foto_bit,
+                    foto_ruta = x.foto_ruta,
+                    foto_estado = x.foto_estado,
+                    fecha_subida = x.fecha_subida,
+                    tbl_producto = new tbl_producto
+                    {
+                        pro_nombre = x.pro_nombre
+                    }
+                }).ToList();
+            }
         }
 
         public static List<tbl_pro_fotos> ObtenerPorProductoiN(int productoId)
@@ -71,14 +79,20 @@ namespace Capa_Negocios
 
         public static int Contar(int productoId)
         {
-            var query = dc.tbl_pro_fotos.Where(f => f.pro_id == productoId);
-            return query.Count();
+            using (var db = new MonolitoDataContext())
+            {
+                var query = db.tbl_pro_fotos.Where(f => f.pro_id == productoId);
+                return query.Count();
+            }
         }
 
         public static tbl_pro_fotos BuscarPorId(int fotoId)
         {
-            var query = dc.tbl_pro_fotos.Where(f => f.foto_id == fotoId);
-            return query.FirstOrDefault();
+            using (var db = new MonolitoDataContext())
+            {
+                var query = db.tbl_pro_fotos.Where(f => f.foto_id == fotoId);
+                return query.FirstOrDefault();
+            }
         }
 
         public static List<FotoCargaFila> LeerArchivoCargaMasiva(byte[] contenidoArchivo, string nombreArchivo)
@@ -107,13 +121,16 @@ namespace Capa_Negocios
                     IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted
                 }))
             {
-                if (tipoInsercion == TipoInsercionProveedor.ReemplazarTodo)
+                using (var db = new MonolitoDataContext())
                 {
-                    EjecutarReemplazoTotal(dc, filasNormalizadas, resultado);
-                }
-                else
-                {
-                    EjecutarCargaIncremental(dc, filasNormalizadas, resultado);
+                    if (tipoInsercion == TipoInsercionProveedor.ReemplazarTodo)
+                    {
+                        EjecutarReemplazoTotal(db, filasNormalizadas, resultado);
+                    }
+                    else
+                    {
+                        EjecutarCargaIncremental(db, filasNormalizadas, resultado);
+                    }
                 }
 
                 scope.Complete();
@@ -126,8 +143,11 @@ namespace Capa_Negocios
         {
             try
             {
-                dc.tbl_pro_fotos.InsertAllOnSubmit(fotos);
-                dc.SubmitChanges();
+                using (var db = new MonolitoDataContext())
+                {
+                    db.tbl_pro_fotos.InsertAllOnSubmit(fotos);
+                    db.SubmitChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -139,10 +159,13 @@ namespace Capa_Negocios
         {
             try
             {
-                foto.fecha_subida = DateTime.Now;
-                foto.foto_estado = 'A';
-                dc.tbl_pro_fotos.InsertOnSubmit(foto);
-                dc.SubmitChanges();
+                using (var db = new MonolitoDataContext())
+                {
+                    foto.fecha_subida = DateTime.Now;
+                    foto.foto_estado = 'A';
+                    db.tbl_pro_fotos.InsertOnSubmit(foto);
+                    db.SubmitChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -154,10 +177,13 @@ namespace Capa_Negocios
         {
             try
             {
-                var foto = dc.tbl_pro_fotos.FirstOrDefault(f => f.foto_id == fotoId)
-                    ?? throw new Exception("Foto no encontrada.");
-                foto.foto_estado = nuevoEstado;
-                dc.SubmitChanges();
+                using (var db = new MonolitoDataContext())
+                {
+                    var foto = db.tbl_pro_fotos.FirstOrDefault(f => f.foto_id == fotoId)
+                        ?? throw new Exception("Foto no encontrada.");
+                    foto.foto_estado = nuevoEstado;
+                    db.SubmitChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -167,30 +193,36 @@ namespace Capa_Negocios
 
         public static tbl_pro_fotos ObtenerFallback(int fotoId)
         {
-            var query = dc.tbl_pro_fotos.Where(f => f.foto_id == fotoId && f.foto_bit != null);
-            return query.FirstOrDefault();
+            using (var db = new MonolitoDataContext())
+            {
+                var query = db.tbl_pro_fotos.Where(f => f.foto_id == fotoId && f.foto_bit != null);
+                return query.FirstOrDefault();
+            }
         }
 
         public static tbl_pro_fotos ObtenerParaResolver(int fotoId)
         {
-            var query = dc.tbl_pro_fotos
-                .Where(f => f.foto_id == fotoId)
-                .Select(f => new
-                {
-                    f.foto_id,
-                    f.foto_bit,
-                    f.foto_ruta
-                });
-
-            var result = query.FirstOrDefault();
-            if (result == null) return null;
-
-            return new tbl_pro_fotos
+            using (var db = new MonolitoDataContext())
             {
-                foto_id = result.foto_id,
-                foto_bit = result.foto_bit,
-                foto_ruta = result.foto_ruta
-            };
+                var query = db.tbl_pro_fotos
+                    .Where(f => f.foto_id == fotoId)
+                    .Select(f => new
+                    {
+                        f.foto_id,
+                        f.foto_bit,
+                        f.foto_ruta
+                    });
+
+                var result = query.FirstOrDefault();
+                if (result == null) return null;
+
+                return new tbl_pro_fotos
+                {
+                    foto_id = result.foto_id,
+                    foto_bit = result.foto_bit,
+                    foto_ruta = result.foto_ruta
+                };
+            }
         }
 
         private static List<FotoCargaFilaNormalizada> NormalizarFilasCarga(IEnumerable<FotoCargaFila> filas, ResultadoCargaFotos resultado)

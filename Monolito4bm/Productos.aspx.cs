@@ -569,6 +569,7 @@ namespace Monolito4bm
             gvPreviewCarga.DataSource = preview;
             gvPreviewCarga.DataBind();
             phPreviewVacia.Visible = !preview.Any();
+            btnLimpiarCarga.Visible = preview.Any();
             litArchivoCarga.Text = $"Archivo listo: {fuCargaMasiva.FileName}";
             litResumenCarga.Text = filas.Count > MAX_FILAS_PREVIEW
                 ? $"Mostrando {MAX_FILAS_PREVIEW} de {filas.Count} fila(s)."
@@ -582,6 +583,7 @@ namespace Monolito4bm
             gvPreviewCarga.DataSource = null;
             gvPreviewCarga.DataBind();
             phPreviewVacia.Visible = true;
+            btnLimpiarCarga.Visible = false;
             litArchivoCarga.Text = "Sin archivo cargado.";
             litResumenCarga.Text = "Aun no hay vista previa.";
             if (ddlTipoInsercionMasiva != null) ddlTipoInsercionMasiva.SelectedValue = "1";

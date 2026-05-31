@@ -32,7 +32,66 @@
         .btn-sm { padding:6px 12px;font-size:.76rem;border-radius:20px; }
         .alert { padding:11px 16px;border-radius:12px;margin-bottom:14px;font-size:.86rem;font-weight:600; }
         .alert-success { background:rgba(39,174,96,.15);color:#1e8449;border:1px solid rgba(39,174,96,.3); }
-        .alert-danger { background:rgba(192,57,43,.12);color:#c0392b;border:1px solid rgba(192,57,43,.25); }
+        /* ── Custom File Upload styling ── */
+        .custom-file-upload {
+          border: 2px dashed rgba(124, 58, 237, 0.4);
+          background: linear-gradient(135deg, rgba(253, 242, 248, 0.7) 0%, rgba(245, 243, 255, 0.7) 100%);
+          border-radius: 16px;
+          padding: 24px 20px;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.25s ease;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 120px;
+          margin-bottom: 8px;
+        }
+        .custom-file-upload:hover, .custom-file-upload.dragover {
+          border-color: #db2777;
+          background: linear-gradient(135deg, rgba(253, 242, 248, 0.9) 0%, rgba(245, 243, 255, 0.9) 100%);
+          box-shadow: 0 8px 24px rgba(219, 39, 119, 0.12);
+          transform: translateY(-2px);
+        }
+        .custom-file-upload .upload-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          pointer-events: none;
+        }
+        .custom-file-upload .upload-icon {
+          font-size: 2rem;
+          background: linear-gradient(135deg, #db2777, #7c3aed);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 2px;
+        }
+        .custom-file-upload .upload-text {
+          font-size: 0.88rem;
+          color: #4c0519;
+          font-weight: 700;
+        }
+        .custom-file-upload .upload-file-info {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          pointer-events: none;
+        }
+        .custom-file-upload .file-icon {
+          font-size: 2.2rem;
+          color: #27ae60;
+        }
+        .custom-file-upload .file-name {
+          font-size: 0.85rem;
+          font-weight: 700;
+          color: #1e293b;
+          word-break: break-all;
+          max-width: 280px;
+        }
 
         /* ── SLOTS TRACK ── */
         .slots-header {
@@ -452,16 +511,31 @@
                 </ol>
                 <div class="steps-grid">
                     <div>
-                        <label class="form-label" for="<%= fuCargaMasiva.ClientID %>">Archivo Excel o CSV</label>
-                        <asp:FileUpload ID="fuCargaMasiva" runat="server" CssClass="form-control" />
-                        <div style="font-size:.78rem;color:#6b5b82;margin-top:8px;">
-                            Encabezados: <code>producto</code>, <code>foto_ruta</code>, <code>estado</code>.
+                        <div class="custom-file-upload" id="uploadZoneExcel">
+                            <div class="upload-content">
+                                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                                <span class="upload-text">Arrastra tu archivo aquí o</span>
+                                <button type="button" class="btn btn-secondary btn-sm" style="margin-top: 4px; pointer-events: none;">
+                                    <i class="fa-solid fa-plus"></i> Seleccionar archivo
+                                </button>
+                                <small style="color:#7b6a94;font-size:0.75rem;margin-top:4px;">Formatos permitidos: .csv, .xlsx y .xls. Encabezados: <code>producto</code>, <code>foto_ruta</code>, <code>estado</code>.</small>
+                            </div>
+                            <div class="upload-file-info" style="display:none;">
+                                <i class="fa-solid fa-file-excel file-icon"></i>
+                                <span class="file-name"></span>
+                            </div>
+                            <asp:FileUpload ID="fuCargaMasiva" runat="server" Style="display:none;" onchange="handleFileSelect(this);" />
                         </div>
+
                         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-                            <asp:Button ID="btnPrevisualizarCarga" runat="server" CssClass="btn btn-secondary"
-                                Text="Visualizar archivo" OnClick="btnPrevisualizarCarga_Click" />
-                            <asp:Button ID="btnLimpiarCarga" runat="server" CssClass="btn btn-secondary"
-                                Text="Limpiar carga" OnClick="btnLimpiarCarga_Click" />
+                            <asp:LinkButton ID="btnPrevisualizarCarga" runat="server" CssClass="btn btn-primary"
+                                OnClick="btnPrevisualizarCarga_Click" CausesValidation="false">
+                                <i class="fa-solid fa-eye"></i> Visualizar archivo
+                            </asp:LinkButton>
+                            <asp:LinkButton ID="btnLimpiarCarga" runat="server" CssClass="btn btn-secondary"
+                                OnClick="btnLimpiarCarga_Click" CausesValidation="false">
+                                <i class="fa-solid fa-broom"></i> Limpiar carga
+                            </asp:LinkButton>
                         </div>
                         <div style="margin-top:12px;font-size:.8rem;color:#6b5b82;">
                             <span id="litArchivoCargaCliente"><asp:Literal ID="litArchivoCarga" runat="server" Text="Sin archivo cargado." /></span>
@@ -508,11 +582,13 @@
     </asp:UpdatePanel>
 
     <%-- FILTROS --%>
+    <asp:UpdatePanel ID="upFotosGeneral" runat="server" UpdateMode="Conditional">
+        <ContentTemplate>
     <div class="card">
         <div class="search-bar">
             <span><i class="fa-solid fa-magnifying-glass"></i></span>
             <asp:TextBox ID="txtBuscar" runat="server" placeholder="Buscar foto por nombre de producto o ruta..."
-                AutoPostBack="true" OnTextChanged="Filtros_Changed" />
+                AutoPostBack="false" OnTextChanged="Filtros_Changed" />
         </div>
         <button class="filtros-toggle" onclick="toggleFiltros(); return false;">
             <i class="fa-solid fa-sliders"></i> Filtros avanzados
@@ -550,9 +626,6 @@
             </div>
         </div>
     </div>
-
-    <asp:UpdatePanel ID="upFotosGeneral" runat="server" UpdateMode="Conditional">
-        <ContentTemplate>
             <div class="card">
                 <div class="card-title">
                     <i class="fa-solid fa-images"></i> Todas las fotos guardadas
@@ -1172,6 +1245,122 @@
         window.guardarTodo = guardarTodo;
         window.toggleFiltros = toggleFiltros;
         addSlot(); // slot inicial por defecto
+
+        function handleFileSelect(input) {
+            var zone = document.getElementById('uploadZoneExcel');
+            if (!zone) return;
+            var content = zone.querySelector('.upload-content');
+            var fileInfo = zone.querySelector('.upload-file-info');
+            var nameSpan = zone.querySelector('.file-name');
+
+            if (input.files && input.files.length > 0) {
+                var fileName = input.files[0].name;
+                nameSpan.textContent = fileName;
+                content.style.display = 'none';
+                fileInfo.style.display = 'flex';
+            } else {
+                content.style.display = 'flex';
+                fileInfo.style.display = 'none';
+                nameSpan.textContent = '';
+            }
+        }
+
+        function initDragAndDrop() {
+            var zone = document.getElementById('uploadZoneExcel');
+            var fileInput = document.getElementById('<%= fuCargaMasiva.ClientID %>');
+            if (!zone || !fileInput) return;
+
+            zone.addEventListener('click', function(e) {
+                if (e.target !== fileInput) {
+                    fileInput.click();
+                }
+            });
+
+            zone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                zone.classList.add('dragover');
+            });
+
+            zone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+            });
+
+            zone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleFileSelect(fileInput);
+                    var event = new Event('change', { bubbles: true });
+                    fileInput.dispatchEvent(event);
+                }
+            });
+
+            handleFileSelect(fileInput);
+        }
+
+        window.handleFileSelect = handleFileSelect;
+
+        function inicializarBusquedaPredictivaFotos() {
+            var input = document.getElementById('<%= txtBuscar.ClientID %>');
+            if (!input || input.dataset.liveSearchBound === '1') {
+                return;
+            }
+
+            var timeoutId = 0;
+            input.dataset.liveSearchBound = '1';
+            input.addEventListener('input', function() {
+                window.clearTimeout(timeoutId);
+                timeoutId = window.setTimeout(function() {
+                    __doPostBack('<%= txtBuscar.UniqueID %>', '');
+                }, 250);
+            });
+        }
+
+        inicializarBusquedaPredictivaFotos();
+        initDragAndDrop();
+
+        if (typeof Sys !== 'undefined') {
+            var prm = Sys.WebForms.PageRequestManager.getInstance();
+            
+            prm.add_endRequest(function() {
+                inicializarBusquedaPredictivaFotos();
+                initDragAndDrop();
+            });
+
+            var activeElementId = null;
+            var selectionStart = 0;
+            var selectionEnd = 0;
+
+            prm.add_beginRequest(function (sender, args) {
+                var activeEl = document.activeElement;
+                if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+                    activeElementId = activeEl.id;
+                    try {
+                        selectionStart = activeEl.selectionStart;
+                        selectionEnd = activeEl.selectionEnd;
+                    } catch (e) {
+                        selectionStart = 0;
+                        selectionEnd = 0;
+                    }
+                } else {
+                    activeElementId = null;
+                }
+            });
+
+            prm.add_endRequest(function (sender, args) {
+                if (activeElementId) {
+                    var el = document.getElementById(activeElementId);
+                    if (el) {
+                        el.focus();
+                        try {
+                            el.setSelectionRange(selectionStart, selectionEnd);
+                        } catch (e) {}
+                    }
+                }
+            });
+        }
 
         } // end init()
 

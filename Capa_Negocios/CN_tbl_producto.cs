@@ -8,7 +8,6 @@ namespace Capa_Negocios
 {
     public class CN_tbl_producto
     {
-        private static MonolitoDataContext dc = new MonolitoDataContext();
         private const string NombreProveedorPredeterminado = "Sin proveedor";
 
         private class FotoProyectada
@@ -62,29 +61,32 @@ namespace Capa_Negocios
 
         private static IEnumerable<tbl_producto> QueryConRelaciones(bool ordenarAscendente)
         {
-            var query = dc.tbl_producto
-                .OrderBy(p => ordenarAscendente ? p.pro_id : -p.pro_id)
-                .Select(p => new ProductoProyectado
-                {
-                    pro_id = p.pro_id,
-                    pro_nombre = p.pro_nombre,
-                    pro_cantidad = p.pro_cantidad,
-                    pro_precio = p.pro_precio,
-                    pro_estado = p.pro_estado,
-                    prov_id = p.prov_id,
-                    prov_nombre = p.tbl_proveedor != null ? p.tbl_proveedor.prov_nombre : null,
-                    fotos = p.tbl_pro_fotos
-                              .Select(f => new FotoProyectada
-                              {
-                                  foto_id = f.foto_id,
-                                  pro_id = f.pro_id,
-                                  foto_ruta = f.foto_ruta,
-                                  fecha_subida = f.fecha_subida,
-                                  foto_estado = f.foto_estado
-                              }).ToList()
-                }).ToList();
+            using (var db = new MonolitoDataContext())
+            {
+                var query = db.tbl_producto
+                    .OrderBy(p => ordenarAscendente ? p.pro_id : -p.pro_id)
+                    .Select(p => new ProductoProyectado
+                    {
+                        pro_id = p.pro_id,
+                        pro_nombre = p.pro_nombre,
+                        pro_cantidad = p.pro_cantidad,
+                        pro_precio = p.pro_precio,
+                        pro_estado = p.pro_estado,
+                        prov_id = p.prov_id,
+                        prov_nombre = p.tbl_proveedor != null ? p.tbl_proveedor.prov_nombre : null,
+                        fotos = p.tbl_pro_fotos
+                                  .Select(f => new FotoProyectada
+                                  {
+                                      foto_id = f.foto_id,
+                                      pro_id = f.pro_id,
+                                      foto_ruta = f.foto_ruta,
+                                      fecha_subida = f.fecha_subida,
+                                      foto_estado = f.foto_estado
+                                  }).ToList()
+                    }).ToList();
 
-            return ConvertirProyeccion(query);
+                return ConvertirProyeccion(query);
+            }
         }
 
         public static List<tbl_producto> Listar(bool ordenarAscendente = false)
@@ -92,17 +94,26 @@ namespace Capa_Negocios
 
         public static tbl_producto BuscarPorId(int id)
         {
-            return dc.tbl_producto.FirstOrDefault(p => p.pro_id == id);
+            using (var db = new MonolitoDataContext())
+            {
+                return db.tbl_producto.FirstOrDefault(p => p.pro_id == id);
+            }
         }
 
         public static List<tbl_producto> traerproductos()
         {
-            return dc.tbl_producto.Where(p => p.pro_estado == 'A').ToList();
+            using (var db = new MonolitoDataContext())
+            {
+                return db.tbl_producto.Where(p => p.pro_estado == 'A').ToList();
+            }
         }
 
         public static tbl_producto traerproductoxid(int id)
         {
-            return dc.tbl_producto.FirstOrDefault(p => p.pro_id == id && p.pro_estado == 'A');
+            using (var db = new MonolitoDataContext())
+            {
+                return db.tbl_producto.FirstOrDefault(p => p.pro_id == id && p.pro_estado == 'A');
+            }
         }
 
         public static List<tbl_producto> Buscar(
@@ -115,48 +126,51 @@ namespace Capa_Negocios
             int? stockMax = null,
             bool ordenarAscendente = false)
         {
-            var query = dc.tbl_producto.AsQueryable();
+            using (var db = new MonolitoDataContext())
+            {
+                var query = db.tbl_producto.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(nombre))
-                query = query.Where(p => p.pro_nombre.Contains(nombre));
-            if (proveedorId.HasValue && proveedorId.Value == -1)
-                query = query.Where(p => !p.prov_id.HasValue);
-            else if (proveedorId.HasValue)
-                query = query.Where(p => p.prov_id == proveedorId.Value);
-            if (estado.HasValue)
-                query = query.Where(p => p.pro_estado == estado.Value);
-            if (precioMin.HasValue)
-                query = query.Where(p => p.pro_precio >= precioMin.Value);
-            if (precioMax.HasValue)
-                query = query.Where(p => p.pro_precio <= precioMax.Value);
-            if (stockMin.HasValue)
-                query = query.Where(p => p.pro_cantidad >= stockMin.Value);
-            if (stockMax.HasValue)
-                query = query.Where(p => p.pro_cantidad <= stockMax.Value);
+                if (!string.IsNullOrWhiteSpace(nombre))
+                    query = query.Where(p => p.pro_nombre.Contains(nombre));
+                if (proveedorId.HasValue && proveedorId.Value == -1)
+                    query = query.Where(p => !p.prov_id.HasValue);
+                else if (proveedorId.HasValue)
+                    query = query.Where(p => p.prov_id == proveedorId.Value);
+                if (estado.HasValue)
+                    query = query.Where(p => p.pro_estado == estado.Value);
+                if (precioMin.HasValue)
+                    query = query.Where(p => p.pro_precio >= precioMin.Value);
+                if (precioMax.HasValue)
+                    query = query.Where(p => p.pro_precio <= precioMax.Value);
+                if (stockMin.HasValue)
+                    query = query.Where(p => p.pro_cantidad >= stockMin.Value);
+                if (stockMax.HasValue)
+                    query = query.Where(p => p.pro_cantidad <= stockMax.Value);
 
-            var resultados = query
-                .OrderBy(p => ordenarAscendente ? p.pro_id : -p.pro_id)
-                .Select(p => new ProductoProyectado
-                {
-                    pro_id = p.pro_id,
-                    pro_nombre = p.pro_nombre,
-                    pro_cantidad = p.pro_cantidad,
-                    pro_precio = p.pro_precio,
-                    pro_estado = p.pro_estado,
-                    prov_id = p.prov_id,
-                    prov_nombre = p.tbl_proveedor != null ? p.tbl_proveedor.prov_nombre : null,
-                    fotos = p.tbl_pro_fotos
-                              .Select(f => new FotoProyectada
-                              {
-                                  foto_id = f.foto_id,
-                                  pro_id = f.pro_id,
-                                  foto_ruta = f.foto_ruta,
-                                  fecha_subida = f.fecha_subida,
-                                  foto_estado = f.foto_estado
-                              }).Take(5).ToList()
-                }).ToList();
+                var resultados = query
+                    .OrderBy(p => ordenarAscendente ? p.pro_id : -p.pro_id)
+                    .Select(p => new ProductoProyectado
+                    {
+                        pro_id = p.pro_id,
+                        pro_nombre = p.pro_nombre,
+                        pro_cantidad = p.pro_cantidad,
+                        pro_precio = p.pro_precio,
+                        pro_estado = p.pro_estado,
+                        prov_id = p.prov_id,
+                        prov_nombre = p.tbl_proveedor != null ? p.tbl_proveedor.prov_nombre : null,
+                        fotos = p.tbl_pro_fotos
+                                  .Select(f => new FotoProyectada
+                                  {
+                                      foto_id = f.foto_id,
+                                      pro_id = f.pro_id,
+                                      foto_ruta = f.foto_ruta,
+                                      fecha_subida = f.fecha_subida,
+                                      foto_estado = f.foto_estado
+                                  }).Take(5).ToList()
+                    }).ToList();
 
-            return ConvertirProyeccion(resultados);
+                return ConvertirProyeccion(resultados);
+            }
         }
 
         public static List<tbl_producto> BuscarPaginado(
@@ -172,7 +186,10 @@ namespace Capa_Negocios
 
         public static bool ExisteNombre(string nombre, int idIgnorar = 0)
         {
-            return dc.tbl_producto.Any(p => p.pro_nombre == nombre && p.pro_estado == 'A' && p.pro_id != idIgnorar);
+            using (var db = new MonolitoDataContext())
+            {
+                return db.tbl_producto.Any(p => p.pro_nombre == nombre && p.pro_estado == 'A' && p.pro_id != idIgnorar);
+            }
         }
 
         public static List<ProductoCargaFila> LeerArchivoCargaMasiva(byte[] contenidoArchivo, string nombreArchivo)
@@ -191,25 +208,29 @@ namespace Capa_Negocios
             {
                 FilasProcesadas = 0
             };
-            var filasNormalizadas = NormalizarFilasCarga(filas, resultado);
-            resultado.FilasProcesadas = filasNormalizadas.Count;
 
-            using (var scope = new System.Transactions.TransactionScope(System.Transactions.TransactionScopeOption.Required,
-                new System.Transactions.TransactionOptions
-                {
-                    IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted
-                }))
+            using (var db = new MonolitoDataContext())
             {
-                if (tipoInsercion == TipoInsercionProveedor.ReemplazarTodo)
-                {
-                    EjecutarReemplazoTotal(dc, filasNormalizadas, resultado);
-                }
-                else
-                {
-                    EjecutarCargaIncremental(dc, filasNormalizadas, resultado);
-                }
+                var filasNormalizadas = NormalizarFilasCarga(db, filas, resultado);
+                resultado.FilasProcesadas = filasNormalizadas.Count;
 
-                scope.Complete();
+                using (var scope = new System.Transactions.TransactionScope(System.Transactions.TransactionScopeOption.Required,
+                    new System.Transactions.TransactionOptions
+                    {
+                        IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted
+                    }))
+                {
+                    if (tipoInsercion == TipoInsercionProveedor.ReemplazarTodo)
+                    {
+                        EjecutarReemplazoTotal(db, filasNormalizadas, resultado);
+                    }
+                    else
+                    {
+                        EjecutarCargaIncremental(db, filasNormalizadas, resultado);
+                    }
+
+                    scope.Complete();
+                }
             }
 
             return resultado;
@@ -219,10 +240,13 @@ namespace Capa_Negocios
         {
             try
             {
-                producto.prov_id = ValidarProveedorExistente(dc, producto.prov_id);
-                producto.pro_estado = 'A';
-                dc.tbl_producto.InsertOnSubmit(producto);
-                dc.SubmitChanges();
+                using (var db = new MonolitoDataContext())
+                {
+                    producto.prov_id = ValidarProveedorExistente(db, producto.prov_id);
+                    producto.pro_estado = 'A';
+                    db.tbl_producto.InsertOnSubmit(producto);
+                    db.SubmitChanges();
+                }
             }
             catch (Exception ex) { throw new Exception("Error al guardar el producto: " + ex.Message); }
         }
@@ -231,13 +255,16 @@ namespace Capa_Negocios
         {
             try
             {
-                var e = dc.tbl_producto.FirstOrDefault(p => p.pro_id == producto.pro_id)
-                    ?? throw new Exception("Producto no encontrado.");
-                e.pro_nombre = producto.pro_nombre;
-                e.pro_cantidad = producto.pro_cantidad;
-                e.pro_precio = producto.pro_precio;
-                e.prov_id = ValidarProveedorExistente(dc, producto.prov_id);
-                dc.SubmitChanges();
+                using (var db = new MonolitoDataContext())
+                {
+                    var e = db.tbl_producto.FirstOrDefault(p => p.pro_id == producto.pro_id)
+                        ?? throw new Exception("Producto no encontrado.");
+                    e.pro_nombre = producto.pro_nombre;
+                    e.pro_cantidad = producto.pro_cantidad;
+                    e.pro_precio = producto.pro_precio;
+                    e.prov_id = ValidarProveedorExistente(db, producto.prov_id);
+                    db.SubmitChanges();
+                }
             }
             catch (Exception ex) { throw new Exception("Error al modificar el producto: " + ex.Message); }
         }
@@ -246,10 +273,13 @@ namespace Capa_Negocios
         {
             try
             {
-                var prod = dc.tbl_producto.FirstOrDefault(p => p.pro_id == id)
-                    ?? throw new Exception("Producto no encontrado.");
-                prod.pro_estado = 'A';
-                dc.SubmitChanges();
+                using (var db = new MonolitoDataContext())
+                {
+                    var prod = db.tbl_producto.FirstOrDefault(p => p.pro_id == id)
+                        ?? throw new Exception("Producto no encontrado.");
+                    prod.pro_estado = 'A';
+                    db.SubmitChanges();
+                }
             }
             catch (Exception ex) { throw new Exception("Error al activar el producto: " + ex.Message); }
         }
@@ -258,10 +288,13 @@ namespace Capa_Negocios
         {
             try
             {
-                var prod = dc.tbl_producto.FirstOrDefault(p => p.pro_id == id)
-                    ?? throw new Exception("Producto no encontrado.");
-                prod.pro_estado = 'I';
-                dc.SubmitChanges();
+                using (var db = new MonolitoDataContext())
+                {
+                    var prod = db.tbl_producto.FirstOrDefault(p => p.pro_id == id)
+                        ?? throw new Exception("Producto no encontrado.");
+                    prod.pro_estado = 'I';
+                    db.SubmitChanges();
+                }
             }
             catch (Exception ex) { throw new Exception("Error al desactivar el producto: " + ex.Message); }
         }
@@ -270,25 +303,28 @@ namespace Capa_Negocios
         {
             try
             {
-                var prod = dc.tbl_producto.FirstOrDefault(p => p.pro_id == id)
-                    ?? throw new Exception("Producto no encontrado.");
-
-                var fotos = dc.tbl_pro_fotos.Where(f => f.pro_id == id).ToList();
-                var rutas = fotos.Select(f => f.foto_ruta).Where(r => !string.IsNullOrWhiteSpace(r)).Distinct().ToList();
-
-                if (fotos.Any())
+                using (var db = new MonolitoDataContext())
                 {
-                    dc.tbl_pro_fotos.DeleteAllOnSubmit(fotos);
-                }
+                    var prod = db.tbl_producto.FirstOrDefault(p => p.pro_id == id)
+                        ?? throw new Exception("Producto no encontrado.");
 
-                dc.tbl_producto.DeleteOnSubmit(prod);
-                dc.SubmitChanges();
-                return rutas;
+                    var fotos = db.tbl_pro_fotos.Where(f => f.pro_id == id).ToList();
+                    var rutas = fotos.Select(f => f.foto_ruta).Where(r => !string.IsNullOrWhiteSpace(r)).Distinct().ToList();
+
+                    if (fotos.Any())
+                    {
+                        db.tbl_pro_fotos.DeleteAllOnSubmit(fotos);
+                    }
+
+                    db.tbl_producto.DeleteOnSubmit(prod);
+                    db.SubmitChanges();
+                    return rutas;
+                }
             }
             catch (Exception ex) { throw new Exception("Error al eliminar el producto: " + ex.Message); }
         }
 
-        private static List<ProductoCargaFilaNormalizada> NormalizarFilasCarga(IEnumerable<ProductoCargaFila> filas, ResultadoCargaProductos resultado)
+        private static List<ProductoCargaFilaNormalizada> NormalizarFilasCarga(MonolitoDataContext dc, IEnumerable<ProductoCargaFila> filas, ResultadoCargaProductos resultado)
         {
             var normalizadas = new List<ProductoCargaFilaNormalizada>();
             var nombres = new HashSet<string>();

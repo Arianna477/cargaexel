@@ -7,80 +7,103 @@ namespace Capa_Negocios
 {
     public class CN_tbl_proveedor
     {
-        private static MonolitoDataContext dc = new MonolitoDataContext();
         private const string TablaPendientes = "tbl_proveedor_reasignacion_pendiente";
         private const string NombreProveedorPredeterminado = "Sin proveedor";
 
         public static List<tbl_proveedor> Listar(bool ordenarAscendente = false)
         {
-            return dc.tbl_proveedor
-                .OrderBy(p => ordenarAscendente ? p.prov_id : -p.prov_id)
-                .ToList();
+            using (var db = new MonolitoDataContext())
+            {
+                return db.tbl_proveedor
+                    .OrderBy(p => ordenarAscendente ? p.prov_id : -p.prov_id)
+                    .ToList();
+            }
         }
 
         public static List<tbl_proveedor> Buscar(string nombre = null, char? estado = null, bool ordenarAscendente = false)
         {
-            var query = dc.tbl_proveedor.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(nombre))
+            using (var db = new MonolitoDataContext())
             {
-                string termino = nombre.Trim();
-                query = query.Where(p => p.prov_nombre.Contains(termino));
-            }
+                var query = db.tbl_proveedor.AsQueryable();
 
-            if (estado.HasValue)
-            {
-                query = query.Where(p => p.prov_estado == estado.Value);
-            }
+                if (!string.IsNullOrWhiteSpace(nombre))
+                {
+                    string termino = nombre.Trim();
+                    query = query.Where(p => p.prov_nombre.Contains(termino));
+                }
 
-            return query
-                .OrderBy(p => ordenarAscendente ? p.prov_id : -p.prov_id)
-                .ToList();
+                if (estado.HasValue)
+                {
+                    query = query.Where(p => p.prov_estado == estado.Value);
+                }
+
+                return query
+                    .OrderBy(p => ordenarAscendente ? p.prov_id : -p.prov_id)
+                    .ToList();
+            }
         }
 
         public static List<tbl_proveedor> ListarActivos()
         {
-            return dc.tbl_proveedor
-                .Where(p => p.prov_estado == 'A')
-                .OrderBy(p => p.prov_nombre)
-                .ToList();
+            using (var db = new MonolitoDataContext())
+            {
+                return db.tbl_proveedor
+                    .Where(p => p.prov_estado == 'A')
+                    .OrderBy(p => p.prov_nombre)
+                    .ToList();
+            }
         }
 
         public static tbl_proveedor BuscarPorId(int id)
         {
-            return dc.tbl_proveedor.FirstOrDefault(p => p.prov_id == id);
+            using (var db = new MonolitoDataContext())
+            {
+                return db.tbl_proveedor.FirstOrDefault(p => p.prov_id == id);
+            }
         }
 
         public static List<tbl_proveedor> traerproveedores()
         {
-            return dc.tbl_proveedor.Where(p => p.prov_estado == 'A').ToList();
+            using (var db = new MonolitoDataContext())
+            {
+                return db.tbl_proveedor.Where(p => p.prov_estado == 'A').ToList();
+            }
         }
 
         public static tbl_proveedor traerproveedorid(int id)
         {
-            return dc.tbl_proveedor.FirstOrDefault(p => p.prov_id == id && p.prov_estado == 'A');
+            using (var db = new MonolitoDataContext())
+            {
+                return db.tbl_proveedor.FirstOrDefault(p => p.prov_id == id && p.prov_estado == 'A');
+            }
         }
 
         public static bool ExisteNombre(string nombre, int idIgnorar = 0)
         {
-            return dc.tbl_proveedor
-                .Any(p => p.prov_nombre == nombre
-                       && p.prov_estado == 'A'
-                       && p.prov_id != idIgnorar);
+            using (var db = new MonolitoDataContext())
+            {
+                return db.tbl_proveedor
+                    .Any(p => p.prov_nombre == nombre
+                           && p.prov_estado == 'A'
+                           && p.prov_id != idIgnorar);
+            }
         }
 
         public static void Guardar(tbl_proveedor proveedor)
         {
             try
             {
-                AsegurarTablaPendientes(dc);
+                using (var db = new MonolitoDataContext())
+                {
+                    AsegurarTablaPendientes(db);
 
-                proveedor.prov_nombre = (proveedor.prov_nombre ?? string.Empty).Trim();
-                proveedor.prov_estado = 'A';
-                dc.tbl_proveedor.InsertOnSubmit(proveedor);
-                dc.SubmitChanges();
+                    proveedor.prov_nombre = (proveedor.prov_nombre ?? string.Empty).Trim();
+                    proveedor.prov_estado = 'A';
+                    db.tbl_proveedor.InsertOnSubmit(proveedor);
+                    db.SubmitChanges();
 
-                ReasignarProductosPendientes(dc, proveedor.prov_id, proveedor.prov_nombre);
+                    ReasignarProductosPendientes(db, proveedor.prov_id, proveedor.prov_nombre);
+                }
             }
             catch (Exception ex)
             {
@@ -92,15 +115,18 @@ namespace Capa_Negocios
         {
             try
             {
-                var existente = dc.tbl_proveedor
-                    .FirstOrDefault(p => p.prov_id == proveedor.prov_id)
-                    ?? throw new Exception("Proveedor no encontrado.");
+                using (var db = new MonolitoDataContext())
+                {
+                    var existente = db.tbl_proveedor
+                        .FirstOrDefault(p => p.prov_id == proveedor.prov_id)
+                        ?? throw new Exception("Proveedor no encontrado.");
 
-                existente.prov_nombre = (proveedor.prov_nombre ?? string.Empty).Trim();
-                dc.SubmitChanges();
+                    existente.prov_nombre = (proveedor.prov_nombre ?? string.Empty).Trim();
+                    db.SubmitChanges();
 
-                AsegurarTablaPendientes(dc);
-                ReasignarProductosPendientes(dc, existente.prov_id, existente.prov_nombre);
+                    AsegurarTablaPendientes(db);
+                    ReasignarProductosPendientes(db, existente.prov_id, existente.prov_nombre);
+                }
             }
             catch (Exception ex)
             {
@@ -112,11 +138,14 @@ namespace Capa_Negocios
         {
             try
             {
-                var prov = dc.tbl_proveedor
-                    .FirstOrDefault(p => p.prov_id == id)
-                    ?? throw new Exception("Proveedor no encontrado.");
-                prov.prov_estado = 'A';
-                dc.SubmitChanges();
+                using (var db = new MonolitoDataContext())
+                {
+                    var prov = db.tbl_proveedor
+                        .FirstOrDefault(p => p.prov_id == id)
+                        ?? throw new Exception("Proveedor no encontrado.");
+                    prov.prov_estado = 'A';
+                    db.SubmitChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -128,11 +157,14 @@ namespace Capa_Negocios
         {
             try
             {
-                var prov = dc.tbl_proveedor
-                    .FirstOrDefault(p => p.prov_id == id)
-                    ?? throw new Exception("Proveedor no encontrado.");
-                prov.prov_estado = 'I';
-                dc.SubmitChanges();
+                using (var db = new MonolitoDataContext())
+                {
+                    var prov = db.tbl_proveedor
+                        .FirstOrDefault(p => p.prov_id == id)
+                        ?? throw new Exception("Proveedor no encontrado.");
+                    prov.prov_estado = 'I';
+                    db.SubmitChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -144,25 +176,28 @@ namespace Capa_Negocios
         {
             try
             {
-                AsegurarTablaPendientes(dc);
-
-                var prov = dc.tbl_proveedor
-                    .FirstOrDefault(p => p.prov_id == id)
-                    ?? throw new Exception("Proveedor no encontrado.");
-
-                string nombreProveedor = (prov.prov_nombre ?? string.Empty).Trim();
-                var productosAfectados = dc.tbl_producto
-                    .Where(p => p.prov_id == id)
-                    .ToList();
-
-                foreach (var producto in productosAfectados)
+                using (var db = new MonolitoDataContext())
                 {
-                    RegistrarPendiente(dc, producto.pro_id, nombreProveedor);
-                    producto.prov_id = null;
-                }
+                    AsegurarTablaPendientes(db);
 
-                dc.tbl_proveedor.DeleteOnSubmit(prov);
-                dc.SubmitChanges();
+                    var prov = db.tbl_proveedor
+                        .FirstOrDefault(p => p.prov_id == id)
+                        ?? throw new Exception("Proveedor no encontrado.");
+
+                    string nombreProveedor = (prov.prov_nombre ?? string.Empty).Trim();
+                    var productosAfectados = db.tbl_producto
+                        .Where(p => p.prov_id == id)
+                        .ToList();
+
+                    foreach (var producto in productosAfectados)
+                    {
+                        RegistrarPendiente(db, producto.pro_id, nombreProveedor);
+                        producto.prov_id = null;
+                    }
+
+                    db.tbl_proveedor.DeleteOnSubmit(prov);
+                    db.SubmitChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -195,15 +230,18 @@ namespace Capa_Negocios
                     IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted
                 }))
             {
-                AsegurarTablaPendientes(dc);
+                using (var db = new MonolitoDataContext())
+                {
+                    AsegurarTablaPendientes(db);
 
-                if (tipoInsercion == TipoInsercionProveedor.ReemplazarTodo)
-                {
-                    EjecutarReemplazoTotal(dc, filasNormalizadas, resultado);
-                }
-                else
-                {
-                    EjecutarCargaIncremental(dc, filasNormalizadas, resultado);
+                    if (tipoInsercion == TipoInsercionProveedor.ReemplazarTodo)
+                    {
+                        EjecutarReemplazoTotal(db, filasNormalizadas, resultado);
+                    }
+                    else
+                    {
+                        EjecutarCargaIncremental(db, filasNormalizadas, resultado);
+                    }
                 }
 
                 scope.Complete();

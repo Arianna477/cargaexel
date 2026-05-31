@@ -45,6 +45,7 @@ namespace Monolito4bm
         protected global::System.Web.UI.WebControls.LinkButton btnPrev;
         protected global::System.Web.UI.WebControls.Repeater rptPager;
         protected global::System.Web.UI.WebControls.LinkButton btnNext;
+        protected global::System.Web.UI.WebControls.LinkButton btnNuevo;
 
         private const int POR_PAGINA = 5;
         private const int MAX_FILAS_PREVIEW = 20;
@@ -287,6 +288,13 @@ namespace Monolito4bm
             ddlFiltroEstado.SelectedIndex = 0;
             hfPagina.Value = "1";
             CargarGrid();
+        }
+        protected void btnNuevo_Click(object sender, EventArgs e)
+        {
+            LimpiarFormulario();
+            hfModalAbierto.Value = "1";
+            ScriptManager.RegisterStartupScript(this, GetType(), "openNewProveedor", "abrirModal();", true);
+            upDashboardProveedores.Update();
         }
         protected void btnPrev_Click(object sender, EventArgs e)
         {
@@ -573,6 +581,7 @@ namespace Monolito4bm
             litResumenCarga.Text = filas.Count > MAX_FILAS_PREVIEW
                 ? $"Mostrando {MAX_FILAS_PREVIEW} de {filas.Count} fila(s)."
                 : $"Mostrando {filas.Count} fila(s).";
+            btnLimpiarCarga.Visible = preview.Any();
         }
 
         private void LimpiarPreviewCarga()
@@ -585,6 +594,7 @@ namespace Monolito4bm
             litArchivoCarga.Text = "Sin archivo cargado.";
             litResumenCarga.Text = "Aun no hay vista previa.";
             ddlTipoInsercionMasiva.SelectedValue = "1";
+            btnLimpiarCarga.Visible = false;
         }
     }
 }

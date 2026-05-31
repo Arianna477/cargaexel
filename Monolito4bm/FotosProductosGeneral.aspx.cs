@@ -29,8 +29,8 @@ namespace Monolito4bm
         protected global::System.Web.UI.WebControls.Button btnDescargarRutasPreparadas;
         protected global::System.Web.UI.WebControls.Button btnDescargarFormato;
         protected global::System.Web.UI.WebControls.Button btnProcesarCargaMasiva;
-        protected global::System.Web.UI.WebControls.Button btnLimpiarCarga;
-        protected global::System.Web.UI.WebControls.Button btnPrevisualizarCarga;
+        protected global::System.Web.UI.WebControls.LinkButton btnLimpiarCarga;
+        protected global::System.Web.UI.WebControls.LinkButton btnPrevisualizarCarga;
         protected global::System.Web.UI.WebControls.LinkButton btnLimpiarFiltros;
         protected global::System.Web.UI.WebControls.Repeater rptFotos;
         protected global::System.Web.UI.WebControls.Repeater rptRutasPreparadas;
@@ -45,6 +45,7 @@ namespace Monolito4bm
         protected global::System.Web.UI.WebControls.HiddenField hfAccumulatedRoutes;
         protected global::System.Web.UI.WebControls.Button btnGenerarExcelTodo;
         protected global::System.Web.UI.UpdatePanel upCargaMasiva;
+        protected global::System.Web.UI.UpdatePanel upFotosGeneral;
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPaginacion;
         protected global::System.Web.UI.WebControls.LinkButton btnPaginaPrev;
         protected global::System.Web.UI.WebControls.LinkButton btnPaginaNext;
@@ -114,6 +115,7 @@ namespace Monolito4bm
                 CargarProductosDropdowns();
                 CargarFotos();
                 LimpiarRutasPreparadas();
+                LimpiarPreviewCarga();
             }
         }
 
@@ -610,6 +612,7 @@ namespace Monolito4bm
         {
             PaginaActual = 0;
             CargarFotos();
+            upFotosGeneral.Update();
         }
 
         protected void btnLimpiarFiltros_Click(object sender, EventArgs e)
@@ -623,18 +626,21 @@ namespace Monolito4bm
             PaginaActual = 0;
 
             CargarFotos();
+            upFotosGeneral.Update();
         }
 
         protected void btnPaginaPrev_Click(object sender, EventArgs e)
         {
             PaginaActual--;
             CargarFotos();
+            upFotosGeneral.Update();
         }
 
         protected void btnPaginaNext_Click(object sender, EventArgs e)
         {
             PaginaActual++;
             CargarFotos();
+            upFotosGeneral.Update();
         }
 
         protected void rptFotos_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -675,6 +681,7 @@ namespace Monolito4bm
             }
 
             CargarFotos();
+            upFotosGeneral.Update();
         }
 
         private void BindPreviewCarga()
@@ -696,6 +703,7 @@ namespace Monolito4bm
             gvPreviewCarga.DataSource = preview;
             gvPreviewCarga.DataBind();
             phPreviewVacia.Visible = !preview.Any();
+            btnLimpiarCarga.Visible = preview.Any();
             
             string filename = Session["CargaMasivaFileName"] as string ?? string.Empty;
             litArchivoCarga.Text = "Archivo listo: " + HttpUtility.HtmlEncode(filename);
@@ -712,6 +720,7 @@ namespace Monolito4bm
             gvPreviewCarga.Visible = false;
             gvPreviewCarga.DataSource = null;
             gvPreviewCarga.DataBind();
+            btnLimpiarCarga.Visible = false;
             if (phPreviewVacia != null) phPreviewVacia.Visible = true;
             if (litArchivoCarga != null) litArchivoCarga.Text = "Sin archivo cargado.";
             if (litResumenCarga != null) litResumenCarga.Text = "Aun no hay vista previa.";
