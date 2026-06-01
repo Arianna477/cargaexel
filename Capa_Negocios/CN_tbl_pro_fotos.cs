@@ -457,16 +457,19 @@ namespace Capa_Negocios
                 }
             }
 
-            string nombreNormalizado = identificador.ToLowerInvariant();
-            if (productosPorNombre.ContainsKey(nombreNormalizado))
+            // Búsqueda case-insensitive: el dict usa OrdinalIgnoreCase, la clave puede tener cualquier capitalización
+            string nombreBusqueda = identificador.Trim();
+            if (productosPorNombre.ContainsKey(nombreBusqueda))
             {
-                return productosPorNombre[nombreNormalizado];
+                return productosPorNombre[nombreBusqueda];
             }
 
-            var prodDb = dc.tbl_producto.FirstOrDefault(p => p.pro_nombre != null && p.pro_nombre.ToLower() == nombreNormalizado);
+            // Fallback: buscar directamente en BD ignorando mayúsculas
+            string nombreLower = nombreBusqueda.ToLowerInvariant();
+            var prodDb = dc.tbl_producto.ToList().FirstOrDefault(p => p.pro_nombre != null && p.pro_nombre.Trim().ToLowerInvariant() == nombreLower);
             if (prodDb != null)
             {
-                productosPorNombre[nombreNormalizado] = prodDb.pro_id;
+                productosPorNombre[prodDb.pro_nombre.Trim()] = prodDb.pro_id;
                 productosPorId[prodDb.pro_id] = prodDb.pro_id;
                 return prodDb.pro_id;
             }

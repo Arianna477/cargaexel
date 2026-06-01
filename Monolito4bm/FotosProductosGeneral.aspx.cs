@@ -573,6 +573,7 @@ namespace Monolito4bm
                 LimpiarPreviewCarga();
                 PaginaActual = 0;
                 CargarFotos();
+                upFotosGeneral.Update();
 
                 string mensaje = "Carga masiva completada. Filas: " + resultado.FilasProcesadas +
                     ". Insertadas: " + resultado.Insertados +
@@ -703,7 +704,7 @@ namespace Monolito4bm
             gvPreviewCarga.DataSource = preview;
             gvPreviewCarga.DataBind();
             phPreviewVacia.Visible = !preview.Any();
-            btnLimpiarCarga.Visible = preview.Any();
+            btnLimpiarCarga.Visible = true; // Siempre visible
             
             string filename = Session["CargaMasivaFileName"] as string ?? string.Empty;
             litArchivoCarga.Text = "Archivo listo: " + HttpUtility.HtmlEncode(filename);
@@ -720,11 +721,23 @@ namespace Monolito4bm
             gvPreviewCarga.Visible = false;
             gvPreviewCarga.DataSource = null;
             gvPreviewCarga.DataBind();
-            btnLimpiarCarga.Visible = false;
+            // Siempre visible
+            btnLimpiarCarga.Visible = true;
             if (phPreviewVacia != null) phPreviewVacia.Visible = true;
             if (litArchivoCarga != null) litArchivoCarga.Text = "Sin archivo cargado.";
             if (litResumenCarga != null) litResumenCarga.Text = "Aun no hay vista previa.";
             if (ddlTipoInsercionMasiva != null) ddlTipoInsercionMasiva.SelectedValue = "1";
+            // Resetear la zona de upload visualmente
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "resetUploadZoneUI",
+                "var _z=document.getElementById('uploadZoneExcel');" +
+                "if(_z){" +
+                "  var _c=_z.querySelector('.upload-content');" +
+                "  var _f=_z.querySelector('.upload-file-info');" +
+                "  var _n=_z.querySelector('.file-name');" +
+                "  if(_c)_c.style.display='flex';" +
+                "  if(_f)_f.style.display='none';" +
+                "  if(_n)_n.textContent='';" +
+                "}", true);
         }
 
         private void LimpiarFotosTemporales()

@@ -323,7 +323,12 @@ namespace Monolito4bm
                 CN_tbl_pro_fotos.GuardarFotos(nuevas);
                 LimpiarFotosTemporales();
                 BindFotosPreview();
-                MostrarMensaje($"{nuevas.Count} foto(s) subida(s) correctamente.", true);
+                // Recargar página tras cerrar el alert para mostrar las fotos nuevas
+                string safeMsg = HttpUtility.JavaScriptStringEncode($"{nuevas.Count} foto(s) subida(s) correctamente.");
+                string scriptReload = $"Swal.fire({{ title: '\u00a1Éxito!', text: '{safeMsg}', icon: 'success', confirmButtonColor: '#7a4aaa' }}).then(function(){{ window.location.reload(); }});";
+                ClientScript.RegisterStartupScript(this.GetType(), "swal_reload", scriptReload, true);
+                CargarFotos(proId);
+                return;
             }
             catch (Exception ex)
             {

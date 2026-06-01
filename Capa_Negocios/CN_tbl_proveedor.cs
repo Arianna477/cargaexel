@@ -82,8 +82,10 @@ namespace Capa_Negocios
         {
             using (var db = new MonolitoDataContext())
             {
+                string nombreLower = (nombre ?? string.Empty).Trim().ToLowerInvariant();
                 return db.tbl_proveedor
-                    .Any(p => p.prov_nombre == nombre
+                    .ToList()
+                    .Any(p => (p.prov_nombre ?? string.Empty).Trim().ToLowerInvariant() == nombreLower
                            && p.prov_estado == 'A'
                            && p.prov_id != idIgnorar);
             }

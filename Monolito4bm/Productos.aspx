@@ -908,8 +908,14 @@
     var fileInput = document.getElementById('<%= fuCargaMasiva.ClientID %>');
     if (!zone || !fileInput) return;
 
+    // Guard: solo inicializar una vez por elemento
+    if (zone.dataset.dndBound === '1') return;
+    zone.dataset.dndBound = '1';
+
     zone.addEventListener('click', function(e) {
       if (e.target !== fileInput) {
+        // Resetear el valor para que se pueda re-seleccionar el mismo archivo tras limpiar
+        fileInput.value = '';
         fileInput.click();
       }
     });
@@ -928,8 +934,14 @@
       e.preventDefault();
       zone.classList.remove('dragover');
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        fileInput.files = e.dataTransfer.files;
+        // Usar DataTransfer para asignar archivos y disparar change
+        var dt = new DataTransfer();
+        for (var i = 0; i < e.dataTransfer.files.length; i++) {
+          dt.items.add(e.dataTransfer.files[i]);
+        }
+        fileInput.files = dt.files;
         handleFileSelect(fileInput);
+        fileInput.dispatchEvent(new Event('change', { bubbles: true }));
       }
     });
 

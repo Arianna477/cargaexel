@@ -413,27 +413,17 @@
                   }
 
                   var files = Array.from(input.files);
-                  var maxBytes = 2 * 1024 * 1024; // 2 MB
+                  var maxBytes = 2 * 1024 * 1024;
                   for (var i = 0; i < files.length; i++) {
                       var file = files[i];
                       if (file.size > maxBytes) {
-                          Swal.fire({
-                              title: 'Archivo muy pesado',
-                              text: 'La foto "' + file.name + '" supera los 2 MB permitidos.',
-                              icon: 'warning',
-                              confirmButtonColor: '#7a4aaa'
-                          });
+                          Swal.fire({ title: 'Archivo muy pesado', text: 'La foto "' + file.name + '" supera los 2 MB permitidos.', icon: 'warning', confirmButtonColor: '#7a4aaa' });
                           input.value = '';
                           return;
                       }
                       var ext = file.name.split('.').pop().toLowerCase();
                       if (ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png') {
-                          Swal.fire({
-                              title: 'Formato no válido',
-                              text: 'El archivo "' + file.name + '" no es una imagen JPG o PNG válida.',
-                              icon: 'warning',
-                              confirmButtonColor: '#7a4aaa'
-                          });
+                          Swal.fire({ title: 'Formato no válido', text: 'El archivo "' + file.name + '" no es una imagen JPG o PNG válida.', icon: 'warning', confirmButtonColor: '#7a4aaa' });
                           input.value = '';
                           return;
                       }
@@ -450,25 +440,36 @@
                   var cards = document.querySelectorAll('.preview-strip .preview-card');
                   if (cards.length === 0) {
                       e.preventDefault();
-                      Swal.fire({
-                          title: '¡Atención!',
-                          text: 'Debes previsualizar las fotos primero antes de subirlas.',
-                          icon: 'warning',
-                          confirmButtonColor: '#7a4aaa'
-                      });
+                      Swal.fire({ title: '¡Atención!', text: 'Debes previsualizar las fotos primero antes de subirlas.', icon: 'warning', confirmButtonColor: '#7a4aaa' });
+                      return;
                   }
+                  // Marcar que se está subiendo para recargar al volver
+                  sessionStorage.setItem('fotosSubidas', '1');
               });
           }
 
-          // Drag & drop sobre la zona
+          // Recargar la tabla de fotos si acaba de subirse (el postback ya actualizó el servidor)
+          // La página se recarga automáticamente con el postback de ASP.NET — esto solo resetea el input
+          if (input) {
+              // Limpiar el input de fotos tras cualquier postback para evitar re-envíos accidentales
+              input.value = '';
+          }
+
+          // Drag & drop sobre la zona — con guard para no duplicar listeners
           var zone = document.getElementById('uploadZone');
-          if (zone && input) {
+          if (zone && input && zone.dataset.dndBound !== '1') {
+              zone.dataset.dndBound = '1';
               zone.addEventListener('dragover', function (e) { e.preventDefault(); zone.classList.add('drag-over'); });
               zone.addEventListener('dragleave', function () { zone.classList.remove('drag-over'); });
               zone.addEventListener('drop', function (e) {
-                  e.preventDefault(); zone.classList.remove('drag-over');
-                  input.files = e.dataTransfer.files;
-                  input.dispatchEvent(new Event('change'));
+                  e.preventDefault();
+                  zone.classList.remove('drag-over');
+                  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                      var dt = new DataTransfer();
+                      for (var i = 0; i < e.dataTransfer.files.length; i++) { dt.items.add(e.dataTransfer.files[i]); }
+                      input.files = dt.files;
+                      input.dispatchEvent(new Event('change', { bubbles: true }));
+                  }
               });
           }
       });

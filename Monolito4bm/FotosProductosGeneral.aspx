@@ -1201,8 +1201,12 @@
         }
 
         // Subida automática de archivo de carga masiva
-        var fuCarga = document.getElementById('<%= fuCargaMasiva.ClientID %>');
-        if (fuCarga) {
+        function initExcelUpload() {
+            var fuCarga = document.getElementById('<%= fuCargaMasiva.ClientID %>');
+            if (!fuCarga) return;
+            if (fuCarga.dataset.uploadBound === '1') return;
+            fuCarga.dataset.uploadBound = '1';
+
             fuCarga.addEventListener('change', function() {
                 if (fuCarga.files.length === 0) return;
                 var file = fuCarga.files[0];
@@ -1270,8 +1274,14 @@
             var fileInput = document.getElementById('<%= fuCargaMasiva.ClientID %>');
             if (!zone || !fileInput) return;
 
+            // Guard: solo inicializar una vez por elemento
+            if (zone.dataset.dndBound === '1') return;
+            zone.dataset.dndBound = '1';
+
             zone.addEventListener('click', function(e) {
                 if (e.target !== fileInput) {
+                    // Resetear el valor para que se pueda re-seleccionar el mismo archivo tras limpiar
+                    fileInput.value = '';
                     fileInput.click();
                 }
             });
@@ -1290,10 +1300,13 @@
                 e.preventDefault();
                 zone.classList.remove('dragover');
                 if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                    fileInput.files = e.dataTransfer.files;
+                    var dt = new DataTransfer();
+                    for (var i = 0; i < e.dataTransfer.files.length; i++) {
+                        dt.items.add(e.dataTransfer.files[i]);
+                    }
+                    fileInput.files = dt.files;
                     handleFileSelect(fileInput);
-                    var event = new Event('change', { bubbles: true });
-                    fileInput.dispatchEvent(event);
+                    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
                 }
             });
 
@@ -1319,6 +1332,7 @@
         }
 
         inicializarBusquedaPredictivaFotos();
+        initExcelUpload();
         initDragAndDrop();
 
         if (typeof Sys !== 'undefined') {
@@ -1326,6 +1340,7 @@
             
             prm.add_endRequest(function() {
                 inicializarBusquedaPredictivaFotos();
+                initExcelUpload();
                 initDragAndDrop();
             });
 
