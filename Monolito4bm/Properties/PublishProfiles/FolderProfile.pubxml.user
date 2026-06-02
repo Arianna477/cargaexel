@@ -3,7 +3,7 @@
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\Aricita\monolito</_PublishTargetUrl>
-    <History>True|2026-05-31T20:42:10.1032824Z||;False|2026-05-31T15:34:20.0675460-05:00||;False|2026-05-31T15:33:32.5959337-05:00||;False|2026-05-31T15:27:32.4092863-05:00||;False|2026-05-31T15:23:33.6631012-05:00||;False|2026-05-31T15:20:52.6781331-05:00||;</History>
+    <History>True|2026-06-02T13:43:31.5683008Z||;True|2026-06-01T21:24:51.9563923-05:00||;True|2026-05-31T19:14:30.1245189-05:00||;True|2026-05-31T15:42:10.1032824-05:00||;False|2026-05-31T15:34:20.0675460-05:00||;False|2026-05-31T15:33:32.5959337-05:00||;False|2026-05-31T15:27:32.4092863-05:00||;False|2026-05-31T15:23:33.6631012-05:00||;False|2026-05-31T15:20:52.6781331-05:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -17,10 +17,10 @@
       <publishTime>09/10/2013 11:29:20</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>05/31/2026 15:42:06</publishTime>
+      <publishTime>06/02/2026 08:43:25</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>05/31/2026 15:42:05</publishTime>
+      <publishTime>06/02/2026 08:43:24</publishTime>
     </File>
     <File Include="bin/BCrypt-Net-Next.dll">
       <publishTime>05/11/2026 06:04:00</publishTime>
@@ -35,13 +35,13 @@
       <publishTime>05/31/2026 15:20:43</publishTime>
     </File>
     <File Include="bin/Capa_Negocios.dll">
-      <publishTime>05/31/2026 15:20:45</publishTime>
+      <publishTime>06/02/2026 08:42:45</publishTime>
     </File>
     <File Include="bin/Capa_Negocios.dll.config">
       <publishTime>05/25/2026 10:02:23</publishTime>
     </File>
     <File Include="bin/Capa_Negocios.pdb">
-      <publishTime>05/31/2026 15:20:45</publishTime>
+      <publishTime>06/02/2026 08:42:45</publishTime>
     </File>
     <File Include="bin/de/Microsoft.ReportViewer.Common.resources.dll">
       <publishTime>06/01/2024 15:18:50</publishTime>
@@ -227,10 +227,10 @@
       <publishTime>04/11/2022 14:09:46</publishTime>
     </File>
     <File Include="bin/Monolito4bm.dll">
-      <publishTime>05/31/2026 15:40:44</publishTime>
+      <publishTime>06/02/2026 08:42:48</publishTime>
     </File>
     <File Include="bin/Monolito4bm.pdb">
-      <publishTime>05/31/2026 15:40:44</publishTime>
+      <publishTime>06/02/2026 08:42:48</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>03/08/2023 02:09:56</publishTime>
@@ -617,10 +617,10 @@
       <publishTime>05/25/2026 10:02:23</publishTime>
     </File>
     <File Include="FotosProducto.aspx">
-      <publishTime>05/31/2026 10:05:23</publishTime>
+      <publishTime>06/01/2026 20:09:10</publishTime>
     </File>
     <File Include="FotosProductosGeneral.aspx">
-      <publishTime>05/31/2026 13:18:04</publishTime>
+      <publishTime>06/01/2026 21:08:08</publishTime>
     </File>
     <File Include="GuardarFotosSlots.ashx">
       <publishTime>05/31/2026 10:52:51</publishTime>
@@ -629,7 +629,7 @@
       <publishTime>05/27/2026 08:27:31</publishTime>
     </File>
     <File Include="ImagenUsuarioFallback.ashx">
-      <publishTime>05/27/2026 08:27:31</publishTime>
+      <publishTime>06/01/2026 20:32:18</publishTime>
     </File>
     <File Include="PaginaRol1.aspx">
       <publishTime>05/25/2026 10:02:23</publishTime>
@@ -647,13 +647,13 @@
       <publishTime>05/29/2026 16:31:46</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>05/31/2026 15:41:36</publishTime>
+      <publishTime>06/02/2026 08:42:50</publishTime>
     </File>
     <File Include="Productos.aspx">
-      <publishTime>05/31/2026 13:26:36</publishTime>
+      <publishTime>06/01/2026 21:14:00</publishTime>
     </File>
     <File Include="Proveedores.aspx">
-      <publishTime>05/31/2026 13:27:02</publishTime>
+      <publishTime>06/01/2026 21:08:03</publishTime>
     </File>
     <File Include="RecuperarClave.aspx">
       <publishTime>05/25/2026 10:02:23</publishTime>
@@ -806,7 +806,7 @@
       <publishTime>05/25/2026 10:02:23</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>05/31/2026 15:41:34</publishTime>
+      <publishTime>06/02/2026 08:42:49</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -112,6 +112,72 @@
 .btn-warn:hover      { background:#d35400; }
 .btn-sm  { padding:5px 13px; font-size:.76rem; border-radius:20px; }
 
+/* ── Action Buttons Custom Styling ── */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.22s ease-in-out;
+  background: #fff;
+  border: 1.5px solid transparent;
+  text-decoration: none !important;
+}
+.action-btn-warn {
+  color: var(--warn, #e67e22);
+  border-color: var(--warn, #e67e22);
+}
+.action-btn-warn:hover {
+  background: var(--warn, #e67e22);
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(230,126,34,0.3);
+  transform: translateY(-2px);
+}
+.action-btn-danger {
+  color: var(--danger, #c0392b);
+  border-color: var(--danger, #c0392b);
+}
+.action-btn-danger:hover {
+  background: var(--danger, #c0392b);
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(192,57,43,0.3);
+  transform: translateY(-2px);
+}
+.action-btn-success {
+  color: var(--success, #27ae60);
+  border-color: var(--success, #27ae60);
+}
+.action-btn-success:hover {
+  background: var(--success, #27ae60);
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(39,174,96,0.3);
+  transform: translateY(-2px);
+}
+.action-btn-secondary {
+  color: #7a4aaa;
+  border-color: #7a4aaa;
+}
+.action-btn-secondary:hover {
+  background: #7a4aaa;
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(122,74,170,0.3);
+  transform: translateY(-2px);
+}
+.action-btn-primary {
+  color: var(--accent, #db2777);
+  border-color: var(--accent, #db2777);
+}
+.action-btn-primary:hover {
+  background: var(--accent, #db2777);
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(219,39,119,0.3);
+  transform: translateY(-2px);
+}
+
 /* ── Alertas ────────────────────────────────────────────────── */
 .alert {
   padding:11px 16px; border-radius:12px; margin-bottom:14px;
@@ -155,7 +221,7 @@
 
 /* ── Carrusel ───────────────────────────────────────────────── */
 .carousel-cell {
-  position:relative; width:155px; height:110px;
+  position:relative; width:120px; height:85px;
   border-radius:10px; overflow:hidden;
   background:rgba(219,39,119,0.08);
 }
@@ -165,7 +231,7 @@
 .carousel-cell .prev, .carousel-cell .next {
   position:absolute; top:50%; transform:translateY(-50%);
   background:rgba(219,39,119,0.85); color:#fff; border:none; cursor:pointer;
-  border-radius:50%; width:30px; height:30px; font-size:.9rem;
+  border-radius:50%; width:20px; height:20px; font-size:.7rem;
   display:flex; align-items:center; justify-content:center;
   transition:all .2s; z-index:2;
 }
@@ -173,12 +239,22 @@
 .carousel-cell .next { right:4px; }
 .carousel-cell .prev:hover, .carousel-cell .next:hover { background:rgba(244,63,94,0.95); transform:translateY(-50%) scale(1.15); }
 .carousel-cell .dots { position:absolute; bottom:6px; left:50%; transform:translateX(-50%); display:flex; gap:5px; }
-.carousel-cell .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.6); cursor:pointer; transition:background .2s; }
+.carousel-cell .dot { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.6); cursor:pointer; transition:background .2s; }
 .carousel-cell .dot.on { background:#f43f5e; box-shadow:0 0 5px rgba(244,63,94,0.9); }
 .no-foto {
-  width:155px; height:110px; border-radius:10px;
+  width:120px; height:85px; border-radius:10px;
   display:flex; align-items:center; justify-content:center;
-  background:rgba(219,39,119,0.07); color:rgba(219,39,119,0.35); font-size:1.8rem;
+  background:rgba(219,39,119,0.07); color:rgba(219,39,119,0.35); font-size:1.3rem;
+}
+.btn-excel-procesar {
+  padding: 13px 26px !important;
+  font-size: 0.92rem !important;
+  height: 48px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  border-radius: 30px !important;
 }
 
 /* ── Custom File Upload styling ── */
@@ -252,23 +328,14 @@
 .badge-activo   { background:rgba(39,174,96,.14);  color:#1e8449; }
 .badge-inactivo { background:rgba(192,57,43,.11);   color:#c0392b; }
 
-/* ── Paginador ──────────────────────────────────────────────── */
-.pager-wrap {
-  display:flex; align-items:center; justify-content:space-between;
-  flex-wrap:wrap; gap:12px; margin-top:16px;
-}
-.pager-info { font-size:.8rem; color:#999; }
-.pager-btns { display:flex; align-items:center; gap:6px; }
-.pager-btn {
-  min-width:34px; height:34px; border-radius:50%;
-  border:1.5px solid rgba(219,39,119,0.28); background:rgba(255,255,255,0.8);
-  color:var(--accent2); font-weight:700; font-size:.84rem; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  transition:all .2s; font-family:inherit;
-}
-.pager-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
-.pager-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-.pager-btn:disabled, .pager-btn.aspNetDisabled { opacity:.4; cursor:default; pointer-events:none; }
+/* ── Paginador pill (estilo unificado) ─────────────────────── */
+.pager-wrap { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:12px; margin-top:20px; }
+.pager-info { display:none; }
+.pager-pill { display:inline-flex; align-items:center; background:rgba(255,255,255,0.72); backdrop-filter:blur(10px); border:1.5px solid rgba(219,39,119,0.22); border-radius:40px; box-shadow:0 2px 12px rgba(190,24,93,0.09); overflow:hidden; }
+.pager-btn-pill { display:inline-flex; align-items:center; gap:6px; padding:9px 22px; background:transparent; border:none; color:var(--accent); font-weight:700; font-size:.85rem; cursor:pointer; font-family:inherit; transition:background .18s,color .18s; white-space:nowrap; text-decoration:none; }
+.pager-btn-pill:hover:not(.aspNetDisabled) { background:rgba(219,39,119,0.09); }
+.pager-btn-pill.aspNetDisabled { opacity:.38; cursor:default; pointer-events:none; }
+.pager-info-pill { padding:9px 20px; font-size:.85rem; font-weight:700; color:var(--accent2); border-left:1.5px solid rgba(219,39,119,0.18); border-right:1.5px solid rgba(219,39,119,0.18); white-space:nowrap; }
 
 /* ── Modal ──────────────────────────────────────────────────── */
 .modal-overlay {
@@ -420,7 +487,7 @@
 
   <div class="card">
     <div class="card-title">
-      <i class="fa-solid fa-file-arrow-up"></i> Carga Masiva Excel
+      <i class="fa-solid fa-file-arrow-up"></i> Carga Excel
     </div>
 
     <div class="massive-layout">
@@ -469,14 +536,11 @@
             <asp:ListItem Value="1" Text="Anadir sin borrar"/>
             <asp:ListItem Value="2" Text="Borrar todo y volver a cargar"/>
           </asp:DropDownList>
-          <small style="color:#7b6a94;margin-top:8px;display:block;">
-            En reemplazo total se respaldan las fotos, se reinician productos y fotos, y luego se restauran las fotos cuyos IDs de producto sigan existiendo en la nueva secuencia. Si un prov_id no existe, el producto se reasigna automaticamente a "Sin proveedor".
-          </small>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
-          <asp:LinkButton ID="btnProcesarCargaMasiva" runat="server" CssClass="btn btn-success"
+          <asp:LinkButton ID="btnProcesarCargaMasiva" runat="server" CssClass="btn btn-success btn-excel-procesar"
                           CausesValidation="false" OnClick="btnProcesarCargaMasiva_Click">
-            <i class="fa-solid fa-database"></i> Procesar carga masiva
+            <i class="fa-solid fa-file-excel"></i> Procesar carga en excel
           </asp:LinkButton>
         </div>
       </div>
@@ -485,8 +549,8 @@
     <div style="margin-top:18px;">
       <asp:PlaceHolder ID="phPreviewVacia" runat="server">
         <div class="empty-preview">
-          <i class="fa-solid fa-table-list" style="font-size:1.6rem;display:block;margin-bottom:10px;"></i>
-          Selecciona un archivo y presiona "Visualizar archivo" para revisar los productos antes de importarlos.
+          <i class="fa-solid fa-file-excel" style="font-size:2.4rem;color:#27ae60;display:block;margin-bottom:10px;"></i>
+          Aquí puedes previsualizar tus archivos
         </div>
       </asp:PlaceHolder>
 
@@ -533,12 +597,7 @@
   </div>
 
   <!-- ══ Buscador + Filtros ════════════════════════════════════ -->
-  <asp:UpdatePanel ID="upGridProductos" runat="server" UpdateMode="Conditional">
-      <ContentTemplate>
-    <asp:HiddenField ID="hfPagina"    runat="server" Value="1"/>
-    <asp:HiddenField ID="hfTotalPags" runat="server" Value="1"/>
-    <asp:HiddenField ID="hfOrdenId"   runat="server" Value="DESC"/>
-    <asp:Literal ID="litMensaje" runat="server"/>
+
 
   <div class="card">
 
@@ -613,6 +672,7 @@
       <div style="display:flex;align-items:flex-end;">
         <asp:LinkButton ID="btnLimpiarFiltros" runat="server"
                         CssClass="btn btn-secondary btn-sm" CausesValidation="false"
+                        OnClientClick="return limpiarFiltrosCliente();"
                         OnClick="btnLimpiarFiltros_Click">
           <i class="fa-solid fa-eraser"></i> Limpiar
         </asp:LinkButton>
@@ -620,7 +680,12 @@
   </div>
 
   <!-- ══ Grid + Paginador ══════════════════════════════════════ -->
-    <div class="card">
+  <asp:UpdatePanel ID="upGridProductos" runat="server" UpdateMode="Conditional">
+    <ContentTemplate>
+      <asp:HiddenField ID="hfPagina" runat="server" Value="1" />
+      <asp:HiddenField ID="hfTotalPags" runat="server" Value="1" />
+      <asp:HiddenField ID="hfOrdenId" runat="server" Value="DESC" />
+      <div class="card">
       <div class="card-title">
         <i class="fa-solid fa-table-list"></i> Lista de Productos
         <span style="margin-left:auto;font-size:.78rem;color:#aaa;font-weight:400;">
@@ -702,41 +767,41 @@
             </ItemTemplate>
           </asp:TemplateField>
 
-          <asp:TemplateField ItemStyle-Width="240px">
+          <asp:TemplateField ItemStyle-Width="200px">
             <HeaderTemplate>
               <i class="fa-solid fa-gears"></i> ACCIONES
             </HeaderTemplate>
             <ItemTemplate>
+              <div style="display:flex; gap:8px; align-items:center; justify-content:center;">
+                <asp:LinkButton runat="server" CommandName="Editar"
+                    CommandArgument='<%# Eval("pro_id") %>'
+                    CssClass="action-btn action-btn-warn" ToolTip="Editar">
+                  <i class="fa-solid fa-pen"></i>
+                </asp:LinkButton>
 
-              <asp:LinkButton runat="server" CommandName="Editar"
-                  CommandArgument='<%# Eval("pro_id") %>'
-                  CssClass="btn btn-warn btn-sm">
-                <i class="fa-solid fa-pen"></i> Editar
-              </asp:LinkButton>
+                <asp:LinkButton runat="server"
+                    CommandName='<%# Convert.ToString(Eval("pro_estado")) == "A" ? "ElimLog" : "Activar" %>'
+                    CommandArgument='<%# Eval("pro_id") %>'
+                    CssClass='<%# "action-btn " + (Convert.ToString(Eval("pro_estado")) == "A" ? "action-btn-secondary":"action-btn-success") %>'
+                    ToolTip='<%# Convert.ToString(Eval("pro_estado")) == "A" ? "Desactivar":"Activar" %>'
+                    OnClientClick='<%# Convert.ToString(Eval("pro_estado")) == "A"
+                        ? "return confirm(\"Desactivar este producto?\");"
+                        : "return confirm(\"Reactivar este producto?\");" %>'>
+                  <i class='fa-solid <%# Convert.ToString(Eval("pro_estado")) == "A" ? "fa-toggle-off":"fa-toggle-on" %>'></i>
+                </asp:LinkButton>
 
-              <asp:LinkButton runat="server"
-                  CommandName='<%# Convert.ToString(Eval("pro_estado")) == "A" ? "ElimLog" : "Activar" %>'
-                  CommandArgument='<%# Eval("pro_id") %>'
-                  CssClass='<%# "btn btn-sm " + (Convert.ToString(Eval("pro_estado")) == "A" ? "btn-secondary":"btn-success") %>'
-                  OnClientClick='<%# Convert.ToString(Eval("pro_estado")) == "A"
-                      ? "return confirm(\"Desactivar este producto?\");"
-                      : "return confirm(\"Reactivar este producto?\");" %>'>
-                <i class='fa-solid <%# Convert.ToString(Eval("pro_estado")) == "A" ? "fa-toggle-off":"fa-toggle-on" %>'></i>
-                <%# Convert.ToString(Eval("pro_estado")) == "A" ? " Desactivar":" Activar" %>
-              </asp:LinkButton>
+                <asp:LinkButton runat="server" CommandName="ElimFis"
+                    CommandArgument='<%# Eval("pro_id") %>'
+                    CssClass="action-btn action-btn-danger" ToolTip="Eliminar permanentemente"
+                    OnClientClick="return confirm('ELIMINAR permanentemente. No se puede deshacer.');">
+                  <i class="fa-solid fa-trash"></i>
+                </asp:LinkButton>
 
-              <asp:LinkButton runat="server" CommandName="ElimFis"
-                  CommandArgument='<%# Eval("pro_id") %>'
-                  CssClass="btn btn-danger btn-sm"
-                  OnClientClick="return confirm('ELIMINAR permanentemente. No se puede deshacer.');">
-                <i class="fa-solid fa-trash"></i>
-              </asp:LinkButton>
-
-              <a href='FotosProducto.aspx?id=<%# Eval("pro_id") %>'
-                 class="btn btn-primary btn-sm" title="Administrar fotos">
-                <i class="fa-solid fa-camera"></i>
-              </a>
-
+                <a href='FotosProducto.aspx?id=<%# Eval("pro_id") %>'
+                   class="action-btn action-btn-primary" title="Administrar fotos">
+                  <i class="fa-solid fa-camera"></i>
+                </a>
+              </div>
             </ItemTemplate>
           </asp:TemplateField>
 
@@ -752,20 +817,16 @@
 
     <div class="pager-wrap">
       <span class="pager-info"><asp:Literal ID="litPagerInfo" runat="server"/></span>
-      <div class="pager-btns">
-        <asp:LinkButton ID="btnPrev" runat="server" CssClass="pager-btn"
-                    CausesValidation="false" OnClick="btnPrev_Click">&#8249;</asp:LinkButton>
-        <asp:Repeater ID="rptPager" runat="server" OnItemCommand="rptPager_ItemCommand">
-          <ItemTemplate>
-            <asp:LinkButton runat="server" CommandName="Paginar"
-                CommandArgument='<%# Container.DataItem %>'
-                CssClass='<%# "pager-btn" + ((int)Container.DataItem == int.Parse(hfPagina.Value) ? " active":"") %>'>
-              <%# Container.DataItem %>
-            </asp:LinkButton>
-          </ItemTemplate>
-        </asp:Repeater>
-        <asp:LinkButton ID="btnNext" runat="server" CssClass="pager-btn"
-                    CausesValidation="false" OnClick="btnNext_Click">&#8250;</asp:LinkButton>
+      <div class="pager-pill">
+        <asp:LinkButton ID="btnPrev" runat="server" CssClass="pager-btn-pill"
+                    CausesValidation="false" OnClick="btnPrev_Click">
+          <i class="fa-solid fa-chevron-left"></i> Anterior
+        </asp:LinkButton>
+        <span class="pager-info-pill"><asp:Literal ID="litPagerInfoPill" runat="server" Text="Página 1 de 1"/></span>
+        <asp:LinkButton ID="btnNext" runat="server" CssClass="pager-btn-pill"
+                    CausesValidation="false" OnClick="btnNext_Click">
+          Siguiente <i class="fa-solid fa-chevron-right"></i>
+        </asp:LinkButton>
       </div>
     </div>
 
@@ -1002,6 +1063,7 @@
     prm.add_endRequest(inicializarComponentesProductos);
 
     var activeElementId = null;
+    var activeElementRef = null;
     var selectionStart = 0;
     var selectionEnd = 0;
 
@@ -1009,6 +1071,7 @@
       var activeEl = document.activeElement;
       if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
         activeElementId = activeEl.id;
+        activeElementRef = activeEl;
         try {
           selectionStart = activeEl.selectionStart;
           selectionEnd = activeEl.selectionEnd;
@@ -1018,13 +1081,14 @@
         }
       } else {
         activeElementId = null;
+        activeElementRef = null;
       }
     });
 
     prm.add_endRequest(function (sender, args) {
       if (activeElementId) {
         var el = document.getElementById(activeElementId);
-        if (el) {
+        if (el && el !== activeElementRef) {
           el.focus();
           try {
             el.setSelectionRange(selectionStart, selectionEnd);
@@ -1035,6 +1099,24 @@
   }
 
   // ── Filtros ──────────────────────────────────────────────────
+  function limpiarFiltrosCliente() {
+    var txt = document.getElementById('<%= txtBuscar.ClientID %>');
+    if (txt) txt.value = '';
+    var ddlP = document.getElementById('<%= ddlFiltroProveedor.ClientID %>');
+    if (ddlP) ddlP.selectedIndex = 0;
+    var ddlE = document.getElementById('<%= ddlFiltroEstado.ClientID %>');
+    if (ddlE) ddlE.selectedIndex = 0;
+    var txtPMin = document.getElementById('<%= txtPrecioMin.ClientID %>');
+    if (txtPMin) txtPMin.value = '';
+    var txtPMax = document.getElementById('<%= txtPrecioMax.ClientID %>');
+    if (txtPMax) txtPMax.value = '';
+    var txtSMin = document.getElementById('<%= txtStockMin.ClientID %>');
+    if (txtSMin) txtSMin.value = '';
+    var txtSMax = document.getElementById('<%= txtStockMax.ClientID %>');
+    if (txtSMax) txtSMax.value = '';
+    return true;
+  }
+
   function toggleFiltros() {
     var p  = document.getElementById('filtrosPanel');
     var a  = document.getElementById('arrowFilt');

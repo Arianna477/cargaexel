@@ -328,7 +328,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Uploads\Productos\" />
+    <Folder Include="wwwroot\Productos\" />
+    <Folder Include="wwwroot\Usuarios\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

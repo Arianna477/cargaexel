@@ -340,8 +340,8 @@ namespace Capa_Negocios
             }
 
             string valor = NormalizarHeader(estadoTexto);
-            if (valor == "a" || valor == "activo") return 'A';
-            if (valor == "i" || valor == "inactivo") return 'I';
+            if (valor == "a" || valor.StartsWith("act")) return 'A';
+            if (valor == "i" || valor.StartsWith("inac") || valor.StartsWith("inact")) return 'I';
             throw new Exception($"Estado no valido: '{estadoTexto}'. Usa A/Activo o I/Inactivo.");
         }
 

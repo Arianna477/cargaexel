@@ -15,7 +15,7 @@ namespace Monolito4bm
     /// </summary>
     public class GuardarFotosSlots : IHttpHandler, IRequiresSessionState
     {
-        private const string CarpetaVirtual = "~/Uploads/Productos/";
+        private const string CarpetaVirtual = "~/wwwroot/Productos/";
 
         public void ProcessRequest(HttpContext context)
         {
@@ -99,11 +99,11 @@ namespace Monolito4bm
                         (ct != "image/jpeg" && ct != "image/png"))
                         throw new Exception("'" + Path.GetFileName(file.FileName) + "' no es una imagen JPG o PNG válida.");
 
-                    string archivo = "foto_masiva_" + Guid.NewGuid().ToString("N") + ext;
+                    string archivo = "foto_" + Guid.NewGuid().ToString("N") + ext;
                     string rutaFisica = Path.Combine(carpetaFisica, archivo);
                     file.SaveAs(rutaFisica);
 
-                    rutasSaved.Add(new string[] { Path.GetFileName(file.FileName), "Uploads/Productos/" + archivo });
+                    rutasSaved.Add(new string[] { Path.GetFileName(file.FileName), "wwwroot/Productos/" + archivo });
                 }
 
                 if (rutasSaved.Count == 0)

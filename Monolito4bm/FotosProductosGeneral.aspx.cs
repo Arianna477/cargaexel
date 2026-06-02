@@ -12,7 +12,6 @@ namespace Monolito4bm
 {
     public partial class FotosProductosGeneral : System.Web.UI.Page
     {
-        protected global::System.Web.UI.WebControls.Literal litMensaje;
         protected global::System.Web.UI.WebControls.Literal litTotalFotos;
         protected global::System.Web.UI.WebControls.Literal litSinFotos;
         protected global::System.Web.UI.WebControls.FileUpload fuFotos;
@@ -28,7 +27,7 @@ namespace Monolito4bm
         protected global::System.Web.UI.WebControls.Button btnPrepararExcelRutas;
         protected global::System.Web.UI.WebControls.Button btnDescargarRutasPreparadas;
         protected global::System.Web.UI.WebControls.Button btnDescargarFormato;
-        protected global::System.Web.UI.WebControls.Button btnProcesarCargaMasiva;
+        protected global::System.Web.UI.WebControls.LinkButton btnProcesarCargaMasiva;
         protected global::System.Web.UI.WebControls.LinkButton btnLimpiarCarga;
         protected global::System.Web.UI.WebControls.LinkButton btnPrevisualizarCarga;
         protected global::System.Web.UI.WebControls.LinkButton btnLimpiarFiltros;
@@ -61,7 +60,7 @@ namespace Monolito4bm
         }
 
 
-        private const string CarpetaVirtual = "~/Uploads/Productos/";
+        private const string CarpetaVirtual = "~/wwwroot/Productos/";
         private const int MaxFilasPreview = 20;
         private const string SessionFotosKey = "GeneralFotosPreview";
         private const string SessionCargaMasivaKey = "FotosCargaMasivaRows";
@@ -222,7 +221,7 @@ namespace Monolito4bm
                     }
 
                     var listado = query
-                        .OrderByDescending(f => f.fecha_subida)
+                        .OrderByDescending(f => f.foto_id)
                         .Select(f => new
                         {
                             f.foto_id,
@@ -415,14 +414,14 @@ namespace Monolito4bm
                         ext = string.Equals(foto.ContentType, "image/png", StringComparison.OrdinalIgnoreCase) ? ".png" : ".jpg";
                     }
 
-                    string archivo = "foto_masiva_" + Guid.NewGuid().ToString("N") + ext;
+                    string archivo = "foto_" + Guid.NewGuid().ToString("N") + ext;
                     string rutaFisica = Path.Combine(carpetaFisica, archivo);
                     File.WriteAllBytes(rutaFisica, foto.Contenido);
 
                     rutas.Add(new FotoRutaPreparada
                     {
                         NombreArchivo = foto.NombreArchivo,
-                        RutaRelativa = "Uploads/Productos/" + archivo,
+                        RutaRelativa = "wwwroot/Productos/" + archivo,
                         ProductoId = selectedProId
                     });
                 }
@@ -513,7 +512,7 @@ namespace Monolito4bm
 
                 if (contenido == null || contenido.Length == 0)
                 {
-                    throw new Exception("Primero debes seleccionar y subir un archivo para la carga masiva.");
+                    throw new Exception("Primero debes seleccionar y subir un archivo para la carga.");
                 }
 
                 ValidarArchivoCarga(filename);
@@ -552,7 +551,7 @@ namespace Monolito4bm
                 if (accionRutas == "cancelar")
                 {
                     hfAccionRutasFaltantes.Value = string.Empty;
-                    MostrarMensaje("La carga masiva fue cancelada por el usuario.", false);
+                    MostrarMensaje("La carga en excel fue cancelada por el usuario.", false);
                     return;
                 }
 
@@ -575,7 +574,7 @@ namespace Monolito4bm
                 CargarFotos();
                 upFotosGeneral.Update();
 
-                string mensaje = "Carga masiva completada. Filas: " + resultado.FilasProcesadas +
+                string mensaje = "Carga en excel completada. Filas: " + resultado.FilasProcesadas +
                     ". Insertadas: " + resultado.Insertados +
                     ". Actualizadas: " + resultado.Actualizados + ".";
                 if (resultado.Omitidos > 0)
@@ -896,11 +895,8 @@ Swal.fire({
             string title = exito ? "Exito" : "Atencion";
             string safeTitle = HttpUtility.JavaScriptStringEncode(title);
             string safeText = HttpUtility.JavaScriptStringEncode(texto ?? string.Empty);
-            string script = "Swal.fire({ title: '" + safeTitle + "', text: '" + safeText + "', icon: '" + icon + "', confirmButtonColor: '#7a4aaa' });";
+            string script = "Swal.fire({ title: '" + safeTitle + "', text: '" + safeText + "', icon: '" + icon + "', confirmButtonColor: '#db2777' });";
             ScriptManager.RegisterStartupScript(this, GetType(), "swal_msg_general_fotos", script, true);
-
-            string css = exito ? "alert alert-success" : "alert alert-danger";
-            litMensaje.Text = "<div class='" + css + "'>" + HttpUtility.HtmlEncode(texto) + "</div>";
         }
     }
 }

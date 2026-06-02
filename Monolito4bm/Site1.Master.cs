@@ -121,7 +121,7 @@ namespace Monolito4bm
         {
             try
             {
-                string carpeta = Server.MapPath("~/Uploads");
+                string carpeta = Server.MapPath("~/wwwroot");
                 if (!Directory.Exists(carpeta))
                 {
                     Directory.CreateDirectory(carpeta);

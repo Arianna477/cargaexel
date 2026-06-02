@@ -14,7 +14,7 @@ namespace Monolito4bm
         private const int MinFotos = 3;
         private const int MaxFotos = 5;
         private const int MaxPesoFotoBytes = 2 * 1024 * 1024;
-        private const string CarpetaFotosRegistroVirtual = "~/Uploads/Usuarios/";
+        private const string CarpetaFotosRegistroVirtual = "~/wwwroot/Usuarios/";
         private static readonly string[] ParticulasCompuestas =
         {
             "de", "del", "la", "las", "los", "san", "santa", "da", "das", "do", "dos", "van", "von"
@@ -329,7 +329,7 @@ namespace Monolito4bm
 
             File.WriteAllBytes(rutaFisica, foto.Contenido);
 
-            return "Uploads/Usuarios/" + nombreArchivo;
+            return "wwwroot/Usuarios/" + nombreArchivo;
         }
 
         private static string ObtenerExtensionSegura(string nombreArchivo, string contentType)

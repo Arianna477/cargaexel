@@ -15,7 +15,6 @@ namespace Monolito4bm
 {
     public partial class Proveedores : System.Web.UI.Page
     {
-        protected global::System.Web.UI.WebControls.Literal litMensaje;
         protected global::System.Web.UI.WebControls.FileUpload fuCargaMasiva;
         protected global::System.Web.UI.WebControls.LinkButton btnPrevisualizarCarga;
         protected global::System.Web.UI.WebControls.LinkButton btnLimpiarCarga;
@@ -42,8 +41,8 @@ namespace Monolito4bm
         protected global::System.Web.UI.WebControls.HiddenField hfOrdenId;
         protected global::System.Web.UI.UpdatePanel upDashboardProveedores;
         protected global::System.Web.UI.WebControls.Literal litPagerInfo;
+        protected global::System.Web.UI.WebControls.Literal litPagerInfoPill;
         protected global::System.Web.UI.WebControls.LinkButton btnPrev;
-        protected global::System.Web.UI.WebControls.Repeater rptPager;
         protected global::System.Web.UI.WebControls.LinkButton btnNext;
         protected global::System.Web.UI.WebControls.LinkButton btnNuevo;
 
@@ -108,12 +107,10 @@ namespace Monolito4bm
 
             litTotal.Text = $"Total: {total} proveedor(es)";
             litPagerInfo.Text = $"Página {pagina} de {totalPags}";
+            litPagerInfoPill.Text = $"P&aacute;gina {pagina} de {totalPags}";
 
             btnPrev.Enabled = pagina > 1;
             btnNext.Enabled = pagina < totalPags;
-
-            rptPager.DataSource = Enumerable.Range(1, totalPags).ToList();
-            rptPager.DataBind();
 
             var listaPaginada = lista
                 .Skip((pagina - 1) * POR_PAGINA)
@@ -280,6 +277,7 @@ namespace Monolito4bm
         {
             hfPagina.Value = "1";
             CargarGrid();
+            upDashboardProveedores.Update();
         }
 
         protected void btnLimpiarFiltros_Click(object sender, EventArgs e)
@@ -288,6 +286,7 @@ namespace Monolito4bm
             ddlFiltroEstado.SelectedIndex = 0;
             hfPagina.Value = "1";
             CargarGrid();
+            upDashboardProveedores.Update();
         }
         protected void btnNuevo_Click(object sender, EventArgs e)
         {
@@ -354,7 +353,7 @@ namespace Monolito4bm
             {
                 if (!fuCargaMasiva.HasFile)
                 {
-                    throw new Exception("Primero debes seleccionar un archivo para la carga masiva.");
+                    throw new Exception("Primero debes seleccionar un archivo para la carga en excel.");
                 }
 
                 ValidarArchivoCarga(fuCargaMasiva.FileName);
@@ -391,7 +390,7 @@ namespace Monolito4bm
                 var resultado = CN_tbl_proveedor.ProcesarCargaMasiva(filas, tipo);
 
                 var mensaje = new StringBuilder();
-                mensaje.Append($"Carga masiva completada. Filas: {resultado.FilasProcesadas}. ");
+                mensaje.Append($"Carga en excel completada. Filas: {resultado.FilasProcesadas}. ");
                 mensaje.Append($"Insertados: {resultado.Insertados}. ");
                 mensaje.Append($"Actualizados: {resultado.Actualizados}.");
                 if (resultado.Omitidos > 0)
@@ -466,12 +465,9 @@ namespace Monolito4bm
             string title = exito ? "¡Éxito!" : "¡Atención!";
             string safeTitle = HttpUtility.JavaScriptStringEncode(title);
             string safeText = HttpUtility.JavaScriptStringEncode(texto ?? string.Empty);
-            string script = $"Swal.fire({{ title: '{safeTitle}', text: '{safeText}', icon: '{icon}', confirmButtonColor: '#2563eb' }});";
+            string script = $"Swal.fire({{ title: '{safeTitle}', text: '{safeText}', icon: '{icon}', confirmButtonColor: '#db2777' }});";
 
             ScriptManager.RegisterStartupScript(this, GetType(), "swal_msg", script, true);
-
-            string css = exito ? "alert alert-success" : "alert alert-danger";
-            litMensaje.Text = $"<div class='{css}'>{HttpUtility.HtmlEncode(texto)}</div>";
         }
         public string GenerarCarruselProveedor(object providerIdObj)
         {

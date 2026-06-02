@@ -501,17 +501,17 @@ namespace Capa_Negocios
             }
 
             string valor = NormalizarHeader(estadoTexto);
-            if (valor == "a" || valor == "activo")
+            if (valor == "a" || valor.StartsWith("act"))
             {
                 return 'A';
             }
 
-            if (valor == "i" || valor == "inactivo")
+            if (valor == "i" || valor.StartsWith("inac") || valor.StartsWith("inact"))
             {
                 return 'I';
             }
 
-            throw new Exception($"Estado no v\u00e1lido: '{estadoTexto}'. Usa A/Activo o I/Inactivo.");
+            throw new Exception($"Estado no valido: '{estadoTexto}'. Usa A/Activo o I/Inactivo.");
         }
 
         private static string NormalizarHeader(string valor)

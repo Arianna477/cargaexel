@@ -120,7 +120,7 @@ public class ImagenUsuarioFallback : IHttpHandler
     {
         try
         {
-            string carpeta = context.Server.MapPath("~/Uploads");
+            string carpeta = context.Server.MapPath("~/wwwroot");
             if (!Directory.Exists(carpeta))
             {
                 Directory.CreateDirectory(carpeta);

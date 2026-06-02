@@ -334,8 +334,22 @@ namespace Capa_Negocios
                 return porDefecto;
             }
 
+            string limpio = valor.Trim().Replace("$", "").Replace(" ", "");
+            while (limpio.Contains("..")) limpio = limpio.Replace("..", ".");
+            while (limpio.Contains(",,")) limpio = limpio.Replace(",,", ",");
+            while (limpio.Contains(".,")) limpio = limpio.Replace(".,", ".");
+            while (limpio.Contains(",.")) limpio = limpio.Replace(",.", ".");
+            limpio = limpio.Replace(",", ".");
+            int ultimoPunto = limpio.LastIndexOf('.');
+            if (ultimoPunto >= 0)
+            {
+                string parteEntera = limpio.Substring(0, ultimoPunto).Replace(".", "");
+                string parteDecimal = limpio.Substring(ultimoPunto + 1);
+                limpio = parteEntera + "." + parteDecimal;
+            }
+
             decimal numero;
-            if (decimal.TryParse(valor.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out numero))
+            if (decimal.TryParse(limpio, NumberStyles.Any, CultureInfo.InvariantCulture, out numero))
             {
                 return numero;
             }
@@ -351,8 +365,8 @@ namespace Capa_Negocios
             }
 
             string valor = NormalizarHeader(estadoTexto);
-            if (valor == "a" || valor == "activo") return 'A';
-            if (valor == "i" || valor == "inactivo") return 'I';
+            if (valor == "a" || valor.StartsWith("act")) return 'A';
+            if (valor == "i" || valor.StartsWith("inac") || valor.StartsWith("inact")) return 'I';
             throw new Exception($"Estado no valido: '{estadoTexto}'. Usa A/Activo o I/Inactivo.");
         }
 

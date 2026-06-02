@@ -30,6 +30,83 @@
         .btn-success { background:var(--success);color:#fff; }
         .btn-danger { background:var(--danger);color:#fff; }
         .btn-sm { padding:6px 12px;font-size:.76rem;border-radius:20px; }
+        .btn-excel-procesar {
+          padding: 13px 26px !important;
+          font-size: 0.92rem !important;
+          height: 48px !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 10px !important;
+          border-radius: 30px !important;
+        }
+
+        /* ── Action Buttons Custom Styling ── */
+        .action-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          font-size: 1.2rem;
+          cursor: pointer;
+          transition: all 0.22s ease-in-out;
+          background: #fff;
+          border: 1.5px solid transparent;
+          text-decoration: none !important;
+        }
+        .action-btn-warn {
+          color: var(--warn, #e67e22);
+          border-color: var(--warn, #e67e22);
+        }
+        .action-btn-warn:hover {
+          background: var(--warn, #e67e22);
+          color: #fff !important;
+          box-shadow: 0 4px 10px rgba(230,126,34,0.3);
+          transform: translateY(-2px);
+        }
+        .action-btn-danger {
+          color: var(--danger, #c0392b);
+          border-color: var(--danger, #c0392b);
+        }
+        .action-btn-danger:hover {
+          background: var(--danger, #c0392b);
+          color: #fff !important;
+          box-shadow: 0 4px 10px rgba(192,57,43,0.3);
+          transform: translateY(-2px);
+        }
+        .action-btn-success {
+          color: var(--success, #27ae60);
+          border-color: var(--success, #27ae60);
+        }
+        .action-btn-success:hover {
+          background: var(--success, #27ae60);
+          color: #fff !important;
+          box-shadow: 0 4px 10px rgba(39,174,96,0.3);
+          transform: translateY(-2px);
+        }
+        .action-btn-secondary {
+          color: #7a4aaa;
+          border-color: #7a4aaa;
+        }
+        .action-btn-secondary:hover {
+          background: #7a4aaa;
+          color: #fff !important;
+          box-shadow: 0 4px 10px rgba(122,74,170,0.3);
+          transform: translateY(-2px);
+        }
+        .action-btn-primary {
+          color: var(--accent, #db2777);
+          border-color: var(--accent, #db2777);
+        }
+        .action-btn-primary:hover {
+          background: var(--accent, #db2777);
+          color: #fff !important;
+          box-shadow: 0 4px 10px rgba(219,39,119,0.3);
+          transform: translateY(-2px);
+        }
+
         .alert { padding:11px 16px;border-radius:12px;margin-bottom:14px;font-size:.86rem;font-weight:600; }
         .alert-success { background:rgba(39,174,96,.15);color:#1e8449;border:1px solid rgba(39,174,96,.3); }
         /* ── Custom File Upload styling ── */
@@ -395,7 +472,7 @@
         </a>
     </div>
 
-    <asp:Literal ID="litMensaje" runat="server" />
+
 
     <%-- Controles de servidor mínimos para Excel y filtros --%>
     <asp:HiddenField ID="hfProductosJson"      runat="server" />
@@ -417,14 +494,14 @@
          ═══════════════════════════════════════════════════════ --%>
     <div class="card">
         <div class="card-title">
-            <i class="fa-solid fa-list-check"></i> Paso 1. Carga masiva de fotos por producto
+            <i class="fa-solid fa-list-check"></i> Paso 1. Carga de fotos por producto
         </div>
         <ol>sigue el flujo para facilitar tu carga en excel</ol>
         <ol class="guide-list">
             <li>Presiona <strong>+</strong> para agregar un slot por cada producto que desees cargar.</li>
             <li>En cada slot: elige el producto en el dropdown y arrastra o selecciona las fotos (JPG/PNG MB).</li>
             <li>Cuando tengas todos los slots listos, presiona <strong>Guardar Todo en servidor</strong></li>
-            <li>Descarga el Excel generado, completa datos si hace falta y usa la carga masiva de abajo.</li>
+            <li>Descarga el Excel generado, completa datos si hace falta y usa la carga de abajo.</li>
         </ol>
 
         <div class="slots-header">
@@ -477,6 +554,9 @@
             </button>
             <asp:Button ID="btnDescargarFormato" runat="server" CssClass="btn btn-secondary"
                 Text="Descargar plantilla base (servidor)" OnClick="btnDescargarFormato_Click" Visible="false" />
+            <button type="button" class="btn btn-danger btn-sm" id="btnLimpiarRutas" onclick="limpiarRutas()" style="display:none;">
+                <i class="fa-solid fa-trash"></i> Limpiar rutas
+            </button>
         </div>
         <%-- Rutas en scroll horizontal (cliente) --%>
         <div class="rutas-track" id="rutasTrackClient">
@@ -495,13 +575,13 @@
     </div>
 
     <%-- ═══════════════════════════════════════════════════════
-         CARGA MASIVA POR EXCEL
+         CARGA POR EXCEL
          ═══════════════════════════════════════════════════════ --%>
     <asp:UpdatePanel ID="upCargaMasiva" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
             <div class="card">
                 <div class="card-title">
-                    <i class="fa-solid fa-file-excel" style="color:var(--success)"></i> Carga masiva por Excel
+                    <i class="fa-solid fa-file-excel" style="color:var(--success)"></i> Carga  Excel
                 </div>
                 <ol class="guide-list" style="margin: 0 0 18px 20px; color: rgba(60,30,90,.78); font-size: .88rem; line-height: 1.45; list-style-type: decimal; padding-left: 0;">
                     <li>Selecciona el excel con las rutas (obligatorio)</li>
@@ -548,19 +628,19 @@
                         <asp:DropDownList ID="ddlTipoInsercionMasiva" runat="server" CssClass="form-control">
                             <asp:ListItem Value="1" Text="Anadir sin borrar" />
                             <asp:ListItem Value="2" Text="Borrar todo y volver a cargar" />
-                        </asp:DropDownList>
-                        <div style="font-size:.78rem;color:#6b5b82;margin-top:8px;">Puedes cargar por <code>foto_ruta</code> o por <code>foto_bit</code> en base64.</div>
-                        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-                            <asp:Button ID="btnProcesarCargaMasiva" runat="server" CssClass="btn btn-success"
-                                Text="Procesar carga masiva" OnClick="btnProcesarCargaMasiva_Click" />
+                        </asp:DropDownList><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+                            <asp:LinkButton ID="btnProcesarCargaMasiva" runat="server" CssClass="btn btn-success btn-excel-procesar"
+                                OnClick="btnProcesarCargaMasiva_Click" CausesValidation="false">
+                                <i class="fa-solid fa-file-excel"></i> Procesar carga en excel
+                            </asp:LinkButton>
                         </div>
                     </div>
                 </div>
                 <div style="margin-top:18px;">
                     <asp:PlaceHolder ID="phPreviewVacia" runat="server">
                         <div class="empty-preview">
-                            <i class="fa-solid fa-table-list" style="font-size:1.6rem;display:block;margin-bottom:10px;"></i>
-                            Selecciona un archivo y presiona "Visualizar archivo" para revisar las fotos antes de importarlas.
+                            <i class="fa-solid fa-file-excel" style="font-size:2.4rem;color:#27ae60;display:block;margin-bottom:10px;"></i>
+                            Aquí puedes previsualizar tus archivos
                         </div>
                     </asp:PlaceHolder>
                     <div class="preview-shell">
@@ -582,8 +662,6 @@
     </asp:UpdatePanel>
 
     <%-- FILTROS --%>
-    <asp:UpdatePanel ID="upFotosGeneral" runat="server" UpdateMode="Conditional">
-        <ContentTemplate>
     <div class="card">
         <div class="search-bar">
             <span><i class="fa-solid fa-magnifying-glass"></i></span>
@@ -622,10 +700,13 @@
             <div style="display:flex;align-items:flex-end;">
                 <asp:LinkButton ID="btnLimpiarFiltros" runat="server"
                     CssClass="btn btn-secondary btn-sm" CausesValidation="false"
+                    OnClientClick="return limpiarFiltrosCliente();"
                     OnClick="btnLimpiarFiltros_Click">Limpiar</asp:LinkButton>
             </div>
         </div>
     </div>
+    <asp:UpdatePanel ID="upFotosGeneral" runat="server" UpdateMode="Conditional">
+        <ContentTemplate>
             <div class="card">
                 <div class="card-title">
                     <i class="fa-solid fa-images"></i> Todas las fotos guardadas
@@ -655,18 +736,21 @@
                                 <td style="color:#888;font-size:.8rem;">#<%# Eval("foto_id") %></td>
                                 <td><span class='badge <%# (char)Eval("foto_estado") == 'A' ? "badge-activo" : "badge-inactivo" %>'><%# (char)Eval("foto_estado") == 'A' ? "Activa" : "Inactiva" %></span></td>
                                 <td style="font-size:.8rem;color:#888;"><%# Eval("fecha_subida", "{0:dd/MM/yyyy HH:mm}") %></td>
-                                <td><div class="row-actions">
+                                <td><div class="row-actions" style="display:inline-flex; gap:8px; align-items:center;">
                                     <asp:LinkButton runat="server"
                                         CommandName='<%# Eval("foto_estado").ToString() == "A" ? "Desactivar" : "Reactivar" %>'
                                         CommandArgument='<%# Eval("foto_id") %>'
-                                        CssClass='<%# "btn btn-sm " + (Eval("foto_estado").ToString() == "A" ? "btn-secondary" : "btn-success") %>'
+                                        CssClass='<%# "action-btn " + (Eval("foto_estado").ToString() == "A" ? "action-btn-secondary" : "action-btn-success") %>'
+                                        ToolTip='<%# Eval("foto_estado").ToString() == "A" ? "Desactivar" : "Reactivar" %>'
                                         OnClientClick='<%# Eval("foto_estado").ToString() == "A" ? "return confirm(\"Desactivar esta foto?\");" : "return confirm(\"Reactivar esta foto?\");" %>'>
-                                        <%# (char)Eval("foto_estado") == 'A' ? "Desactivar" : "Reactivar" %>
+                                        <i class='<%# Eval("foto_estado").ToString() == "A" ? "fa-solid fa-eye-slash" : "fa-solid fa-eye" %>'></i>
                                     </asp:LinkButton>
                                     <asp:LinkButton runat="server" CommandName="ElimFis"
                                         CommandArgument='<%# Eval("foto_id") %>'
-                                        CssClass="btn btn-danger btn-sm"
-                                        OnClientClick="return confirm('Eliminar esta foto permanentemente?');">Eliminar</asp:LinkButton>
+                                        CssClass="action-btn action-btn-danger" ToolTip="Eliminar permanentemente"
+                                        OnClientClick="return confirm('Eliminar esta foto permanentemente?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </asp:LinkButton>
                                 </div></td>
                             </tr>
                         </ItemTemplate>
@@ -675,7 +759,6 @@
                 </div>
                 <asp:Literal ID="litSinFotos" runat="server" />
                 
-                <%-- Paginación manual para el Repeater --%>
                 <div class="paginacion-container" id="divPaginacion" runat="server" style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px;">
                     <asp:LinkButton ID="btnPaginaPrev" runat="server" CssClass="btn btn-secondary btn-sm" OnClick="btnPaginaPrev_Click">
                         <i class="fa-solid fa-chevron-left"></i> Anterior
@@ -989,22 +1072,39 @@
             return zone;
         }
 
-        // ── Handle file selection
+        // ── Handle file selection (secuencial para no saturar el hilo)
         function handleFiles(slotId, fileList) {
             var slot = slots.find(function (s) { return s.id === slotId; });
             if (!slot) return;
+            var validFiles = [];
             Array.prototype.forEach.call(fileList, function (file) {
                 if (!file.type.match(/^image\/(jpeg|png)$/)) return;
-                if (file.size > 2 * 1024 * 1024) { Swal.fire({ icon: 'warning', title: 'Archivo grande', text: file.name + ' supera 2 MB y fue omitido.' }); return; }
+                if (file.size > 2 * 1024 * 1024) {
+                    Swal.fire({ icon: 'warning', title: 'Archivo grande', text: file.name + ' supera 2 MB y fue omitido.', timer: 2500, showConfirmButton: false });
+                    return;
+                }
+                validFiles.push(file);
+            });
+            if (validFiles.length === 0) return;
+            slot.saved = false;
+            var index = 0;
+            function readNext() {
+                if (index >= validFiles.length) {
+                    refreshCarousel(slotId);
+                    return;
+                }
+                var file = validFiles[index++];
                 var fid = ++photoIdCounter;
                 var reader = new FileReader();
-                reader.onload = function (e) {
-                    slot.files.push({ id: fid, name: file.name, dataUrl: e.target.result, file: file });
-                    slot.saved = false;
-                    refreshCarousel(slotId);
+                reader.onload = function (ev) {
+                    slot.files.push({ id: fid, name: file.name, dataUrl: ev.target.result, file: file });
+                    // Render carousel incrementally cada 3 archivos para no freezar la UI
+                    if (index % 3 === 0 || index === validFiles.length) refreshCarousel(slotId);
+                    readNext();
                 };
                 reader.readAsDataURL(file);
-            });
+            }
+            readNext();
         }
 
         // ── Fill carousel with photos
@@ -1060,7 +1160,7 @@
 
             btnGuardarTodo.disabled = true;
             globalProgress.style.display = 'inline';
-            globalProgress.textContent = 'Subiendo ' + pending.length + ' slot(s)…';
+            globalProgress.textContent = 'Subiendo ' + pending.length + ' slot(s)\u2026';
 
             var promises = pending.map(function (slot) { return uploadSlot(slot); });
 
@@ -1068,7 +1168,26 @@
                 var ok = results.filter(function (r) { return r.ok; }).length;
                 var fail = results.filter(function (r) { return !r.ok; }).length;
                 globalProgress.style.display = 'none';
-                updateSaveBtn();
+
+                // ── Auto-limpiar slots guardados exitosamente (con animación)
+                if (ok > 0) {
+                    var savedIds = pending.filter(function (_, i) { return results[i].ok; }).map(function (s) { return s.id; });
+                    savedIds.forEach(function (id) {
+                        var card = document.getElementById('slotCard_' + id);
+                        if (card) {
+                            card.style.transition = 'opacity .4s, transform .4s';
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(.92)';
+                        }
+                    });
+                    setTimeout(function () {
+                        slots = slots.filter(function (s) { return savedIds.indexOf(s.id) === -1; });
+                        // Si no quedan slots, agregar uno en blanco
+                        if (slots.length === 0) addSlot();
+                        else renderTrack();
+                        updateSaveBtn();
+                    }, 420);
+                }
 
                 // Collect all routes
                 var allRoutes = [];
@@ -1082,7 +1201,7 @@
 
                 if (allRoutes.length > 0) {
                     globalProgress.style.display = 'inline';
-                    globalProgress.textContent = 'Preparando archivo de descarga…';
+                    globalProgress.textContent = 'Preparando archivo de descarga\u2026';
 
                     fetch('GuardarFotosSlots.ashx?action=generar_excel', {
                         method: 'POST',
@@ -1093,36 +1212,31 @@
                     .then(function(data) {
                         globalProgress.style.display = 'none';
                         if (data.ok) {
-                            // Mostrar botón de descarga en el cliente
                             var btnDescarga = document.getElementById('btnDescargarExcelRutasCliente');
-                            if (btnDescarga) {
-                                btnDescarga.style.display = 'inline-flex';
-                            }
-                            
-                            // Actualizar etiqueta informativa
+                            if (btnDescarga) btnDescarga.style.display = 'inline-flex';
+
                             var infoText = document.getElementById('litRutasPreparadasInfoCliente');
                             if (infoText) {
                                 var count = document.querySelectorAll('#rutasTrackClient .ruta-card').length;
-                                infoText.textContent = "Rutas preparadas en servidor: " + count + ". Descarga el Excel, completa producto/estado si hace falta y luego usa la carga masiva.";
+                                infoText.textContent = 'Rutas preparadas en servidor: ' + count + '. Descarga el Excel, completa producto/estado si hace falta y luego usa la carga masiva.';
                             }
 
                             if (fail === 0) {
-                                Swal.fire({ icon: 'success', title: '¡Listo!', text: ok + ' slot(s) guardados correctamente y Excel preparado para descargar.' });
+                                Swal.fire({ icon: 'success', title: '\u00a1Listo!', text: ok + ' slot(s) guardados y Excel listo para descargar.' });
                             } else {
-                                Swal.fire({ icon: 'warning', title: 'Parcialmente completado', html: ok + ' slot(s) guardados.<br>' + fail + ' slot(s) con error (ver indicadores en cada tarjeta).' });
+                                Swal.fire({ icon: 'warning', title: 'Parcialmente completado', html: ok + ' slot(s) guardados.<br>' + fail + ' slot(s) con error.' });
                             }
                         } else {
-                            Swal.fire({ icon: 'error', title: 'Error al preparar Excel', text: data.error || 'Ocurrió un error en el servidor.' });
+                            Swal.fire({ icon: 'error', title: 'Error al preparar Excel', text: data.error || 'Error en servidor.' });
                         }
                     })
-                    .catch(function(err) {
+                    .catch(function() {
                         globalProgress.style.display = 'none';
-                        Swal.fire({ icon: 'error', title: 'Error de red', text: 'No se pudo conectar con el servidor para preparar el Excel.' });
+                        Swal.fire({ icon: 'error', title: 'Error de red', text: 'No se pudo preparar el Excel.' });
                     });
                 } else {
-                    if (fail > 0) {
-                        Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo guardar ningún slot (ver tarjetas).' });
-                    }
+                    if (fail > 0) Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo guardar ningun slot.' });
+                    updateSaveBtn();
                 }
             });
         };
@@ -1168,6 +1282,47 @@
                 c.innerHTML = '<strong>' + esc(r.nombreArchivo) + '</strong><span>' + esc(r.rutaRelativa) + '</span>';
                 rutasClientTrack.appendChild(c);
             });
+            // Mostrar botón limpiar rutas cuando hay tarjetas
+            var btnLimpiar = document.getElementById('btnLimpiarRutas');
+            if (btnLimpiar) btnLimpiar.style.display = 'inline-flex';
+        }
+
+        // ── Limpiar rutas del cliente
+        function limpiarRutas() {
+            Swal.fire({
+                title: '¿Limpiar rutas?',
+                text: 'Se borrarán las rutas de esta sesión del panel (no se eliminan los archivos del servidor).',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, limpiar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#c0392b'
+            }).then(function (result) {
+                if (!result.isConfirmed) return;
+                if (rutasClientTrack) rutasClientTrack.innerHTML = '';
+                hfRoutes.value = '[]';
+                var btnDescarga = document.getElementById('btnDescargarExcelRutasCliente');
+                if (btnDescarga) btnDescarga.style.display = 'none';
+                var btnLimpiar = document.getElementById('btnLimpiarRutas');
+                if (btnLimpiar) btnLimpiar.style.display = 'none';
+                var infoText = document.getElementById('litRutasPreparadasInfoCliente');
+                if (infoText) infoText.textContent = 'Aún no hay rutas preparadas en servidor.';
+            });
+        }
+
+        // ── Filtros reset client
+        function limpiarFiltrosCliente() {
+            var txt = document.getElementById('<%= txtBuscar.ClientID %>');
+            if (txt) txt.value = '';
+            var ddlP = document.getElementById('<%= ddlFiltroProducto.ClientID %>');
+            if (ddlP) ddlP.selectedIndex = 0;
+            var ddlE = document.getElementById('<%= ddlFiltroEstado.ClientID %>');
+            if (ddlE) ddlE.selectedIndex = 0;
+            var txtFD = document.getElementById('<%= txtFechaDesde.ClientID %>');
+            if (txtFD) txtFD.value = '';
+            var txtFH = document.getElementById('<%= txtFechaHasta.ClientID %>');
+            if (txtFH) txtFH.value = '';
+            return true;
         }
 
         // ── Filtros toggle
@@ -1200,7 +1355,7 @@
             return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
-        // Subida automática de archivo de carga masiva
+        // Subida automática de archivo de carga en excel   
         function initExcelUpload() {
             var fuCarga = document.getElementById('<%= fuCargaMasiva.ClientID %>');
             if (!fuCarga) return;
@@ -1248,6 +1403,8 @@
         window.addSlot = addSlot;
         window.guardarTodo = guardarTodo;
         window.toggleFiltros = toggleFiltros;
+        window.limpiarRutas = limpiarRutas;
+        window.limpiarFiltrosCliente = limpiarFiltrosCliente;
         addSlot(); // slot inicial por defecto
 
         function handleFileSelect(input) {
@@ -1345,6 +1502,7 @@
             });
 
             var activeElementId = null;
+            var activeElementRef = null;
             var selectionStart = 0;
             var selectionEnd = 0;
 
@@ -1352,6 +1510,7 @@
                 var activeEl = document.activeElement;
                 if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
                     activeElementId = activeEl.id;
+                    activeElementRef = activeEl;
                     try {
                         selectionStart = activeEl.selectionStart;
                         selectionEnd = activeEl.selectionEnd;
@@ -1361,13 +1520,14 @@
                     }
                 } else {
                     activeElementId = null;
+                    activeElementRef = null;
                 }
             });
 
             prm.add_endRequest(function (sender, args) {
                 if (activeElementId) {
                     var el = document.getElementById(activeElementId);
-                    if (el) {
+                    if (el && el !== activeElementRef) {
                         el.focus();
                         try {
                             el.setSelectionRange(selectionStart, selectionEnd);

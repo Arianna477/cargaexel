@@ -120,6 +120,72 @@
 .btn-success:hover  { background:#1e8449; transform:translateY(-1px); }
 .btn-sm { padding:5px 12px; font-size:.76rem; border-radius:20px; }
 
+/* ── Action Buttons Custom Styling ── */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.22s ease-in-out;
+  background: #fff;
+  border: 1.5px solid transparent;
+  text-decoration: none !important;
+}
+.action-btn-warn {
+  color: var(--warn, #e67e22);
+  border-color: var(--warn, #e67e22);
+}
+.action-btn-warn:hover {
+  background: var(--warn, #e67e22);
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(230,126,34,0.3);
+  transform: translateY(-2px);
+}
+.action-btn-danger {
+  color: var(--danger, #c0392b);
+  border-color: var(--danger, #c0392b);
+}
+.action-btn-danger:hover {
+  background: var(--danger, #c0392b);
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(192,57,43,0.3);
+  transform: translateY(-2px);
+}
+.action-btn-success {
+  color: var(--success, #27ae60);
+  border-color: var(--success, #27ae60);
+}
+.action-btn-success:hover {
+  background: var(--success, #27ae60);
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(39,174,96,0.3);
+  transform: translateY(-2px);
+}
+.action-btn-secondary {
+  color: #7a4aaa;
+  border-color: #7a4aaa;
+}
+.action-btn-secondary:hover {
+  background: #7a4aaa;
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(122,74,170,0.3);
+  transform: translateY(-2px);
+}
+.action-btn-primary {
+  color: var(--accent, #db2777);
+  border-color: var(--accent, #db2777);
+}
+.action-btn-primary:hover {
+  background: var(--accent, #db2777);
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(219,39,119,0.3);
+  transform: translateY(-2px);
+}
+
 /* ── Alertas ────────────────────────────────────── */
 .alert {
   padding:11px 16px; border-radius:12px; margin-bottom:14px;
@@ -355,26 +421,26 @@
 
             <!-- Acciones -->
             <td>
-              <div class="row-actions">
+              <div class="row-actions" style="display:inline-flex; gap:8px; align-items:center;">
                 <%-- Desactivar / Reactivar segun estado --%>
                 <asp:LinkButton runat="server"
                     CommandName='<%# Eval("foto_estado").ToString() == "A" ? "Desactivar" : "Reactivar" %>'
                     CommandArgument='<%# Eval("foto_id") %>'
-                    CssClass='<%# "btn btn-sm " + (Eval("foto_estado").ToString() == "A" ? "btn-secondary" : "btn-success") %>'
+                    CssClass='<%# "action-btn " + (Eval("foto_estado").ToString() == "A" ? "action-btn-secondary" : "action-btn-success") %>'
+                    ToolTip='<%# Eval("foto_estado").ToString() == "A" ? "Desactivar" : "Reactivar" %>'
                     OnClientClick='<%# Eval("foto_estado").ToString() == "A"
                         ? "return confirm(\"Desactivar esta foto?\");"
                         : "return confirm(\"Reactivar esta foto?\");" %>'>
                   <i class='<%# (char)Eval("foto_estado") == 'A' ? "fa-solid fa-eye-slash" : "fa-solid fa-eye" %>'></i>
-                  <%# (char)Eval("foto_estado") == 'A' ? " Desactivar" : " Reactivar" %>
                 </asp:LinkButton>
 
                 <%-- Eliminar permanente --%>
                 <asp:LinkButton runat="server"
                     CommandName="ElimFis"
                     CommandArgument='<%# Eval("foto_id") %>'
-                    CssClass="btn btn-danger btn-sm"
+                    CssClass="action-btn action-btn-danger" ToolTip="Eliminar permanentemente"
                     OnClientClick="return confirm('Eliminar esta foto PERMANENTEMENTE?');">
-                  <i class="fa-solid fa-trash"></i> Eliminar
+                  <i class="fa-solid fa-trash"></i>
                 </asp:LinkButton>
               </div>
             </td>
@@ -413,27 +479,17 @@
                   }
 
                   var files = Array.from(input.files);
-                  var maxBytes = 2 * 1024 * 1024; // 2 MB
+                  var maxBytes = 2 * 1024 * 1024;
                   for (var i = 0; i < files.length; i++) {
                       var file = files[i];
                       if (file.size > maxBytes) {
-                          Swal.fire({
-                              title: 'Archivo muy pesado',
-                              text: 'La foto "' + file.name + '" supera los 2 MB permitidos.',
-                              icon: 'warning',
-                              confirmButtonColor: '#7a4aaa'
-                          });
+                          Swal.fire({ title: 'Archivo muy pesado', text: 'La foto "' + file.name + '" supera los 2 MB permitidos.', icon: 'warning', confirmButtonColor: '#7a4aaa' });
                           input.value = '';
                           return;
                       }
                       var ext = file.name.split('.').pop().toLowerCase();
                       if (ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png') {
-                          Swal.fire({
-                              title: 'Formato no válido',
-                              text: 'El archivo "' + file.name + '" no es una imagen JPG o PNG válida.',
-                              icon: 'warning',
-                              confirmButtonColor: '#7a4aaa'
-                          });
+                          Swal.fire({ title: 'Formato no válido', text: 'El archivo "' + file.name + '" no es una imagen JPG o PNG válida.', icon: 'warning', confirmButtonColor: '#7a4aaa' });
                           input.value = '';
                           return;
                       }
@@ -450,25 +506,36 @@
                   var cards = document.querySelectorAll('.preview-strip .preview-card');
                   if (cards.length === 0) {
                       e.preventDefault();
-                      Swal.fire({
-                          title: '¡Atención!',
-                          text: 'Debes previsualizar las fotos primero antes de subirlas.',
-                          icon: 'warning',
-                          confirmButtonColor: '#7a4aaa'
-                      });
+                      Swal.fire({ title: '¡Atención!', text: 'Debes previsualizar las fotos primero antes de subirlas.', icon: 'warning', confirmButtonColor: '#7a4aaa' });
+                      return;
                   }
+                  // Marcar que se está subiendo para recargar al volver
+                  sessionStorage.setItem('fotosSubidas', '1');
               });
           }
 
-          // Drag & drop sobre la zona
+          // Recargar la tabla de fotos si acaba de subirse (el postback ya actualizó el servidor)
+          // La página se recarga automáticamente con el postback de ASP.NET — esto solo resetea el input
+          if (input) {
+              // Limpiar el input de fotos tras cualquier postback para evitar re-envíos accidentales
+              input.value = '';
+          }
+
+          // Drag & drop sobre la zona — con guard para no duplicar listeners
           var zone = document.getElementById('uploadZone');
-          if (zone && input) {
+          if (zone && input && zone.dataset.dndBound !== '1') {
+              zone.dataset.dndBound = '1';
               zone.addEventListener('dragover', function (e) { e.preventDefault(); zone.classList.add('drag-over'); });
               zone.addEventListener('dragleave', function () { zone.classList.remove('drag-over'); });
               zone.addEventListener('drop', function (e) {
-                  e.preventDefault(); zone.classList.remove('drag-over');
-                  input.files = e.dataTransfer.files;
-                  input.dispatchEvent(new Event('change'));
+                  e.preventDefault();
+                  zone.classList.remove('drag-over');
+                  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                      var dt = new DataTransfer();
+                      for (var i = 0; i < e.dataTransfer.files.length; i++) { dt.items.add(e.dataTransfer.files[i]); }
+                      input.files = dt.files;
+                      input.dispatchEvent(new Event('change', { bubbles: true }));
+                  }
               });
           }
       });

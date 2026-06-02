@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -13,7 +14,6 @@ namespace Monolito4bm
 {
     public partial class Productos : System.Web.UI.Page
     {
-        protected global::System.Web.UI.WebControls.Literal litMensaje;
         protected global::System.Web.UI.WebControls.FileUpload fuCargaMasiva;
         protected global::System.Web.UI.WebControls.LinkButton btnPrevisualizarCarga;
         protected global::System.Web.UI.WebControls.LinkButton btnLimpiarCarga;
@@ -41,8 +41,8 @@ namespace Monolito4bm
         protected global::System.Web.UI.WebControls.GridView gvProductos;
         protected global::System.Web.UI.UpdatePanel upGridProductos;
         protected global::System.Web.UI.WebControls.Literal litPagerInfo;
+        protected global::System.Web.UI.WebControls.Literal litPagerInfoPill;
         protected global::System.Web.UI.WebControls.LinkButton btnPrev;
-        protected global::System.Web.UI.WebControls.Repeater rptPager;
         protected global::System.Web.UI.WebControls.LinkButton btnNext;
         protected global::System.Web.UI.WebControls.Literal litTituloModal;
         protected global::System.Web.UI.WebControls.HiddenField hfProdId;
@@ -124,11 +124,9 @@ namespace Monolito4bm
             int totalPags = Math.Max(1, (int)Math.Ceiling((double)total / POR_PAGINA));
             hfTotalPags.Value = totalPags.ToString();
             litPagerInfo.Text = $"Pagina {pagina} de {totalPags}";
+            litPagerInfoPill.Text = $"P&aacute;gina {pagina} de {totalPags}";
             btnPrev.Enabled = pagina > 1;
             btnNext.Enabled = pagina < totalPags;
-
-            rptPager.DataSource = Enumerable.Range(1, totalPags).ToList();
-            rptPager.DataBind();
         }
 
         // ── Búsqueda / filtros ────────────────────────────────────────
@@ -136,6 +134,7 @@ namespace Monolito4bm
         {
             hfPagina.Value = "1";
             CargarGrid();
+            upGridProductos.Update();
         }
 
         protected void btnLimpiarFiltros_Click(object sender, EventArgs e)
@@ -146,6 +145,7 @@ namespace Monolito4bm
             ddlFiltroEstado.SelectedIndex = 0;
             hfPagina.Value = "1";
             CargarGrid();
+            upGridProductos.Update();
         }
 
         // ── Paginación ────────────────────────────────────────────────
@@ -273,10 +273,11 @@ namespace Monolito4bm
 
             hfProdId.Value = id.ToString();
             string nombre = NormalizarNombreProducto(txtNombre.Text);
+            int? proveedorId = string.IsNullOrWhiteSpace(ddlProveedor.SelectedValue) ? (int?)null : int.Parse(ddlProveedor.SelectedValue);
 
-            if (CN_tbl_producto.ExisteNombre(nombre, id))
+            if (CN_tbl_producto.ExisteNombre(nombre, proveedorId, id))
             {
-                MostrarMensaje("Ya existe un producto activo con ese nombre.", false);
+                MostrarMensaje("Ya existe un producto activo con ese nombre y proveedor.", false);
                 hfModalAbierto.Value = "1";
                 ScriptManager.RegisterStartupScript(this, GetType(), "openModalExNombre", "abrirModal();", true);
                 return;
@@ -284,9 +285,7 @@ namespace Monolito4bm
 
             try
             {
-                string precioLimpio = txtPrecio.Text.Replace(",", ".");
-                decimal precioFinal = 0;
-                decimal.TryParse(precioLimpio, NumberStyles.Any, CultureInfo.InvariantCulture, out precioFinal);
+                decimal precioFinal = ParsearDecimalPermisivo(txtPrecio.Text);
 
                 int cantidad = ParseCantidadProducto(txtCantidad.Text);
 
@@ -321,7 +320,7 @@ namespace Monolito4bm
             {
                 if (!fuCargaMasiva.HasFile)
                 {
-                    throw new Exception("Primero debes seleccionar un archivo para la carga masiva.");
+                    throw new Exception("Primero debes seleccionar un archivo para la carga en excel.");
                 }
 
                 ValidarArchivoCarga(fuCargaMasiva.FileName);
@@ -361,7 +360,7 @@ namespace Monolito4bm
                 CargarCombos();
                 CargarGrid();
 
-                var mensaje = $"Carga masiva completada. Filas: {resultado.FilasProcesadas}. Insertados: {resultado.Insertados}. Actualizados: {resultado.Actualizados}.";
+                var mensaje = $"Carga en excel completada. Filas: {resultado.FilasProcesadas}. Insertados: {resultado.Insertados}. Actualizados: {resultado.Actualizados}.";
                 if (resultado.Omitidos > 0)
                 {
                     mensaje += $" Omitidos: {resultado.Omitidos}.";
@@ -510,18 +509,12 @@ namespace Monolito4bm
 
         private void MostrarMensaje(string texto, bool exito)
         {
-            string icon = exito ? "success" : "error";
+            string icon  = exito ? "success" : "error";
             string title = exito ? "¡Éxito!" : "¡Atención!";
-            string script = $"Swal.fire({{ title: '{title}', text: '{texto}', icon: '{icon}', confirmButtonColor: '#7a4aaa' }});";
-
-            // 🔴 BORRA O COMENTA ESTA LÍNEA:
-            // ClientScript.RegisterStartupScript(this.GetType(), "swal_msg_fotos", script, true);
-
-            // 🟢 USA ESTA NUEVA LÍNEA (Compatible con UpdatePanel):
+            string safeTitle = HttpUtility.JavaScriptStringEncode(title);
+            string safeText  = HttpUtility.JavaScriptStringEncode(texto ?? string.Empty);
+            string script = $"Swal.fire({{ title: '{safeTitle}', text: '{safeText}', icon: '{icon}', confirmButtonColor: '#db2777' }});";
             ScriptManager.RegisterStartupScript(this, this.GetType(), "swal_msg", script, true);
-
-            string css = exito ? "alert alert-success" : "alert alert-danger";
-            litMensaje.Text = $"<div class='{css}'>{texto}</div>";
         }
 
         private List<ProductoCargaFila> FilasCargaMasiva
@@ -587,6 +580,27 @@ namespace Monolito4bm
             litArchivoCarga.Text = "Sin archivo cargado.";
             litResumenCarga.Text = "Aun no hay vista previa.";
             if (ddlTipoInsercionMasiva != null) ddlTipoInsercionMasiva.SelectedValue = "1";
+        }
+
+        private decimal ParsearDecimalPermisivo(string valor)
+        {
+            if (string.IsNullOrWhiteSpace(valor)) return 0;
+            string limpio = valor.Trim().Replace("$", "").Replace(" ", "");
+            while (limpio.Contains("..")) limpio = limpio.Replace("..", ".");
+            while (limpio.Contains(",,")) limpio = limpio.Replace(",,", ",");
+            while (limpio.Contains(".,")) limpio = limpio.Replace(".,", ".");
+            while (limpio.Contains(",.")) limpio = limpio.Replace(",.", ".");
+            limpio = limpio.Replace(",", ".");
+            int ultimoPunto = limpio.LastIndexOf('.');
+            if (ultimoPunto >= 0)
+            {
+                string parteEntera = limpio.Substring(0, ultimoPunto).Replace(".", "");
+                string parteDecimal = limpio.Substring(ultimoPunto + 1);
+                limpio = parteEntera + "." + parteDecimal;
+            }
+            decimal res;
+            decimal.TryParse(limpio, NumberStyles.Any, CultureInfo.InvariantCulture, out res);
+            return res;
         }
     }
 }

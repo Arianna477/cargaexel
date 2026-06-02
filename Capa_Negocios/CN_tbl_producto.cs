@@ -184,11 +184,11 @@ namespace Capa_Negocios
             return todos.Skip((pagina - 1) * porPagina).Take(porPagina).ToList();
         }
 
-        public static bool ExisteNombre(string nombre, int idIgnorar = 0)
+        public static bool ExisteNombre(string nombre, int? proveedorId, int idIgnorar = 0)
         {
             using (var db = new MonolitoDataContext())
             {
-                return db.tbl_producto.Any(p => p.pro_nombre == nombre && p.pro_estado == 'A' && p.pro_id != idIgnorar);
+                return db.tbl_producto.Any(p => p.pro_nombre == nombre && p.prov_id == proveedorId && p.pro_estado == 'A' && p.pro_id != idIgnorar);
             }
         }
 
@@ -327,12 +327,11 @@ namespace Capa_Negocios
         private static List<ProductoCargaFilaNormalizada> NormalizarFilasCarga(MonolitoDataContext dc, IEnumerable<ProductoCargaFila> filas, ResultadoCargaProductos resultado)
         {
             var normalizadas = new List<ProductoCargaFilaNormalizada>();
-            var nombres = new HashSet<string>();
+            var nombresYProvs = new HashSet<Tuple<string, int?>>();
             var ids = new HashSet<int>();
 
-            // Precargamos el diccionario de proveedores activos para resolver por nombre
+            // Precargamos el diccionario de proveedores para resolver por nombre
             var proveedoresPorNombre = dc.tbl_proveedor
-                .Where(p => p.prov_estado == 'A')
                 .ToList()
                 .GroupBy(p => (p.prov_nombre ?? string.Empty).Trim().ToUpperInvariant())
                 .ToDictionary(g => g.Key, g => g.First().prov_id);
@@ -352,8 +351,18 @@ namespace Capa_Negocios
                     continue;
                 }
 
+                // Resolver proveedor por nombre si se proporcionó
+                int? proveedorId = f.ProveedorId;
+                if (!string.IsNullOrWhiteSpace(f.ProveedorNombre))
+                {
+                    string clave = f.ProveedorNombre.Trim().ToUpperInvariant();
+                    int idEncontrado;
+                    proveedorId = proveedoresPorNombre.TryGetValue(clave, out idEncontrado) ? idEncontrado : (int?)null;
+                }
+
                 string nombreNormalizado = NormalizarNombreProductoCarga(nombreSaneado);
-                if (!nombres.Add(nombreNormalizado))
+                var key = Tuple.Create(nombreNormalizado, proveedorId);
+                if (!nombresYProvs.Add(key))
                 {
                     resultado.Omitidos++;
                     continue;
@@ -363,15 +372,6 @@ namespace Capa_Negocios
                 {
                     resultado.Omitidos++;
                     continue;
-                }
-
-                // Resolver proveedor por nombre si se proporcionó
-                int? proveedorId = f.ProveedorId;
-                if (!string.IsNullOrWhiteSpace(f.ProveedorNombre))
-                {
-                    string clave = f.ProveedorNombre.Trim().ToUpperInvariant();
-                    int idEncontrado;
-                    proveedorId = proveedoresPorNombre.TryGetValue(clave, out idEncontrado) ? idEncontrado : (int?)null;
                 }
 
                 normalizadas.Add(new ProductoCargaFilaNormalizada
@@ -400,19 +400,26 @@ namespace Capa_Negocios
         {
             var productosActuales = dc.tbl_producto.ToList();
             var productosPorId = productosActuales.ToDictionary(p => p.pro_id);
-            var productosPorNombre = productosActuales.GroupBy(p => NormalizarNombreProductoCarga(p.pro_nombre)).ToDictionary(g => g.Key, g => g.First());
-            var proveedoresValidos = dc.tbl_proveedor.Where(p => p.prov_estado == 'A').Select(p => p.prov_id).ToHashSet();
+            var productosPorNombreYProv = productosActuales
+                .GroupBy(p => Tuple.Create(NormalizarNombreProductoCarga(p.pro_nombre), p.prov_id))
+                .ToDictionary(g => g.Key, g => g.First());
+
+            var proveedoresValidos = dc.tbl_proveedor.Select(p => p.prov_id).ToHashSet();
             int? proveedorFallbackId = null;
             var insertarConId = new List<ProductoCargaFilaNormalizada>();
             var insertarSinId = new List<ProductoCargaFilaNormalizada>();
 
             foreach (var fila in filas)
             {
+                int? proveedorId = ResolverProveedorRelacionado(dc, proveedoresValidos, fila.ProveedorId, resultado, ref proveedorFallbackId);
+
                 tbl_producto existente = null;
                 if (fila.ProductoId.HasValue) productosPorId.TryGetValue(fila.ProductoId.Value, out existente);
-                if (existente == null) productosPorNombre.TryGetValue(fila.NombreNormalizado, out existente);
-
-                int? proveedorId = ResolverProveedorRelacionado(dc, proveedoresValidos, fila.ProveedorId, resultado, ref proveedorFallbackId);
+                if (existente == null)
+                {
+                    var key = Tuple.Create(fila.NombreNormalizado, proveedorId);
+                    productosPorNombreYProv.TryGetValue(key, out existente);
+                }
 
                 if (existente != null)
                 {
@@ -492,7 +499,7 @@ namespace Capa_Negocios
             dc.ExecuteCommand("DBCC CHECKIDENT ('dbo.tbl_pro_fotos', RESEED, 0)");
             dc.ExecuteCommand("DBCC CHECKIDENT ('dbo.tbl_producto', RESEED, 0)");
 
-            var proveedoresValidos = dc.tbl_proveedor.Where(p => p.prov_estado == 'A').Select(p => p.prov_id).ToHashSet();
+            var proveedoresValidos = dc.tbl_proveedor.Select(p => p.prov_id).ToHashSet();
             int? proveedorFallbackId = null;
             foreach (var fila in filas)
             {

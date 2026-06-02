@@ -54,7 +54,7 @@ namespace Monolito4bm
         }
 
         // Carpeta donde se guardan las fotos de productos
-        private const string CARPETA_VIRTUAL = "~/Uploads/Productos/";
+        private const string CARPETA_VIRTUAL = "~/wwwroot/Productos/";
 
         // ── Page Load ─────────────────────────────────────────────
         protected void Page_Load(object sender, EventArgs e)
@@ -314,7 +314,7 @@ namespace Monolito4bm
                     {
                         pro_id = proId,
                         foto_bit = null,
-                        foto_ruta = $"Uploads/Productos/{archivo}",
+                        foto_ruta = $"wwwroot/Productos/{archivo}",
                         foto_estado = 'A',
                         fecha_subida = DateTime.Now
                     };
