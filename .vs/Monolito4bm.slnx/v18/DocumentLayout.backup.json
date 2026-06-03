@@ -3,11 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|c:\\users\\aricita\\source\\monolito4bm\\monolito4bm\\monolito4bm\\imagenusuariofallback.ashx||{DAB1E6DB-4119-49A3-ACE3-0FE8F3E0669F}",
+      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|c:\\users\\aricita\\source\\monolito4bm\\monolito4bm\\monolito4bm\\productos.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\productos.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\monolito4bm\\imagenusuariofallback.ashx||{DAB1E6DB-4119-49A3-ACE3-0FE8F3E0669F}",
       "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\imagenusuariofallback.ashx||{DAB1E6DB-4119-49A3-ACE3-0FE8F3E0669F}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|c:\\users\\aricita\\source\\monolito4bm\\monolito4bm\\monolito4bm\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\monolito4bm\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
@@ -39,6 +43,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Productos.aspx.cs",
+              "DocumentMoniker": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx.cs",
+              "RelativeDocumentMoniker": "Monolito4bm\\Productos.aspx.cs",
+              "ToolTip": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx.cs",
+              "RelativeToolTip": "Monolito4bm\\Productos.aspx.cs",
+              "ViewState": "AgIAAHMBAAAAAAAAAAAAAHkBAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-02T14:29:48.653Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "ImagenUsuarioFallback.ashx",
               "DocumentMoniker": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\ImagenUsuarioFallback.ashx",
               "RelativeDocumentMoniker": "Monolito4bm\\ImagenUsuarioFallback.ashx",
@@ -46,12 +63,11 @@
               "RelativeToolTip": "Monolito4bm\\ImagenUsuarioFallback.ashx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000192|",
-              "WhenOpened": "2026-06-02T13:40:51.491Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-02T13:40:51.491Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Productos.aspx",
               "DocumentMoniker": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx",
               "RelativeDocumentMoniker": "Monolito4bm\\Productos.aspx",
@@ -59,12 +75,11 @@
               "RelativeToolTip": "Monolito4bm\\Productos.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2026-06-02T01:34:26.56Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-02T01:34:26.56Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "FotosProductosGeneral.aspx",
               "DocumentMoniker": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\FotosProductosGeneral.aspx",
               "RelativeDocumentMoniker": "Monolito4bm\\FotosProductosGeneral.aspx",

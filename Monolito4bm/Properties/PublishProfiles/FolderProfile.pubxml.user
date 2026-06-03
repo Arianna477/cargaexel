@@ -3,7 +3,7 @@
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\Aricita\monolito</_PublishTargetUrl>
-    <History>True|2026-06-02T13:43:31.5683008Z||;True|2026-06-01T21:24:51.9563923-05:00||;True|2026-05-31T19:14:30.1245189-05:00||;True|2026-05-31T15:42:10.1032824-05:00||;False|2026-05-31T15:34:20.0675460-05:00||;False|2026-05-31T15:33:32.5959337-05:00||;False|2026-05-31T15:27:32.4092863-05:00||;False|2026-05-31T15:23:33.6631012-05:00||;False|2026-05-31T15:20:52.6781331-05:00||;</History>
+    <History>True|2026-06-02T14:33:20.0627273Z||;True|2026-06-02T08:43:31.5683008-05:00||;True|2026-06-01T21:24:51.9563923-05:00||;True|2026-05-31T19:14:30.1245189-05:00||;True|2026-05-31T15:42:10.1032824-05:00||;False|2026-05-31T15:34:20.0675460-05:00||;False|2026-05-31T15:33:32.5959337-05:00||;False|2026-05-31T15:27:32.4092863-05:00||;False|2026-05-31T15:23:33.6631012-05:00||;False|2026-05-31T15:20:52.6781331-05:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -17,10 +17,10 @@
       <publishTime>09/10/2013 11:29:20</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>06/02/2026 08:43:25</publishTime>
+      <publishTime>06/02/2026 09:33:18</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>06/02/2026 08:43:24</publishTime>
+      <publishTime>06/02/2026 09:33:17</publishTime>
     </File>
     <File Include="bin/BCrypt-Net-Next.dll">
       <publishTime>05/11/2026 06:04:00</publishTime>
@@ -227,10 +227,10 @@
       <publishTime>04/11/2022 14:09:46</publishTime>
     </File>
     <File Include="bin/Monolito4bm.dll">
-      <publishTime>06/02/2026 08:42:48</publishTime>
+      <publishTime>06/02/2026 09:32:58</publishTime>
     </File>
     <File Include="bin/Monolito4bm.pdb">
-      <publishTime>06/02/2026 08:42:48</publishTime>
+      <publishTime>06/02/2026 09:32:58</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>03/08/2023 02:09:56</publishTime>
@@ -647,7 +647,7 @@
       <publishTime>05/29/2026 16:31:46</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>06/02/2026 08:42:50</publishTime>
+      <publishTime>06/02/2026 09:33:00</publishTime>
     </File>
     <File Include="Productos.aspx">
       <publishTime>06/01/2026 21:14:00</publishTime>
@@ -806,7 +806,7 @@
       <publishTime>05/25/2026 10:02:23</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>06/02/2026 08:42:49</publishTime>
+      <publishTime>06/02/2026 09:32:59</publishTime>
     </File>
   </ItemGroup>
 </Project>

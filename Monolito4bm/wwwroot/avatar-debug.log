@@ -58,3 +58,15 @@
 [2026-06-02 08:35:29] MASTER Usuario=4 fotos=3
 [2026-06-02 08:35:29] MASTER Foto seleccionada id=4 principal=True bytes=22061 ruta=(null) contentType=image/png
 [2026-06-02 08:35:29] MASTER Render inline base64 id=4 bytes=29416
+[2026-06-02 09:27:27] MASTER Usuario=4 fotos=3
+[2026-06-02 09:27:27] MASTER Foto seleccionada id=4 principal=True bytes=22061 ruta=(null) contentType=image/png
+[2026-06-02 09:27:27] MASTER Render inline base64 id=4 bytes=29416
+[2026-06-02 09:27:48] MASTER Usuario=4 fotos=3
+[2026-06-02 09:27:48] MASTER Foto seleccionada id=4 principal=True bytes=22061 ruta=(null) contentType=image/png
+[2026-06-02 09:27:48] MASTER Render inline base64 id=4 bytes=29416
+[2026-06-02 09:30:35] MASTER Usuario=4 fotos=3
+[2026-06-02 09:30:35] MASTER Foto seleccionada id=4 principal=True bytes=22061 ruta=(null) contentType=image/png
+[2026-06-02 09:30:35] MASTER Render inline base64 id=4 bytes=29416
+[2026-06-02 09:30:54] MASTER Usuario=4 fotos=3
+[2026-06-02 09:30:54] MASTER Foto seleccionada id=4 principal=True bytes=22061 ruta=(null) contentType=image/png
+[2026-06-02 09:30:54] MASTER Render inline base64 id=4 bytes=29416

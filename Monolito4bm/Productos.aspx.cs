@@ -375,7 +375,7 @@ namespace Monolito4bm
                 }
                 if (tipo == TipoInsercionProveedor.ReemplazarTodo)
                 {
-                    mensaje += $" Fotos eliminadas durante la limpieza: {resultado.FotosEliminadas}.";
+                    mensaje += $" ";
                 }
                 if (resultado.FotosAsignadas > 0)
                 {
