@@ -3,11 +3,11 @@
   "WorkspaceRootPath": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|c:\\users\\aricita\\source\\repos\\monolito4bm\\monolito4bm\\monolito4bm\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{6483246F-9D54-42B9-8DD0-FB21812B38B2}|Capa_Datos\\Capa_Datos.csproj|c:\\users\\aricita\\source\\repos\\monolito4bm\\monolito4bm\\capa_datos\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{6483246F-9D54-42B9-8DD0-FB21812B38B2}|Capa_Datos\\Capa_Datos.csproj|solutionrelative:capa_datos\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|c:\\users\\aricita\\source\\repos\\monolito4bm\\monolito4bm\\monolito4bm\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\monolito4bm\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
@@ -47,14 +47,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Monolito4bm\\appsettings.json",
-              "RelativeDocumentMoniker": "Monolito4bm\\appsettings.json",
-              "ToolTip": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Monolito4bm\\appsettings.json",
-              "RelativeToolTip": "Monolito4bm\\appsettings.json",
+              "Title": "app.config",
+              "DocumentMoniker": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Capa_Datos\\app.config",
+              "RelativeDocumentMoniker": "Capa_Datos\\app.config",
+              "ToolTip": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Capa_Datos\\app.config",
+              "RelativeToolTip": "Capa_Datos\\app.config",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-06-20T01:27:23.747Z",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2026-06-20T16:34:24.589Z",
               "EditorCaption": ""
             },
             {
@@ -80,7 +80,8 @@
               "RelativeToolTip": "Monolito4bm\\Productos.aspx.cs",
               "ViewState": "AgIAAD8CAAAAAAAAAAAwwFcCAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-11T00:43:24.281Z"
+              "WhenOpened": "2026-06-11T00:43:24.281Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -92,7 +93,8 @@
               "RelativeToolTip": "Capa_Negocios\\CN_tbl_producto.cs",
               "ViewState": "AgIAAIICAAAAAAAAAAAkwK4CAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-08T02:56:01.725Z"
+              "WhenOpened": "2026-06-08T02:56:01.725Z",
+              "EditorCaption": ""
             }
           ]
         }
