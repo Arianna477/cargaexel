@@ -1,4 +1,4 @@
-using Capa_Datos;
+    using Capa_Datos;
 using Capa_Negocios;
 using System;
 using System.IO;
@@ -120,13 +120,13 @@ namespace Monolito4bm
             var fotos = CN_tbl_pro_fotos.ObtenerConProducto(proId);
 
             int total = fotos.Count;
-            litTotalFotos.Text = $"{total} / 4 foto(s)";
+            litTotalFotos.Text = $"{total} / 10 foto(s)";
 
             // Aviso de límite
-            litAviso.Text = total >= 4
+            litAviso.Text = total >= 10
                 ? "<div class='limite-aviso'>" +
                   "<i class='fa-solid fa-triangle-exclamation'></i> " +
-                  "L&iacute;mite de 4 fotos alcanzado. Elimina una para poder subir m&aacute;s.</div>"
+                  "L&iacute;mite de 10 fotos alcanzado. Elimina una para poder subir m&aacute;s.</div>"
                 : string.Empty;
 
             if (fotos.Any())
@@ -172,7 +172,7 @@ namespace Monolito4bm
 
             int proId = int.Parse(ddlProducto.SelectedValue);
             int yaExisten = CN_tbl_pro_fotos.Contar(proId);
-            int disponibles = 4 - yaExisten;
+            int disponibles = 10 - yaExisten;
 
             try
             {

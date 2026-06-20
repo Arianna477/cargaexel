@@ -1,22 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\",
+  "WorkspaceRootPath": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|c:\\users\\aricita\\source\\monolito4bm\\monolito4bm\\monolito4bm\\productos.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\productos.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\monolito4bm\\imagenusuariofallback.ashx||{DAB1E6DB-4119-49A3-ACE3-0FE8F3E0669F}",
-      "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\imagenusuariofallback.ashx||{DAB1E6DB-4119-49A3-ACE3-0FE8F3E0669F}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\monolito4bm\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|c:\\users\\aricita\\source\\repos\\monolito4bm\\monolito4bm\\monolito4bm\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\monolito4bm\\fotosproductosgeneral.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\fotosproductosgeneral.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\monolito4bm\\productos.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\productos.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F021288F-83F2-47B0-B0FF-296B878D4D27}|Capa_Negocios\\Capa_Negocios.csproj|C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\capa_negocios\\cn_tbl_producto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F021288F-83F2-47B0-B0FF-296B878D4D27}|Capa_Negocios\\Capa_Negocios.csproj|solutionrelative:capa_negocios\\cn_tbl_producto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -41,53 +37,45 @@
               "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Productos.aspx.cs",
-              "DocumentMoniker": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx.cs",
-              "RelativeDocumentMoniker": "Monolito4bm\\Productos.aspx.cs",
-              "ToolTip": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx.cs",
-              "RelativeToolTip": "Monolito4bm\\Productos.aspx.cs",
-              "ViewState": "AgIAAHMBAAAAAAAAAAAAAHkBAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-02T14:29:48.653Z",
+              "Title": "Productos.aspx",
+              "DocumentMoniker": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx",
+              "RelativeDocumentMoniker": "Monolito4bm\\Productos.aspx",
+              "ToolTip": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx",
+              "RelativeToolTip": "Monolito4bm\\Productos.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-06-11T00:43:25.872Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ImagenUsuarioFallback.ashx",
-              "DocumentMoniker": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\ImagenUsuarioFallback.ashx",
-              "RelativeDocumentMoniker": "Monolito4bm\\ImagenUsuarioFallback.ashx",
-              "ToolTip": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\ImagenUsuarioFallback.ashx",
-              "RelativeToolTip": "Monolito4bm\\ImagenUsuarioFallback.ashx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000192|",
-              "WhenOpened": "2026-06-02T13:40:51.491Z"
+              "Title": "Productos.aspx.cs",
+              "DocumentMoniker": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx.cs",
+              "RelativeDocumentMoniker": "Monolito4bm\\Productos.aspx.cs",
+              "ToolTip": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx.cs",
+              "RelativeToolTip": "Monolito4bm\\Productos.aspx.cs",
+              "ViewState": "AgIAAD8CAAAAAAAAAAAwwFcCAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-11T00:43:24.281Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Productos.aspx",
-              "DocumentMoniker": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx",
-              "RelativeDocumentMoniker": "Monolito4bm\\Productos.aspx",
-              "ToolTip": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx",
-              "RelativeToolTip": "Monolito4bm\\Productos.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2026-06-02T01:34:26.56Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "FotosProductosGeneral.aspx",
-              "DocumentMoniker": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\FotosProductosGeneral.aspx",
-              "RelativeDocumentMoniker": "Monolito4bm\\FotosProductosGeneral.aspx",
-              "ToolTip": "C:\\Users\\Aricita\\source\\Monolito4bm\\Monolito4bm\\Monolito4bm\\FotosProductosGeneral.aspx",
-              "RelativeToolTip": "Monolito4bm\\FotosProductosGeneral.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000192|",
-              "WhenOpened": "2026-06-02T01:34:26.562Z"
+              "Title": "CN_tbl_producto.cs",
+              "DocumentMoniker": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Capa_Negocios\\CN_tbl_producto.cs",
+              "RelativeDocumentMoniker": "Capa_Negocios\\CN_tbl_producto.cs",
+              "ToolTip": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Capa_Negocios\\CN_tbl_producto.cs",
+              "RelativeToolTip": "Capa_Negocios\\CN_tbl_producto.cs",
+              "ViewState": "AgIAAIICAAAAAAAAAAAkwK4CAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-08T02:56:01.725Z"
             }
           ]
         }
