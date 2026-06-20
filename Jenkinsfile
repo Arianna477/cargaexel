@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Ajustamos la ruta para que entre a la subcarpeta y apunte al .slnx
-        PROYECTO = 'Monolito4bm.slnx'
+        PROYECTO = 'Monolito4bm/Monolito4bm.csproj'
     }
 
     stages {
