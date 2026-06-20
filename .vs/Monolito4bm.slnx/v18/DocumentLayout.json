@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|c:\\users\\aricita\\source\\repos\\monolito4bm\\monolito4bm\\monolito4bm\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|c:\\users\\aricita\\source\\repos\\monolito4bm\\monolito4bm\\monolito4bm\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{78B8AD6B-024B-42A3-AC2D-2191BEEF253E}|Monolito4bm\\Monolito4bm.csproj|solutionrelative:monolito4bm\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
@@ -43,6 +47,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Monolito4bm\\appsettings.json",
+              "RelativeDocumentMoniker": "Monolito4bm\\appsettings.json",
+              "ToolTip": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Monolito4bm\\appsettings.json",
+              "RelativeToolTip": "Monolito4bm\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-06-20T01:27:23.747Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Productos.aspx",
               "DocumentMoniker": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx",
               "RelativeDocumentMoniker": "Monolito4bm\\Productos.aspx",
@@ -55,7 +72,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Productos.aspx.cs",
               "DocumentMoniker": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Monolito4bm\\Productos.aspx.cs",
               "RelativeDocumentMoniker": "Monolito4bm\\Productos.aspx.cs",
@@ -67,7 +84,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "CN_tbl_producto.cs",
               "DocumentMoniker": "C:\\Users\\Aricita\\source\\repos\\Monolito4bm\\Monolito4bm\\Capa_Negocios\\CN_tbl_producto.cs",
               "RelativeDocumentMoniker": "Capa_Negocios\\CN_tbl_producto.cs",
