@@ -1,11 +1,8 @@
 pipeline {
     agent any 
-
     environment {
-        // Ajustamos la ruta para que entre a la subcarpeta y apunte al .slnx
         PROYECTO = 'Monolito4bm/Monolito4bm.csproj'
     }
-
     stages {
         stage('Descargar Código') {
             steps {
@@ -13,21 +10,18 @@ pipeline {
                 checkout scm
             }
         }
-        
         stage('Restaurar Paquetes') {
             steps {
                 echo 'Restaurando dependencias de NuGet...'
                 sh 'dotnet restore ${PROYECTO}'
             }
         }
-        
         stage('Compilar Solución') {
             steps {
                 echo 'Compilando Monolito4bm...'
                 sh 'dotnet build ${PROYECTO} --configuration Release --no-restore'
             }
         }
-        
         stage('Ejecutar Pruebas') {
             steps {
                 echo 'Corriendo pruebas unitarias...'
@@ -35,7 +29,6 @@ pipeline {
                 sh 'dotnet test ${PROYECTO} --no-build --verbosity normal'
             }
         }
-        
         stage('Publicar Aplicación') {
             steps {
                 echo 'Generando la carpeta con los archivos listos para IIS...'
