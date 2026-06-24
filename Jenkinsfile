@@ -1,8 +1,15 @@
 pipeline {
     agent any 
+    
     environment {
+        // Tu proyecto principal
         PROYECTO = 'Monolito4bm/Monolito4bm.csproj'
+        // Tu nuevo proyecto de pruebas
+        PROYECTO_TEST = 'Monolito4bm.Tests/Monolito4bm.Tests.csproj'
+        // Tu script de base de datos
+        SCRIPT_SQL = 'BaseDeDatos/script_bd.sql'
     }
+    
     stages {
         stage('Descargar Código') {
             steps {
@@ -10,44 +17,55 @@ pipeline {
                 checkout scm
             }
         }
+        
+        stage('Construir Base de Datos') {
+            steps {
+                echo 'Ejecutando script SQL para crear tablas y datos...'
+                sh '/opt/mssql-tools/bin/sqlcmd -S host.docker.internal -U jenkis -P jenkis -i ${SCRIPT_SQL}'
+            }
+        }
+        
         stage('Restaurar Paquetes') {
             steps {
                 echo 'Restaurando dependencias de NuGet...'
                 sh 'dotnet restore ${PROYECTO}'
+                sh 'dotnet restore ${PROYECTO_TEST}'
             }
         }
+        
         stage('Compilar Solución') {
             steps {
-                echo 'Compilando Monolito4bm...'
+                echo 'Compilando código web y pruebas...'
                 sh 'dotnet build ${PROYECTO} --configuration Release --no-restore'
+                sh 'dotnet build ${PROYECTO_TEST} --configuration Release --no-restore'
             }
         }
+        
         stage('Ejecutar Pruebas') {
             steps {
-                echo 'Corriendo pruebas unitarias y generando reporte...'
-                // Agregamos el flag --logger para generar el archivo "resultados_pruebas.xml"
-                sh 'dotnet test ${PROYECTO} --no-build --logger "junit;LogFilePath=resultados_pruebas.xml"'
+                echo 'Corriendo pruebas y generando archivo XML para la gráfica...'
+                // Ejecuta la prueba de ejemplo y guarda el resultado en resultados_pruebas.xml
+                sh 'dotnet test ${PROYECTO_TEST} --no-build --configuration Release --logger "junit;LogFilePath=resultados_pruebas.xml"'
             }
         }
+        
         stage('Publicar Aplicación') {
             steps {
                 echo 'Generando la carpeta con los archivos listos para IIS...'
-                // Generará los archivos en la carpeta "publish_output" en la raíz
                 sh 'dotnet publish ${PROYECTO} -c Release -o ./publish_output'
             }
         }
         
         stage('Desplegar en IIS') {
             steps {
-                echo 'Enviando archivos al Servidor Windows...'
-                // Pendiente de configurar según cómo pases los archivos a Windows
+                echo 'Aviso: Copia manual requerida a C:\\inetpub\\wwwroot\\Monolito'
             }
         }
     }
+    
     post {
         always {
-            echo 'Generando gráfica de resultados de pruebas...'
-            // Este comando lee el XML y crea el reporte visual en el menú de Jenkins
+            echo 'Dibujando la gráfica de JUnit...'
             junit '**/resultados_pruebas.xml'
         }
     }
