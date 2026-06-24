@@ -5,7 +5,7 @@ pipeline {
         // Tu proyecto principal
         PROYECTO = 'Monolito4bm/Monolito4bm.csproj'
         // Tu nuevo proyecto de pruebas
-        PROYECTO_TEST = 'Monolito4bm.Tests/Monolito4bm.Tests.csproj'
+        PROYECTO_TEST = 'Monolito4bm.Tests/Monolito4bm.Test.csproj'
         // Tu script de base de datos
         SCRIPT_SQL = 'BaseDeDatos/script_bd.sql'
     }
