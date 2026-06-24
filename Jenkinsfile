@@ -44,8 +44,8 @@ pipeline {
         stage('Ejecutar Pruebas') {
             steps {
                 echo 'Corriendo pruebas y generando archivo XML para la gráfica...'
-                // Ejecuta la prueba de ejemplo y guarda el resultado en resultados_pruebas.xml
-                sh 'dotnet test ${PROYECTO_TEST} --no-build --configuration Release --logger "junit;LogFilePath=resultados_pruebas.xml"'
+                // Usamos TRX en lugar de JUnit
+                sh 'dotnet test ${PROYECTO_TEST} --no-build --configuration Release --logger "trx;LogFileName=resultados_pruebas.trx"'
             }
         }
         
