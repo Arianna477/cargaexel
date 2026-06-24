@@ -62,11 +62,11 @@ pipeline {
             }
         }
     }
-    
     post {
         always {
-            echo 'Dibujando la gráfica de JUnit...'
-            junit '**/resultados_pruebas.xml'
+            echo 'Dibujando la gráfica...'
+            // Cambiamos el comando junit por mstest
+            mstest testResultsFile:"**/*.trx", keepLongStdio: true
         }
     }
 }
