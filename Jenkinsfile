@@ -24,9 +24,9 @@ pipeline {
         }
         stage('Ejecutar Pruebas') {
             steps {
-                echo 'Corriendo pruebas unitarias...'
-                // Si no tienes pruebas, puedes borrar este stage o comentarlo
-                sh 'dotnet test ${PROYECTO} --no-build --verbosity normal'
+                echo 'Corriendo pruebas unitarias y generando reporte...'
+                // Agregamos el flag --logger para generar el archivo "resultados_pruebas.xml"
+                sh 'dotnet test ${PROYECTO} --no-build --logger "junit;LogFilePath=resultados_pruebas.xml"'
             }
         }
         stage('Publicar Aplicación') {
@@ -42,6 +42,13 @@ pipeline {
                 echo 'Enviando archivos al Servidor Windows...'
                 // Pendiente de configurar según cómo pases los archivos a Windows
             }
+        }
+    }
+    post {
+        always {
+            echo 'Generando gráfica de resultados de pruebas...'
+            // Este comando lee el XML y crea el reporte visual en el menú de Jenkins
+            junit '**/resultados_pruebas.xml'
         }
     }
 }
